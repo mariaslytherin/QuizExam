@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace QuizExam.Data
+namespace QuizExam.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

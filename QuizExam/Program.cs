@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using QuizExam.Data;
+using QuizExam.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
