@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizExam.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using QuizExam.Infrastructure.Data;
 namespace QuizExam.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220326175352_ExamsAndSubjectsTablesAdded")]
+    partial class ExamsAndSubjectsTablesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,46 +266,6 @@ namespace QuizExam.Infrastructure.Data.Migrations
                     b.ToTable("Exams");
                 });
 
-            modelBuilder.Entity("QuizExam.Infrastructure.Data.Question", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("date");
-
-                    b.Property<Guid>("ExamId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("date");
-
-                    b.Property<double>("Points")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Rule")
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExamId");
-
-                    b.ToTable("Questions");
-                });
-
             modelBuilder.Entity("QuizExam.Infrastructure.Data.Subject", b =>
                 {
                     b.Property<Guid>("Id")
@@ -380,22 +342,6 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Subject");
-                });
-
-            modelBuilder.Entity("QuizExam.Infrastructure.Data.Question", b =>
-                {
-                    b.HasOne("QuizExam.Infrastructure.Data.Exam", "Exam")
-                        .WithMany("Questions")
-                        .HasForeignKey("ExamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Exam");
-                });
-
-            modelBuilder.Entity("QuizExam.Infrastructure.Data.Exam", b =>
-                {
-                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("QuizExam.Infrastructure.Data.Subject", b =>
