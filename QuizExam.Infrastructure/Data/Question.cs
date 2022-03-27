@@ -31,9 +31,17 @@ namespace QuizExam.Infrastructure.Data
         public double Points { get; set; }
 
         [Required]
+        public int OrderNumber { get; set; }
+
+        [Range(2, 6)]
+        public int AnswerOptionsCount { get; set; }
+
+        [Required]
         public Guid ExamId { get; set; }
 
         [ForeignKey(nameof(ExamId))]
         public Exam Exam { get; set; }
+
+        public ICollection<AnswerOption> Answers { get; set; } = new List<AnswerOption>();
     }
 }

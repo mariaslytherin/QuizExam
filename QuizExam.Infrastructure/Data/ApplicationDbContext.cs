@@ -15,5 +15,7 @@ namespace QuizExam.Infrastructure.Data
         public DbSet<Subject> Subjects { get; set; }
 
         public DbSet<Question> Questions { get; set; }
+
+        public DbSet<AnswerOption> AnswerOptions { get; set; }
     }
 }

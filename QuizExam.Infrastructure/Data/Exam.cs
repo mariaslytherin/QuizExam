@@ -26,8 +26,9 @@ namespace QuizExam.Infrastructure.Data
 
         public bool IsDeleted { get; set; }
 
-        [Required]
-        public int MaxScore { get; set; }
+        public int? QuestionsCount { get; set; }
+
+        public int? MaxScore { get; set; }
 
         [Required]
         public Guid SubjectId { get; set; }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizExam.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using QuizExam.Infrastructure.Data;
 namespace QuizExam.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220327160548_AddedQuestionsCountToExamTable")]
+    partial class AddedQuestionsCountToExamTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,39 +226,6 @@ namespace QuizExam.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("QuizExam.Infrastructure.Data.AnswerOption", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("date");
-
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("date");
-
-                    b.Property<Guid>("QuestionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("AnswerOptions");
-                });
-
             modelBuilder.Entity("QuizExam.Infrastructure.Data.Exam", b =>
                 {
                     b.Property<Guid>("Id")
@@ -306,9 +275,6 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AnswerOptionsCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -325,9 +291,6 @@ namespace QuizExam.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("ModifyDate")
                         .HasColumnType("date");
-
-                    b.Property<int>("OrderNumber")
-                        .HasColumnType("int");
 
                     b.Property<double>("Points")
                         .HasColumnType("float");
@@ -413,17 +376,6 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("QuizExam.Infrastructure.Data.AnswerOption", b =>
-                {
-                    b.HasOne("QuizExam.Infrastructure.Data.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("QuizExam.Infrastructure.Data.Exam", b =>
                 {
                     b.HasOne("QuizExam.Infrastructure.Data.Subject", "Subject")
@@ -449,11 +401,6 @@ namespace QuizExam.Infrastructure.Data.Migrations
             modelBuilder.Entity("QuizExam.Infrastructure.Data.Exam", b =>
                 {
                     b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("QuizExam.Infrastructure.Data.Question", b =>
-                {
-                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("QuizExam.Infrastructure.Data.Subject", b =>
