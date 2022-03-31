@@ -31,6 +31,7 @@ namespace QuizExam.Infrastructure.Data
         public double Points { get; set; }
 
         [Required]
+        [StringLength(100)]
         public int OrderNumber { get; set; }
 
         [Range(2, 6)]

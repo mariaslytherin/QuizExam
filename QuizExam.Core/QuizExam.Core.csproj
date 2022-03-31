@@ -10,8 +10,4 @@
     <ProjectReference Include="..\QuizExam.Infrastructure\QuizExam.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Constants\" />
-  </ItemGroup>
-
 </Project>
