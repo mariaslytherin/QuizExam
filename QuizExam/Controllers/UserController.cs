@@ -2,37 +2,27 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuizExam.Core.Constants;
+using QuizExam.Core.Contracts;
+using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Controllers
 {
     public class UserController : BaseController
     {
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IUserService userService;
 
-        public UserController(RoleManager<IdentityRole> roleManager)
+        public UserController(
+            UserManager<ApplicationUser> userManager,
+            IUserService userService)
         {
-            this.roleManager = roleManager;
+            this.userManager = userManager;
+            this.userService = userService;
         }
 
         public IActionResult Index()
         {
             return View();
-        }
-
-        [Authorize(Roles = UserRolesConstants.Administrator)]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            return Ok();
-        }
-
-        public async Task<IActionResult> CreateRole()
-        {
-            // await roleManager.CreateAsync(new IdentityRole()
-            // {
-            //     Name = "Administrator"
-            // });
-
-            return Ok();
         }
     }
 }

@@ -1,0 +1,43 @@
+﻿@using QuizExam.Core.Models
+@model UserEditVM
+@{
+}
+
+<div class="row">
+    <div class="col-4">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Edit User</h3>
+            </div>
+            <form id="edit" method="post">
+                <div class="card-body">
+                    <input type="hidden" name="Id" value=""/>
+                    <div class="form-group">
+                        <label asp-for="@Model.FirstName">First Name</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" autocomplete="firstName" placeholder="Enter first name">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@Model.LastName">Last Name</label>
+                        <input type="text" class="form-control" id="exampleInputPassword1" autocomplete="lastName" placeholder="Enter last name">
+                    </div>
+                    @*<div class="form-group">
+                        <label for="exampleInputFile">File input</label>
+                        <div class="input-group">
+                        <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="exampleInputFile">
+                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                        </div>
+                        <div class="input-group-append">
+                        <span class="input-group-text">Upload</span>
+                        </div>
+                        </div>
+                        </div>*@
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-outline-primary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
