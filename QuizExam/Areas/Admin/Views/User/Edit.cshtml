@@ -1,6 +1,7 @@
 ﻿@using QuizExam.Core.Models
 @model UserEditVM
 @{
+    ViewData["Title"] = "Edit User";
 }
 
 <div class="row">
@@ -11,14 +12,17 @@
             </div>
             <form id="edit" method="post">
                 <div class="card-body">
-                    <input type="hidden" name="Id" value=""/>
+                    <input type="hidden" name="Id" value="@Model.Id"/>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="@Model.FirstName">First Name</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" autocomplete="firstName" placeholder="Enter first name">
+                        <label asp-for="FirstName" class="form-label"></label>
+                        <input asp-for="FirstName" type="text" class="form-control" placeholder="Enter first name" aria-required="true">
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="@Model.LastName">Last Name</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" autocomplete="lastName" placeholder="Enter last name">
+                        <label asp-for="LastName" class="form-label"></label>
+                        <input asp-for="LastName" type="text" class="form-control" placeholder="Enter last name" aria-required="true">
+                        <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     @*<div class="form-group">
                         <label for="exampleInputFile">File input</label>
@@ -41,3 +45,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

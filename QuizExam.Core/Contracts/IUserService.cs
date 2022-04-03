@@ -1,4 +1,5 @@
 ﻿using QuizExam.Core.Models;
+using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Core.Contracts
 {
@@ -6,6 +7,10 @@ namespace QuizExam.Core.Contracts
     {
         Task<IEnumerable<UserListVM>> GetAllUsers();
 
-        Task<UserEditVM> GetUser(string id);
+        Task<UserEditVM> GetUserForEdit(string id);
+
+        Task<bool> EditUserData(UserEditVM model);
+
+        Task<ApplicationUser> GetUserById(string id);
     }
 }
