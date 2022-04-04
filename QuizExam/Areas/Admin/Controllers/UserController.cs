@@ -62,7 +62,7 @@ namespace QuizExam.Areas.Admin.Controllers
                 throw new Exception("An error appeard!");
             }
 
-            return View("Edit", model);
+            return RedirectToAction(nameof(GetAllUsers));
         }
 
         public async Task<IActionResult> Roles(string id)
@@ -79,11 +79,26 @@ namespace QuizExam.Areas.Admin.Controllers
                 .Select(r => new SelectListItem()
                 {
                     Text = r.Name,
-                    Value = r.Id,
+                    Value = r.Name,
                     Selected = this.userManager.IsInRoleAsync(user, r.Name).Result
-                });
+                }).ToList();
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Roles(UserRolesVM model)
+        {
+            var user = await this.userService.GetUserById(model.UserId);
+            var userRoles = await this.userManager.GetRolesAsync(user);
+            await this.userManager.RemoveFromRolesAsync(user, userRoles);
+
+            if (model.RoleNames?.Length > 0)
+            {
+                await this.userManager.AddToRolesAsync(user, model.RoleNames);
+            }
+
+            return RedirectToAction(nameof(GetAllUsers));
         }
 
         public async Task<IActionResult> CreateRole()
