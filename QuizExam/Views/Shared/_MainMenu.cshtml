@@ -7,9 +7,16 @@
                 <i class="nav-icon fas fa-home"></i>
                 <p> Home </p>
             </a>
+            @if (User.IsInRole("Administrator"))
+            {
+                <a href="/" class="nav-link">
+                    <i class="nav-icon fa fa-user"></i>
+                    <p> Users </p>
+                </a>
+            }
             <a href="/" class="nav-link">
-                <i class="nav-icon fa fa-user"></i>
-                <p> Users </p>
+                <i class="nav-icon fa fa-sort"></i>
+                <p> Categories </p>
             </a>
             <a href="/" class="nav-link">
                 <i class="nav-icon fa fa-list"></i>
