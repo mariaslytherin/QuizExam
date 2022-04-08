@@ -65,7 +65,7 @@ namespace QuizExam.Areas.Admin.Controllers
             return RedirectToAction(nameof(GetAllUsers));
         }
 
-        public async Task<IActionResult> Roles(string id)
+        public async Task<IActionResult> GetRoles(string id)
         {
             var user = await this.userService.GetUserById(id);
             var model = new UserRolesVM()
@@ -87,7 +87,7 @@ namespace QuizExam.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Roles(UserRolesVM model)
+        public async Task<IActionResult> SetRoles(UserRolesVM model)
         {
             var user = await this.userService.GetUserById(model.UserId);
             var userRoles = await this.userManager.GetRolesAsync(user);

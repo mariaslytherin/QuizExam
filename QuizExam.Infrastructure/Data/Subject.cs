@@ -11,6 +11,8 @@ namespace QuizExam.Infrastructure.Data
         [StringLength(100)]
         public string Name { get; set; }
 
+        public bool IsActive { get; set; } = true;
+
         public ICollection<Exam> Exams { get; set; } = new List<Exam>();
     }
 }

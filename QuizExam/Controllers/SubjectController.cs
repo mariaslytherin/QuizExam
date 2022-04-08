@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Models.Subject;
+using QuizExam.Infrastructure.Data;
 
 namespace QuizExam.Controllers
 {
@@ -18,9 +19,18 @@ namespace QuizExam.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult NewSubject()
+        {
+            return View("NewSubject");
+        }
+
+        [HttpPost]
         public async Task<IActionResult> NewSubject(SubjectVM model)
         {
-            return Ok();
+            await this.subjectService.AddSubject(model);
+
+            return RedirectToAction(nameof(GetSubjectsList));
         }
 
         public async Task<IActionResult> GetSubjectsList()
@@ -28,6 +38,48 @@ namespace QuizExam.Controllers
             var subjects = await this.subjectService.GetAllSubjects();
 
             return View("SubjectsList", subjects);
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            var subject = await this.subjectService.GetSubjectForEdit(id);
+
+            return View("Edit", subject);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(SubjectVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (await this.subjectService.Edit(model))
+            {
+
+            }
+            else
+            {
+                throw new Exception("An error appeard!");
+            }
+
+            return RedirectToAction(nameof(GetSubjectsList));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Deactivate(string id)
+        {
+            if (await this.subjectService.Deactivate(id))
+            {
+
+            }
+            else
+            {
+                throw new Exception("An error appeard!");
+            }
+
+            return RedirectToAction(nameof(GetSubjectsList));
         }
     }
 }

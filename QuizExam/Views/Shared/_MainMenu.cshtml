@@ -9,14 +9,14 @@
             </a>
             @if (User.IsInRole("Administrator"))
             {
-                <a href="/" class="nav-link">
+                <a asp-area="Admin" asp-controller="User" asp-action="GetAllUsers" class="nav-link">
                     <i class="nav-icon fa fa-user"></i>
                     <p> Users </p>
                 </a>
             }
             <a href="/" class="nav-link">
                 <i class="nav-icon fa fa-sort"></i>
-                <p> Subject </p>
+                <p> Subjects </p>
             </a>
             <a href="/" class="nav-link">
                 <i class="nav-icon fa fa-list"></i>

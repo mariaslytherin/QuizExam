@@ -20,7 +20,7 @@ namespace QuizExam.Infrastructure.Data
         [Column(TypeName = "date")]
         public DateTime ModifyDate { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public QuestionTypeEnum Type { get; set; }
 

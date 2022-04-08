@@ -6,9 +6,9 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
+            @*<div class="card-header">
                 <h3 class="card-title">Users</h3>
-                @*<div class="card-tools">
+                <div class="card-tools">
                     <div class="input-group input-group-sm" style="width: 150px;">
                         <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
                         <div class="input-group-append">
@@ -17,25 +17,25 @@
                             </button>
                         </div>
                     </div>
-                </div>*@
-            </div>
+                </div>
+            </div>*@
 
             <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Actions</th>
+                            <th style="text-align: center">Name</th>
+                            <th style="text-align: center">Email</th>
+                            <th style="text-align: center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var user in Model)
                         {
                             <tr>
-                                <td>@user.Name</td>
-                                <td>@user.Email</td>
-                                <td>
+                                <td style="text-align: center">@user.Name</td>
+                                <td style="text-align: center">@user.Email</td>
+                                <td style="text-align: center">
                                     <a asp-area="admin" asp-action="edit" asp-controller="user" asp-route-id="@user.Id" class="btn btn-block btn-outline-info btn-sm">Edit</a>
                                     <a asp-area="admin" asp-action="roles" asp-controller="user" asp-route-id="@user.Id" class="btn btn-block btn-outline-success btn-sm">Roles</a>
                                 </td>
