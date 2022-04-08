@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Models.Subject;
 using QuizExam.Infrastructure.Data;
@@ -28,7 +29,14 @@ namespace QuizExam.Controllers
         [HttpPost]
         public async Task<IActionResult> NewSubject(SubjectVM model)
         {
-            await this.subjectService.AddSubject(model);
+            if (await this.subjectService.AddSubject(model))
+            {
+                ViewData[MessageConstant.SuccessMessage] = "Успешен запис!";
+            }
+            else
+            {
+                throw new Exception("An error appeard!");
+            }
 
             return RedirectToAction(nameof(GetSubjectsList));
         }
@@ -57,7 +65,7 @@ namespace QuizExam.Controllers
 
             if (await this.subjectService.Edit(model))
             {
-
+                ViewData[MessageConstant.SuccessMessage] = "Успешен запис!";
             }
             else
             {
@@ -72,7 +80,7 @@ namespace QuizExam.Controllers
         {
             if (await this.subjectService.Deactivate(id))
             {
-
+                ViewData[MessageConstant.SuccessMessage] = "Успешно деактивиране!";
             }
             else
             {

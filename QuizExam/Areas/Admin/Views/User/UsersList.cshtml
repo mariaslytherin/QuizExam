@@ -36,8 +36,8 @@
                                 <td style="text-align: center">@user.Name</td>
                                 <td style="text-align: center">@user.Email</td>
                                 <td style="text-align: center">
-                                    <a asp-area="admin" asp-action="edit" asp-controller="user" asp-route-id="@user.Id" class="btn btn-block btn-outline-info btn-sm">Edit</a>
-                                    <a asp-area="admin" asp-action="roles" asp-controller="user" asp-route-id="@user.Id" class="btn btn-block btn-outline-success btn-sm">Roles</a>
+                                    <a asp-area="admin" asp-action="Edit" asp-controller="User" asp-route-id="@user.Id" class="btn btn-block btn-outline-info btn-sm">Edit</a>
+                                    <a asp-area="admin" asp-action="GetRoles" asp-controller="User" asp-route-id="@user.Id" class="btn btn-block btn-outline-success btn-sm">Roles</a>
                                 </td>
                             </tr>
                         }
@@ -47,3 +47,4 @@
         </div>
     </div>
 </div>
+<partial name="_UserMessages" />

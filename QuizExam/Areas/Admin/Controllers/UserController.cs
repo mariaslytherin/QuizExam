@@ -33,6 +33,12 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> GetAllUsers()
         {
+            if (TempData[MessageConstant.SuccessMessage] != null)
+            {
+                var message = TempData[MessageConstant.SuccessMessage]?.ToString();
+                ViewData[MessageConstant.SuccessMessage] = message;
+            }
+
             var users = await this.userService.GetAllUsers();
 
             return View("UsersList", users);
@@ -55,7 +61,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             if (await this.userService.EditUserData(model))
             {
-                
+                TempData[MessageConstant.SuccessMessage] = "Успешен запис!";
             }
             else
             {
@@ -83,7 +89,7 @@ namespace QuizExam.Areas.Admin.Controllers
                     Selected = this.userManager.IsInRoleAsync(user, r.Name).Result
                 }).ToList();
 
-            return View(model);
+            return View("Roles", model);
         }
 
         [HttpPost]

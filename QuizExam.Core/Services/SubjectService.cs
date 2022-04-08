@@ -15,7 +15,7 @@ namespace QuizExam.Core.Services
             this.repository = repository;
         }
 
-        public async Task AddSubject(SubjectVM model)
+        public async Task<bool> AddSubject(SubjectVM model)
         {
             var subject = new Subject()
             {
@@ -24,6 +24,8 @@ namespace QuizExam.Core.Services
 
             await repository.AddAsync(subject);
             await repository.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> Deactivate(string id)
