@@ -35,8 +35,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (TempData[MessageConstant.SuccessMessage] != null)
             {
-                var message = TempData[MessageConstant.SuccessMessage]?.ToString();
-                ViewData[MessageConstant.SuccessMessage] = message;
+                ViewData[MessageConstant.SuccessMessage] = TempData[MessageConstant.SuccessMessage]?.ToString();
             }
 
             var users = await this.userService.GetAllUsers();
@@ -61,7 +60,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             if (await this.userService.EditUserData(model))
             {
-                TempData[MessageConstant.SuccessMessage] = "Успешен запис!";
+                TempData[MessageConstant.SuccessMessage] = "Успешна редакция!";
             }
             else
             {

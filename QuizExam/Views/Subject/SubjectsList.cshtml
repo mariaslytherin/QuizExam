@@ -32,17 +32,21 @@
                     <tbody>
                         @foreach (var subject in Model)
                         {
-                            <tr>
+                            <tr @(subject.IsActive == false ? ("style=" + "background-color:" + "gray;") : string.Empty)>
                                 <td style="text-align: center;">@subject.Name</td>
                                 <td style="text-align: center;">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-info">Action</button>
+                                        <button type="button" class="btn btn-info">Actions</button>
                                         <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
                                             <span class="sr-only">Toggle Dropdown</span>
                                         </button>
                                         <div class="dropdown-menu" role="menu" style="">
                                             <a class="dropdown-item" asp-action="edit" asp-controller="subject" asp-route-id="@subject.Id">Edit</a>
-                                            <a class="dropdown-item" asp-action="deactivate" asp-controller="subject" asp-route-id="@subject.Id">Delete</a>
+                                            <form method="post">
+                                                <button type="submit" class="dropdown-item" asp-action="activate" asp-controller="subject" asp-route-id="@subject.Id">Activate</button>
+                                                <button type="submit" class="dropdown-item" asp-action="deactivate" asp-controller="subject" asp-route-id="@subject.Id">Deactivate</button>
+                                                <button type="submit" class="dropdown-item" asp-action="delete" asp-controller="subject" asp-route-id="@subject.Id">Delete</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </td>

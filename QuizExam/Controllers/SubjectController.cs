@@ -23,7 +23,7 @@ namespace QuizExam.Controllers
         [HttpGet]
         public IActionResult NewSubject()
         {
-            return View("NewSubject");
+            return View("New");
         }
 
         [HttpPost]
@@ -43,6 +43,15 @@ namespace QuizExam.Controllers
 
         public async Task<IActionResult> GetSubjectsList()
         {
+            if (TempData[MessageConstant.SuccessMessage] != null)
+            {
+                ViewData[MessageConstant.SuccessMessage] = TempData[MessageConstant.SuccessMessage]?.ToString();
+            }
+            if (TempData[MessageConstant.SuccesfulEditMessage] != null)
+            {
+                ViewData[MessageConstant.SuccessMessage] = TempData[MessageConstant.SuccesfulEditMessage]?.ToString();
+            }
+
             var subjects = await this.subjectService.GetAllSubjects();
 
             return View("SubjectsList", subjects);
@@ -50,7 +59,7 @@ namespace QuizExam.Controllers
 
         public async Task<IActionResult> Edit(string id)
         {
-            var subject = await this.subjectService.GetSubjectForEdit(id);
+            var subject = await this.subjectService.GetSubjectForEdit(Guid.Parse(id));
 
             return View("Edit", subject);
         }
@@ -65,7 +74,22 @@ namespace QuizExam.Controllers
 
             if (await this.subjectService.Edit(model))
             {
-                ViewData[MessageConstant.SuccessMessage] = "Успешен запис!";
+                TempData[MessageConstant.SuccesfulEditMessage] = MessageConstant.SuccesfulEditMessage;
+            }
+            else
+            {
+                throw new Exception("An error appeard!");
+            }
+
+            return RedirectToAction(nameof(GetSubjectsList));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Activate(string id)
+        {
+            if (await this.subjectService.Activate(Guid.Parse(id)))
+            {
+                TempData[MessageConstant.SuccessMessage] = "Успешно активиране!";
             }
             else
             {
@@ -78,9 +102,24 @@ namespace QuizExam.Controllers
         [HttpPost]
         public async Task<IActionResult> Deactivate(string id)
         {
-            if (await this.subjectService.Deactivate(id))
+            if (await this.subjectService.Deactivate(Guid.Parse(id)))
             {
-                ViewData[MessageConstant.SuccessMessage] = "Успешно деактивиране!";
+                TempData[MessageConstant.SuccessMessage] = "Успешно деактивиране!";
+            }
+            else
+            {
+                throw new Exception("An error appeard!");
+            }
+
+            return RedirectToAction(nameof(GetSubjectsList));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (await this.subjectService.Delete(Guid.Parse(id)))
+            {
+                TempData[MessageConstant.SuccessMessage] = "Успешно изтриване!";
             }
             else
             {

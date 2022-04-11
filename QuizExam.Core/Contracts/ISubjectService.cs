@@ -9,12 +9,16 @@ namespace QuizExam.Core.Contracts
 
         Task<IEnumerable<SubjectVM>> GetAllSubjects();
 
-        Task<Subject> GetSubjectById(string id);
+        Task<Subject> GetSubjectById(Guid id);
 
-        Task<SubjectVM> GetSubjectForEdit(string id);
+        Task<SubjectVM> GetSubjectForEdit(Guid id);
 
         Task<bool> Edit(SubjectVM model);
 
-        Task<bool> Deactivate(string id);
+        Task<bool> Deactivate(Guid id);
+
+        Task<bool> Activate(Guid id);
+
+        Task<bool> Delete(Guid id);
     }
 }

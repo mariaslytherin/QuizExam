@@ -10,5 +10,7 @@ namespace QuizExam.Core.Models.Subject
         [StringLength(100)]
         [Display(Name = "Enter name of a subject")]
         public string Name { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }
