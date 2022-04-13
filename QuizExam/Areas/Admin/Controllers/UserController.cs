@@ -72,6 +72,34 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> GetRoles(string id)
         {
+            //ViewBag.userId = id;
+            //var user = await this.userManager.FindByIdAsync(id);
+            //if (user == null)
+            //{
+            //    ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+            //    return View("NotFound");
+            //}
+            //ViewBag.UserName = user.UserName;
+            //var model = new List<UserRolesVM>();
+            //foreach (var role in this.roleManager.Roles)
+            //{
+            //    var userRolesViewModel = new UserRolesVM
+            //    {
+            //        RoleId = role.Id,
+            //        RoleName = role.Name
+            //    };
+            //    if (await this.userManager.IsInRoleAsync(user, role.Name))
+            //    {
+            //        userRolesViewModel.Selected = true;
+            //    }
+            //    else
+            //    {
+            //        userRolesViewModel.Selected = false;
+            //    }
+            //    model.Add(userRolesViewModel);
+            //}
+            //return View("Roles", model);
+
             var user = await this.userService.GetUserById(id);
             var model = new UserRolesVM()
             {
@@ -92,18 +120,42 @@ namespace QuizExam.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetRoles(UserRolesVM model)
+        public async Task<IActionResult> SetRoles(List<UserRolesVM> model, string id)
         {
-            var user = await this.userService.GetUserById(model.UserId);
-            var userRoles = await this.userManager.GetRolesAsync(user);
-            await this.userManager.RemoveFromRolesAsync(user, userRoles);
+            var user = await this.userManager.FindByIdAsync(id);
 
-            if (model.RoleNames?.Length > 0)
+            if (user == null)
             {
-                await this.userManager.AddToRolesAsync(user, model.RoleNames);
+                return View();
+            }
+            var roles = await this.userManager.GetRolesAsync(user);
+            var result = await this.userManager.RemoveFromRolesAsync(user, roles);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot remove user existing roles");
+                return View(model);
             }
 
+            result = await this.userManager.AddToRolesAsync(user, model.Where(x => x.Selected).Select(y => y.RoleName));
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot add selected roles to user");
+                return View(model);
+            }
             return RedirectToAction(nameof(GetAllUsers));
+
+            //var user = await this.userService.GetUserById(model.UserId);
+            //var userRoles = await this.userManager.GetRolesAsync(user);
+            //await this.userManager.RemoveFromRolesAsync(user, userRoles);
+            //
+            //if (model.RoleNames?.Length > 0)
+            //{
+            //    await this.userManager.AddToRolesAsync(user, model.RoleNames);
+            //}
+            //
+            //return RedirectToAction(nameof(GetAllUsers));
         }
 
         public async Task<IActionResult> CreateRole()
