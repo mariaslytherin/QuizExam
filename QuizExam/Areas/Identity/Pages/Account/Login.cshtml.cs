@@ -122,9 +122,9 @@ namespace QuizExam.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
-                    var user = await _userManager.GetUserAsync(User);
-                    var check = User.IsInRole("Administrator");
-                    if (User.IsInRole("Administrator"))
+                    var smth = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                    var check = await _signInManager.UserManager.IsInRoleAsync(smth, "Administrator");
+                    if (check)
                     {
                         return RedirectToAction("Index", "Home", new { area = "Admin" });
                     }

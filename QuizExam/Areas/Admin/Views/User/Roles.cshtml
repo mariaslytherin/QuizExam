@@ -1,5 +1,5 @@
 ﻿@using QuizExam.Core.Models
-@model UserRolesVM
+@model List<UserRolesVM>
 @{
     var items = (List<SelectListItem>)ViewBag.RoleItems;
 }
@@ -12,31 +12,28 @@
             </div>
             <form id="roles" method="post">
                 <div class="card-body">
-                    @*<input type="hidden" name="UserId" value="@Model.UserId" />*@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    @*<div class="form-group">
-                        <label asp-for="Name" class="form-label"></label>
-                        <input asp-for="Name" class="form-control" readonly>
-                        </div>*@
+                    <div class="form-group">
+                        <label value="@ViewBag.UserFullName" class="form-label"></label>
+                        <input value="@ViewBag.UserFullName" class="form-control" readonly>
+                    </div>
                     <div class="form-group">
                         <label>User Roles</label>
-                        @for (int i = 0; i < items.Count; i++)
+                        @for (int i = 0; i < Model.Count; i++)
                         {
-                            //<div class="form-check m-1">
-                            //    <input type="hidden" asp-for="@items[i].RoleId" />
-                            //    <input type="hidden" asp-for="@items[i].RoleName" />
-                            //    <input asp-for="@items[i].Selected" class="form-check-input" />
-                            //    <label class="form-check-label" asp-for="@items[i].Selected">
-                            //        @items[i].RoleName
-                            //    </label>
-                            //</div>
+                            <div class="form-check m-1">
+                                <input type="hidden" asp-for="@Model[i].RoleId" />
+                                <input type="hidden" asp-for="@Model[i].RoleName" />
+                                <input asp-for="@Model[i].Selected" class="form-check-input" />
+                                <label class="form-check-label" asp-for="@Model[i].Selected">
+                                    @Model[i].RoleName
+                                </label>
+                            </div>
                         }
-                        @*<select asp-for="RoleNames" asp-items="@items" multiple="" class="form-control">
-                            </select>*@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" asp-action="SetRoles" asp-controller="user" class="btn btn-primary">Submit</button>
+                    <button type="submit" asp-area="Admin" asp-action="SetRoles" asp-controller="User" asp-route-id="@ViewBag.UserId" class="btn btn-primary">Submit</button>
                     <a asp-action="GetAllUsers" class="btn btn-outline-primary" style="width:auto">Cancel</a>
                 </div>
             </form>
