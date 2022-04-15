@@ -60,7 +60,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             if (await this.userService.EditUserData(model))
             {
-                TempData[MessageConstant.SuccessMessage] = "Успешна редакция!";
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccesfulEditMessage;
             }
             else
             {
@@ -74,13 +74,16 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             ViewBag.UserId = id;
             var user = await this.userManager.FindByIdAsync(id);
+
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
                 return View("NotFound");
             }
+
             ViewBag.UserFullName = $"{user.FirstName} {user.LastName}";
             var model = new List<UserRolesVM>();
+
             foreach (var role in this.roleManager.Roles)
             {
                 var userRolesViewModel = new UserRolesVM
@@ -98,6 +101,7 @@ namespace QuizExam.Areas.Admin.Controllers
                 }
                 model.Add(userRolesViewModel);
             }
+
             return View("Roles", model);
         }
 
@@ -105,22 +109,31 @@ namespace QuizExam.Areas.Admin.Controllers
         public async Task<IActionResult> SetRoles(List<UserRolesVM> model, string id)
         {
             var user = await this.userManager.FindByIdAsync(id);
+
             if (user == null)
             {
                 return View();
             }
+
             var roles = await this.userManager.GetRolesAsync(user);
             var result = await this.userManager.RemoveFromRolesAsync(user, roles);
+
             if (!result.Succeeded)
             {
                 ModelState.AddModelError("", "Cannot remove user existing roles");
                 return View(model);
             }
+
             result = await this.userManager.AddToRolesAsync(user, model.Where(x => x.Selected).Select(y => y.RoleName));
+
             if (!result.Succeeded)
             {
                 ModelState.AddModelError("", "Cannot add selected roles to user");
                 return View(model);
+            }
+            else if (result.Succeeded)
+            {
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccesfulAddedRoleMessage;
             }
 
             return RedirectToAction(nameof(GetAllUsers));

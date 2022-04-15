@@ -31,7 +31,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.subjectService.AddSubject(model))
             {
-                ViewData[MessageConstant.SuccessMessage] = "Успешен запис!";
+                ViewData[MessageConstants.SuccessMessage] = "Успешен запис!";
             }
             else
             {
@@ -43,15 +43,6 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> GetSubjectsList()
         {
-            if (TempData[MessageConstant.SuccessMessage] != null)
-            {
-                ViewData[MessageConstant.SuccessMessage] = TempData[MessageConstant.SuccessMessage]?.ToString();
-            }
-            if (TempData[MessageConstant.SuccesfulEditMessage] != null)
-            {
-                ViewData[MessageConstant.SuccessMessage] = TempData[MessageConstant.SuccesfulEditMessage]?.ToString();
-            }
-
             var subjects = await this.subjectService.GetAllSubjects();
 
             return View("SubjectsList", subjects);
@@ -74,7 +65,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             if (await this.subjectService.Edit(model))
             {
-                TempData[MessageConstant.SuccesfulEditMessage] = MessageConstant.SuccesfulEditMessage;
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccesfulEditMessage;
             }
             else
             {
@@ -89,7 +80,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.subjectService.Activate(Guid.Parse(id)))
             {
-                TempData[MessageConstant.SuccessMessage] = "Успешно активиране!";
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccesfulActivationMessage;
             }
             else
             {
@@ -104,7 +95,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.subjectService.Deactivate(Guid.Parse(id)))
             {
-                TempData[MessageConstant.SuccessMessage] = "Успешно деактивиране!";
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccesfulDeactivationMessage;
             }
             else
             {
@@ -119,7 +110,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.subjectService.Delete(Guid.Parse(id)))
             {
-                TempData[MessageConstant.SuccessMessage] = "Успешно изтриване!";
+                TempData[MessageConstants.SuccessMessage] = "Успешно изтриване!";
             }
             else
             {
