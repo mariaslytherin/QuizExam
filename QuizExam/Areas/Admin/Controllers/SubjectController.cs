@@ -4,7 +4,7 @@ using QuizExam.Core.Contracts;
 using QuizExam.Core.Models.Subject;
 using QuizExam.Infrastructure.Data;
 
-namespace QuizExam.Controllers
+namespace QuizExam.Areas.Admin.Controllers
 {
     public class SubjectController : BaseController
     {
