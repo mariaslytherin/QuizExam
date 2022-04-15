@@ -16,3 +16,11 @@ html {
 /*body {
   margin-bottom: 60px;
 }*/
+
+#footer {
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 50px;
+    bottom: 0;
+}
