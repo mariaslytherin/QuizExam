@@ -1,5 +1,5 @@
 ﻿@using QuizExam.Core.Models
-@model IEnumerable<UserListVM>
+@model List<UserListVM>
 @{
 }
 
@@ -26,6 +26,7 @@
                         <tr>
                             <th style="text-align: center">Name</th>
                             <th style="text-align: center">Email</th>
+                            <th style="text-align: center">Roles</th>
                             <th style="text-align: center">Actions</th>
                         </tr>
                     </thead>
@@ -35,6 +36,7 @@
                             <tr>
                                 <td style="text-align: center">@user.Name</td>
                                 <td style="text-align: center">@user.Email</td>
+                                <td style="text-align: center">@string.Join(", ", user.Roles.ToList())</td>
                                 <td style="text-align: center">
                                     <a asp-area="admin" asp-action="Edit" asp-controller="User" asp-route-id="@user.Id" class="btn btn-block btn-outline-info btn-sm">Edit</a>
                                     <a asp-area="admin" asp-action="GetRoles" asp-controller="User" asp-route-id="@user.Id" class="btn btn-block btn-outline-success btn-sm">Roles</a>

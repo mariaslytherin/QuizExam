@@ -31,16 +31,9 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<IEnumerable<UserListVM>> GetAllUsers()
+        public async Task<IEnumerable<ApplicationUser>> GetAllUsers()
         {
-            return await this.repository.All<ApplicationUser>()
-                .Select(u => new UserListVM()
-                {
-                    Id = u.Id,
-                    Name = $"{u.FirstName} {u.LastName}",
-                    Email = u.Email,
-                })
-                .ToListAsync();
+            return await this.repository.All<ApplicationUser>().ToListAsync();
         }
 
         public async Task<ApplicationUser> GetUserById(string id)

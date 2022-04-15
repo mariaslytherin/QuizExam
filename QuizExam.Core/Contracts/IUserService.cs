@@ -5,7 +5,7 @@ namespace QuizExam.Core.Contracts
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserListVM>> GetAllUsers();
+        Task<IEnumerable<ApplicationUser>> GetAllUsers();
 
         Task<UserEditVM> GetUserForEdit(string id);
 

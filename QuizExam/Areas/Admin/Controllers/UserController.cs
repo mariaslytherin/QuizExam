@@ -33,14 +33,20 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> GetAllUsers()
         {
-            if (TempData[MessageConstant.SuccessMessage] != null)
+            var users = await this.userService.GetAllUsers();
+            var userRolesList = new List<UserListVM>();
+            
+            foreach (var user in users)
             {
-                ViewData[MessageConstant.SuccessMessage] = TempData[MessageConstant.SuccessMessage]?.ToString();
+                var currentUserVM = new UserListVM();
+                currentUserVM.Id = user.Id;
+                currentUserVM.Name = $"{user.FirstName} {user.LastName}";
+                currentUserVM.Email = user.Email;
+                currentUserVM.Roles = new List<string>(await this.userManager.GetRolesAsync(user));
+                userRolesList.Add(currentUserVM);
             }
 
-            var users = await this.userService.GetAllUsers();
-
-            return View("UsersList", users);
+            return View("UsersList", userRolesList);
         }
 
         public async Task<IActionResult> Edit(string id)
