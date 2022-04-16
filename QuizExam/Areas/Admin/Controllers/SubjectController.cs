@@ -15,11 +15,6 @@ namespace QuizExam.Areas.Admin.Controllers
             this.subjectService = subjectService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpGet]
         public IActionResult NewSubject()
         {
@@ -65,7 +60,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             if (await this.subjectService.Edit(model))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccesfulEditMessage;
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulEditMessage;
             }
             else
             {
@@ -80,7 +75,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.subjectService.Activate(Guid.Parse(id)))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccesfulActivationMessage;
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulActivationMessage;
             }
             else
             {
@@ -95,7 +90,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.subjectService.Deactivate(Guid.Parse(id)))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccesfulDeactivationMessage;
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulDeactivationMessage;
             }
             else
             {

@@ -1,0 +1,60 @@
+﻿@using QuizExam.Core.Models.Exam
+@model NewExamVM
+@{
+    ViewData["Title"] = "Create Exam";
+}
+
+<div class="row">
+    <div class="col-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Create new exam</h3>
+            </div>
+            <form id="edit" method="post">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Title" class="form-label"></label>
+                        <input asp-for="Title" type="text" class="form-control" placeholder="Enter exam title..." aria-required="true">
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" type="text" class="form-control" placeholder="Enter exam description..." aria-required="true"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Example of a Simple Static Select</label>
+                        <select name="simpleSelect2" class="form-control" id="simpleSelect2" data-placeholder="Select a subject">
+                            <option></option>
+                            <option data-select2-id="27">1</option>
+                            <option data-select2-id="28">2</option>
+                            <option data-select2-id="29">3</option>
+                            <option data-select2-id="30">4</option>
+                            <option data-select2-id="31">5</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MaxScore" class="form-label"></label>
+                        <input asp-for="MaxScore" type="number" style="width: 25%;" class="form-control" placeholder="Score" aria-required="true">
+                        <span asp-validation-for="MaxScore" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <a asp-action="GetSubjectsList" class="btn btn-outline-primary" style="width:auto">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".statesSelect").select2();
+    });
+</script>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

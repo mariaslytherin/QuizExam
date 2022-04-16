@@ -88,6 +88,19 @@ namespace QuizExam.Core.Services
             return result;
         }
 
+        public async Task<IEnumerable<SubjectVM>> GetActiveSubjects()
+        {
+            return await this.repository.All<Subject>()
+                .Where(s => s.IsActive)
+                .Select(s => new SubjectVM()
+                {
+                    Id = s.Id.ToString(),
+                    Name = s.Name,
+                    IsActive = s.IsActive,
+                })
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<SubjectVM>> GetAllSubjects()
         {
             return await this.repository.All<Subject>()

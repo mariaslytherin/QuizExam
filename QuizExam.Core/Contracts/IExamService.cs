@@ -4,6 +4,6 @@ namespace QuizExam.Core.Contracts
 {
     public interface IExamService
     {
-        Task<bool> CreateExam(ExamVM model);
+        Task<bool> CreateExam(NewExamVM model);
     }
 }

@@ -8,12 +8,16 @@
 
         public const string WarningMessage = "WarningMessage";
 
-        public const string SuccesfulEditMessage = "Успешна редакция!";
+        public const string SuccessfulEditMessage = "Успешна редакция!";
 
-        public const string SuccesfulActivationMessage = "Успешно активиране!";
+        public const string SuccessfulActivationMessage = "Успешно активиране!";
 
-        public const string SuccesfulDeactivationMessage = "Успешно деактивиране!";
+        public const string SuccessfulDeactivationMessage = "Успешно деактивиране!";
 
-        public const string SuccesfulAddedRoleMessage = "Успешно добавихте потребителя към роля!";
+        public const string SuccessfulAddedRoleMessage = "Успешно добавихте потребителя към роля!";
+
+        public const string SuccessfullyAddedSubjectMessage = "Успешно добавихте нов предмет!";
+
+        public const string SuccessfullyAddedExamMessage = "Успешно създадохте изпит!";
     }
 }

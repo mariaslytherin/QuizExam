@@ -9,6 +9,8 @@ namespace QuizExam.Core.Contracts
 
         Task<IEnumerable<SubjectVM>> GetAllSubjects();
 
+        Task<IEnumerable<SubjectVM>> GetActiveSubjects();
+
         Task<Subject> GetSubjectById(Guid id);
 
         Task<SubjectVM> GetSubjectForEdit(Guid id);

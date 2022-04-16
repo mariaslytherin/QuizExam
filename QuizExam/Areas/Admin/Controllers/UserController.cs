@@ -66,7 +66,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             if (await this.userService.EditUserData(model))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccesfulEditMessage;
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulEditMessage;
             }
             else
             {
@@ -139,7 +139,7 @@ namespace QuizExam.Areas.Admin.Controllers
             }
             else if (result.Succeeded)
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccesfulAddedRoleMessage;
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulAddedRoleMessage;
             }
 
             return RedirectToAction(nameof(GetAllUsers));
