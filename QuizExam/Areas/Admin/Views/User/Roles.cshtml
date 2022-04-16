@@ -8,7 +8,7 @@
     <div class="col-4">
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">User Roles</h3>
+                <h3 class="card-title">Manage User Roles</h3>
             </div>
             <form id="roles" method="post">
                 <div class="card-body">
@@ -18,7 +18,7 @@
                         <input value="@ViewBag.UserFullName" class="form-control" readonly>
                     </div>
                     <div class="form-group">
-                        <label>User Roles</label>
+                        <label>Roles:</label>
                         @for (int i = 0; i < Model.Count; i++)
                         {
                             <div class="form-check m-1">
