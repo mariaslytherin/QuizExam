@@ -24,3 +24,7 @@ html {
     height: 50px;
     bottom: 0;
 }
+
+.card-primary:not(.card-outline) > .card-header {
+    background-color: #008080;
+}
