@@ -26,6 +26,11 @@ namespace QuizExam.Areas.Admin.Controllers
             return View("ExamsList", exams);
         }
 
+        public async Task<IActionResult> View()
+        {
+            return View("View");
+        }
+
         public async Task<IActionResult> New()
         {
             var subjects = await this.subjectService.GetActiveSubjects();
