@@ -15,7 +15,6 @@ namespace QuizExam.Areas.Admin.Controllers
             this.subjectService = subjectService;
         }
 
-        [HttpGet]
         public IActionResult NewSubject()
         {
             return View("New");
