@@ -2,8 +2,10 @@
 
 namespace QuizExam.Core.Models.Exam
 {
-    public class NewExamVM
+    public class EditExamVM
     {
+        public string Id { get; set; }
+
         [Required]
         [StringLength(150)]
         [Display(Name = "Title")]
@@ -16,7 +18,6 @@ namespace QuizExam.Core.Models.Exam
         [Display(Name = "Maximum score")]
         public int? MaxScore { get; set; }
 
-        [Required]
-        public string SubjectId { get; set; }
+        public string SubjectName { get; set; }
     }
 }

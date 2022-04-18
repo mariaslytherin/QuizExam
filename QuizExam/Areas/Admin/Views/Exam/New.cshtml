@@ -2,6 +2,7 @@
 @model NewExamVM
 @{
     ViewData["Title"] = "Create Exam";
+    var subjects = (List<SelectListItem>)ViewBag.Subjects;
 }
 
 <div class="row">
@@ -24,14 +25,9 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label>Example of a Simple Static Select</label>
-                        <select name="simpleSelect2" class="form-control" id="simpleSelect2" data-placeholder="Select a subject">
+                        <label>Select a subject</label>
+                        <select asp-for="SubjectId" asp-items="@subjects" name="SubjectId" class="form-control" id="simpleSelect2" data-placeholder="Select a subject">
                             <option></option>
-                            <option data-select2-id="27">1</option>
-                            <option data-select2-id="28">2</option>
-                            <option data-select2-id="29">3</option>
-                            <option data-select2-id="30">4</option>
-                            <option data-select2-id="31">5</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -41,19 +37,13 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Add</button>
-                    <a asp-action="GetSubjectsList" class="btn btn-outline-primary" style="width:auto">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a asp-action="GetExamsList" class="btn btn-outline-primary" style="width:auto">Cancel</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-<script>
-    $(document).ready(function () {
-        $(".statesSelect").select2();
-    });
-</script>
 
 @section Scripts {
 <partial name="_ValidationScriptsPartial" />

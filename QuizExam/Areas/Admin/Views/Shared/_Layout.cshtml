@@ -33,7 +33,7 @@
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Subject" asp-action="GetSubjectsList">Subjects</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Exam" asp-action="Index">Exams</a>
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Exam" asp-action="GetExamsList">Exams</a>
                         </li>
                         <li class="nav-item">
                             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
