@@ -1,4 +1,8 @@
-﻿<style>
+﻿@using QuizExam.Core.Models.Exam
+@model ViewExamVM
+
+@*TODO*@
+<style>
 
     .center {
         margin: auto;
@@ -9,22 +13,47 @@
 
 </style>
 
-<div class="row d-flex justify-content-center">
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-footer">
-                <div class="row">
-                    <a class="btn btn-block btn-outline-dark" style="width: 80px; margin-right: 5px; height: fit-content;">Edit</a>
-                    <button type="button" class="btn btn-block btn-danger" style="width: 80px; height: fit-content;">Delete</button>
+<header class="bg-dark bg-gradient text-white">
+    <div class="container px-4 text-center">
+        <h1 class="fw-bolder">@Model.Title</h1>
+        <p class="lead">@Model.Description</p>
+    </div>
+    <div class="row d-flex justify-content-center">
+        <a asp-action="questionType" asp-controller="question" class="btn btn-success" style="width:auto; margin-bottom: 10px;">Добави въпрос</a>
+    </div>
+</header>
+@*TODO*@
+@for (int i = 0; i < 10; i++)
+{
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                    <div class="row col-sm-4">
+                        <label>@i</label>
+                        <a class="btn btn-outline-secondary btn-sm" style="width: 70px; margin-right: 5px; height: fit-content;">Edit</a>
+                        <button type="button" class="btn btn-outline-dark btn-sm" style="width: 70px; height: fit-content;">Delete</button>
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                    Some quick example text to build on the card title and make up the bulk of the card's
-                    content.
-                </p>
+                <div class="card-body" style="display: block;">
+                    Start creating your amazing application!
+                    @for (int j = 0; j < 4; j++)
+                    {
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="customCheckbox2">
+                            <label for="customCheckbox2" class="custom-control-label">Custom Checkbox checked</label>
+                        </div>
+                    }
+                </div>
+                @*<div class="card-footer" style="display: block;">
+                    Footer
+                    </div>*@
             </div>
         </div>
     </div>
-</div>
+}

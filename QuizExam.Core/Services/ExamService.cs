@@ -128,5 +128,19 @@ namespace QuizExam.Core.Services
                 SubjectName = subject.Name,
             };
         }
+
+        public async Task<ViewExamVM> GetExamForView(Guid id)
+        {
+            var exam = await this.repository.GetByIdAsync<Exam>(id);
+            var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
+
+            return new ViewExamVM
+            {
+                Id = exam.Id.ToString(),
+                Title= exam.Title,
+                Description= exam.Description,
+                SubjectName = subject.Name,
+            };
+        }
     }
 }

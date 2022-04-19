@@ -13,6 +13,8 @@ namespace QuizExam.Core.Contracts
 
         Task<EditExamVM> GetExamForEdit(Guid id);
 
+        Task<ViewExamVM> GetExamForView(Guid id);
+
         Task<bool> Edit(EditExamVM model);
 
         Task<bool> Deactivate(Guid id);

@@ -26,9 +26,11 @@ namespace QuizExam.Areas.Admin.Controllers
             return View("ExamsList", exams);
         }
 
-        public async Task<IActionResult> View()
+        public async Task<IActionResult> View(string id)
         {
-            return View("View");
+            var exam = await this.examService.GetExamForView(Guid.Parse(id));
+
+            return View("View", exam);
         }
 
         public async Task<IActionResult> New()
@@ -43,7 +45,7 @@ namespace QuizExam.Areas.Admin.Controllers
                 })
                 .ToList();
 
-            return View("New");
+            return await View("New");
         }
 
         [HttpPost]
