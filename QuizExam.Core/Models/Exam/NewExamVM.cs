@@ -1,22 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using QuizExam.Core.Constants;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuizExam.Core.Models.Exam
 {
     public class NewExamVM
     {
-        [Required]
-        [StringLength(150)]
-        [Display(Name = "Title")]
+        [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+        [StringLength(150, ErrorMessage = ExamErrorMessages.ExamTitleLength, MinimumLength = 6)]
+        [Display(Name = "Заглавие")]
         public string Title { get; set; }
 
-        [StringLength(500)]
-        [Display(Name = "Description")]
+        [StringLength(500, ErrorMessage = ExamErrorMessages.ExamDescriptionMaxLength)]
+        [Display(Name = "Описание")]
         public string? Description { get; set; }
 
-        [Display(Name = "Maximum score")]
+        [Display(Name = "Максимален брой точки")]
         public int? MaxScore { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+        [Display(Name = "Предмет")]
         public string SubjectId { get; set; }
     }
 }

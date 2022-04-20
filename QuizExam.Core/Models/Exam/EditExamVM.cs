@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using QuizExam.Core.Constants;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuizExam.Core.Models.Exam
 {
@@ -6,13 +7,13 @@ namespace QuizExam.Core.Models.Exam
     {
         public string Id { get; set; }
 
-        [Required]
-        [StringLength(150)]
-        [Display(Name = "Title")]
+        [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+        [StringLength(150, ErrorMessage = ExamErrorMessages.ExamTitleLength, MinimumLength = 6)]
+        [Display(Name = "Заглавие")]
         public string Title { get; set; }
 
-        [StringLength(500)]
-        [Display(Name = "Description")]
+        [StringLength(500, ErrorMessage = ExamErrorMessages.ExamDescriptionMaxLength, MinimumLength = 10)]
+        [Display(Name = "Описание")]
         public string? Description { get; set; }
 
         [Display(Name = "Maximum score")]
