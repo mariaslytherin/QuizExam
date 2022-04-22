@@ -1,4 +1,6 @@
-﻿namespace QuizExam.Core.Models.Exam
+﻿using QuizExam.Core.Models.Question;
+
+namespace QuizExam.Core.Models.Exam
 {
     public class ViewExamVM
     {
@@ -10,6 +12,6 @@
 
         public string SubjectName { get; set; }
 
-        public IList<string> Questions { get; set; }
+        public IList<QuestionExamVM> Questions { get; set; }
     }
 }

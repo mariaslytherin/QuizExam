@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-12">
-        <a asp-action="New" class="btn btn-block btn-outline-info" style="width: 130px; margin-bottom: 10px;">New Exam</a>
+        <a asp-action="new" asp-controller="exam" class="btn btn-block btn-outline-info" style="width: 130px; margin-bottom: 10px;">New Exam</a>
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Exams</h3>
@@ -39,7 +39,7 @@
                             <tr @(exam.IsActive == "No" ? ("style=" + "background-color:" + "gray;") : string.Empty)>
                                 <td class="text-right py-0 align-middle">
                                     <div class="btn-group btn-group-sm">
-                                        <a asp-action="view" asp-controller="Exam" asp-route-id="@exam.Id" class="btn btn-info">
+                                        <a asp-action="viewExam" asp-controller="exam" asp-route-id="@exam.Id" class="btn btn-info">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <button type="submit" class="btn btn-danger" asp-action="delete" asp-controller="Exam" asp-route-id="@exam.Id"><i class="fas fa-trash"></i></button>
@@ -57,8 +57,8 @@
                                         <div class="dropdown-menu" role="menu" style="">
                                             <a class="dropdown-item" asp-action="edit" asp-controller="Exam" asp-route-id="@exam.Id">Edit</a>
                                             <form method="post">
-                                                <button type="submit" class="dropdown-item" asp-action="activate" asp-controller="Exam" asp-route-id="@exam.Id">Activate</button>
-                                                <button type="submit" class="dropdown-item" asp-action="deactivate" asp-controller="Exam" asp-route-id="@exam.Id">Deactivate</button>
+                                                <button type="submit" class="dropdown-item" asp-action="activate" asp-controller="exam" asp-route-id="@exam.Id">Activate</button>
+                                                <button type="submit" class="dropdown-item" asp-action="deactivate" asp-controller="exam" asp-route-id="@exam.Id">Deactivate</button>
                                             </form>
                                         </div>
                                     </div>

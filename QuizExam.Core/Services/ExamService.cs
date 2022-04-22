@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizExam.Core.Contracts;
+using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Core.Models.Exam;
+using QuizExam.Core.Models.Question;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Repositories;
 
@@ -40,8 +42,8 @@ namespace QuizExam.Core.Services
                 SubjectId = Guid.Parse(model.SubjectId),
             };
 
-            await repository.AddAsync(exam);
-            await repository.SaveChangesAsync();
+            await this.repository.AddAsync(exam);
+            await this.repository.SaveChangesAsync();
 
             return true;
         }
@@ -133,6 +135,24 @@ namespace QuizExam.Core.Services
         {
             var exam = await this.repository.GetByIdAsync<Exam>(id);
             var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
+            var questions = this.repository.All<Question>().Where(q => q.ExamId == id)
+                .Select(q => new QuestionExamVM
+                {
+                    Id = q.Id.ToString(),
+                    Content = q.Content,
+                    AnswerOptions = this.repository
+                        .All<AnswerOption>()
+                        .Where(a => a.QuestionId == q.Id)
+                        .Select(a => new AnswerOptionVM
+                        {
+                            Content = a.Content,
+                            IsCorrect = a.IsCorrect,
+                        })
+                        .DefaultIfEmpty()
+                        .ToList()
+                })
+                .DefaultIfEmpty()
+                .ToList();
 
             return new ViewExamVM
             {
@@ -140,6 +160,7 @@ namespace QuizExam.Core.Services
                 Title= exam.Title,
                 Description= exam.Description,
                 SubjectName = subject.Name,
+                Questions = questions,
             };
         }
     }
