@@ -19,7 +19,7 @@
     }
     public class QuestionErrorMessages
     {
-        public const string ExamTitleMaxLength = "Заглавието трябва да бъде между {2} и {1} символа.";
-        public const string ExamDescriptionMaxLength = "Описанието трябва да бъде между {2} и {1} символа.";
+        public const string QuestionContentLength = "Въпросът трябва да бъде между {2} и {1} символа.";
+        public const string QuestionRuleLength = "Правилото трябва да бъде между {2} и {1} символа.";
     }
 }

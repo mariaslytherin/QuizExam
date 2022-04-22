@@ -19,5 +19,7 @@
         public const string SuccessfullyAddedSubjectMessage = "Успешно добавихте нов предмет!";
 
         public const string SuccessfullyAddedExamMessage = "Успешно създадохте изпит!";
+
+        public const string SuccessfullyAddedQuestionMessage = "Успешно създадохте въпрос!";
     }
 }

@@ -1,29 +1,40 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using QuizExam.Core.Constants;
+using QuizExam.Core.Contracts;
+using QuizExam.Core.Models.Question;
 using QuizExam.Infrastructure.Data.Enums;
 
 namespace QuizExam.Areas.Admin.Controllers
 {
     public class QuestionController : BaseController
     {
-        public IActionResult QuestionType(string id)
+        private readonly IQuestionService questionService;
+
+        public QuestionController(IQuestionService questionService)
         {
-            ViewBag.CountOptions = Enumerable.Range(2, 7)
-                .Select(i => new SelectListItem
-                {
-                    Text = i.ToString(),
-                    Value = i.ToString()
-                });
+            this.questionService = questionService;
+        }
 
-            ViewBag.QuestionTypes = Enum.GetValues(typeof(QuestionTypeEnum))
-                .Cast<QuestionTypeEnum>()
-                .Select(v => new SelectListItem
-                {
-                    Text = v.ToString(),
-                    Value = v.ToString()
-                });
+        public async Task<IActionResult> New()
+        {
+            return View("New");
+        }
 
-            return View("AnswerOptionsCount");
+        [HttpPost]
+        public async Task<IActionResult> New(NewQuestionVM model)
+        {
+            if (await this.questionService.Create(model))
+            {
+                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfullyAddedQuestionMessage;
+                TempData["QuestionContent"] = model.Content;
+            }
+            else
+            {
+                throw new Exception("An error appeard!");
+            }
+
+            return RedirectToAction("NewOption", "AnswerOption", new { area = "Admin" });
         }
     }
 }
