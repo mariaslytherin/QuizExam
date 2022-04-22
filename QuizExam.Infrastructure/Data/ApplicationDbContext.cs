@@ -14,10 +14,6 @@ namespace QuizExam.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Question>()
-                .HasIndex(c => c.OrderNumber)
-                .IsUnique();
-
             base.OnModelCreating(builder);
         }
 

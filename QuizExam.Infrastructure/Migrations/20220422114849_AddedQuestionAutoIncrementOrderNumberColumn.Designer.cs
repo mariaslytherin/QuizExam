@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizExam.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using QuizExam.Infrastructure.Data;
 namespace QuizExam.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220422114849_AddedQuestionAutoIncrementOrderNumberColumn")]
+    partial class AddedQuestionAutoIncrementOrderNumberColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,7 +325,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(300)");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("date");
 
                     b.Property<Guid>("ExamId")
                         .HasColumnType("uniqueidentifier");
@@ -333,6 +335,9 @@ namespace QuizExam.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("ModifyDate")
                         .HasColumnType("date");
+
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("int");
 
                     b.Property<double>("Points")
                         .HasColumnType("float");

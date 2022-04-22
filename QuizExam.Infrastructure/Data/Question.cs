@@ -14,8 +14,8 @@ namespace QuizExam.Infrastructure.Data
         public string Content { get; set; }
 
         [Required]
-        [Column(TypeName = "date")]
-        public DateTime CreateDate { get; set; } = DateTime.Today;
+        [Column(TypeName = "datetime")]
+        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
 
         [Column(TypeName = "date")]
         public DateTime ModifyDate { get; set; }
@@ -29,10 +29,6 @@ namespace QuizExam.Infrastructure.Data
 
         [Required]
         public double Points { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        public int OrderNumber { get; set; }
 
         [Range(2, 6)]
         public int AnswerOptionsCount { get; set; }
