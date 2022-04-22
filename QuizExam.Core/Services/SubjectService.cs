@@ -37,8 +37,8 @@ namespace QuizExam.Core.Services
                 Name = model.Name,
             };
 
-            await repository.AddAsync(subject);
-            await repository.SaveChangesAsync();
+            await this.repository.AddAsync(subject);
+            await this.repository.SaveChangesAsync();
 
             return true;
         }
