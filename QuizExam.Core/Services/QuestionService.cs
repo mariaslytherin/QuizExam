@@ -19,7 +19,7 @@ namespace QuizExam.Core.Services
             this.repository = repository;
         }
 
-        public async Task<bool> Create(NewQuestionVM model)
+        public async Task<Guid> Create(NewQuestionVM model)
         {
             var question = new Question
             {
@@ -33,7 +33,22 @@ namespace QuizExam.Core.Services
             await this.repository.AddAsync(question);
             await this.repository.SaveChangesAsync();
 
-            return true;
+            return question.Id;
+        }
+
+        public async Task<Question> GetQuestionById(string id)
+        {
+            var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(id));
+
+            return question;
+        }
+
+        public bool HasAnswerOptions(string id)
+        {
+            var hasAnswerOptions = this.repository.All<AnswerOption>()
+                .Any(a => a.QuestionId == Guid.Parse(id));
+
+            return hasAnswerOptions;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.subjectService.AddSubject(model))
             {
-                ViewData[MessageConstants.SuccessMessage] = "Успешен запис!";
+                ViewData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedSubjectMessage;
             }
             else
             {
@@ -59,7 +59,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             if (await this.subjectService.Edit(model))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulEditMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulEditMessage;
             }
             else
             {
@@ -74,7 +74,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.subjectService.Activate(Guid.Parse(id)))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulActivationMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulActivationMessage;
             }
             else
             {
@@ -89,7 +89,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.subjectService.Deactivate(Guid.Parse(id)))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulDeactivationMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeactivationMessage;
             }
             else
             {
@@ -104,7 +104,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.subjectService.Delete(Guid.Parse(id)))
             {
-                TempData[MessageConstants.SuccessMessage] = "Успешно изтриване!";
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyDeletedSubjectMessage;
             }
             else
             {

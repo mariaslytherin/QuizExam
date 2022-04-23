@@ -14,10 +14,11 @@ namespace QuizExam.Core.Services
             this.repository = repository;
         }
 
-        public async Task<bool> Create(QuestionAnswerOptionVM model)
+        public async Task<bool> Create(AddAnswerOptionVM model)
         {
             var answerOption = new AnswerOption
             {
+                QuestionId = Guid.Parse(model.QuestionId),
                 Content = model.AnswerOption,
             };
 
@@ -25,6 +26,16 @@ namespace QuizExam.Core.Services
             await this.repository.SaveChangesAsync();
 
             return true;
+        }
+
+        public IEnumerable<AnswerOption> GetOptions(string questionId)
+        {
+            var answerOptions = this.repository.All<AnswerOption>()
+                .Where(a => a.QuestionId == Guid.Parse(questionId))
+                .DefaultIfEmpty()
+                .ToList();
+
+            return answerOptions;
         }
     }
 }

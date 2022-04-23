@@ -24,9 +24,17 @@ namespace QuizExam.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> New(NewQuestionVM model)
         {
-            if (await this.questionService.Create(model))
+            if (!ModelState.IsValid)
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfullyAddedQuestionMessage;
+                TempData[ErrorMessageConstants.UnsuccessfulAddQuestionMessage] = ErrorMessageConstants.UnsuccessfulAddQuestionMessage;
+                return View(model);
+            }
+
+            var questionId = await this.questionService.Create(model);
+
+            if (questionId != Guid.Empty || questionId != null)
+            {
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedQuestionMessage;
                 TempData["QuestionContent"] = model.Content;
             }
             else
@@ -34,7 +42,7 @@ namespace QuizExam.Areas.Admin.Controllers
                 throw new Exception("An error appeard!");
             }
 
-            return RedirectToAction("NewOption", "AnswerOption", new { area = "Admin" });
+            return RedirectToAction("NewOption", "AnswerOption", new { id = questionId });
         }
     }
 }

@@ -189,7 +189,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("AnswerOptions");
+                    b.ToTable("AnswerOptions", (string)null);
                 });
 
             modelBuilder.Entity("QuizExam.Infrastructure.Data.Exam", b =>
@@ -232,7 +232,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Exams");
+                    b.ToTable("Exams", (string)null);
                 });
 
             modelBuilder.Entity("QuizExam.Infrastructure.Data.Identity.ApplicationUser", b =>
@@ -348,7 +348,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
 
                     b.HasIndex("ExamId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("QuizExam.Infrastructure.Data.Subject", b =>
@@ -367,7 +367,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subjects", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -2,7 +2,7 @@
 
 namespace QuizExam.Core.Models.AnswerOption
 {
-    public class QuestionAnswerOptionVM
+    public class AddAnswerOptionVM
     {
         public string QuestionId { get; set; }
 

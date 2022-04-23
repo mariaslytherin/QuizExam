@@ -8,6 +8,8 @@ namespace QuizExam.Core.Models.Question
 
         public string Content { get; set; }
 
+        public double Points { get; set; }
+
         public IList<AnswerOptionVM> AnswerOptions { get; set; }
     }
 }

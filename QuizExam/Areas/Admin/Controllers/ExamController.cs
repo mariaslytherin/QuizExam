@@ -53,7 +53,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.examService.Create(model))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfullyAddedExamMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedExamMessage;
             }
             else
             {
@@ -80,7 +80,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             if (await this.examService.Edit(model))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulEditMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulEditMessage;
             }
             else
             {
@@ -95,7 +95,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.examService.Activate(Guid.Parse(id)))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulActivationMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulActivationMessage;
             }
             else
             {
@@ -110,7 +110,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.examService.Deactivate(Guid.Parse(id)))
             {
-                TempData[MessageConstants.SuccessMessage] = MessageConstants.SuccessfulDeactivationMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeactivationMessage;
             }
             else
             {
@@ -125,7 +125,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.examService.Delete(Guid.Parse(id)))
             {
-                TempData[MessageConstants.SuccessMessage] = "Успешно изтриване!";
+                TempData[SuccessMessageConstants.SuccessMessage] = "Успешно изтриване!";
             }
             else
             {

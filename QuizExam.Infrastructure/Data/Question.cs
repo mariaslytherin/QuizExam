@@ -30,7 +30,7 @@ namespace QuizExam.Infrastructure.Data
         [Required]
         public double Points { get; set; }
 
-        [Range(2, 6)]
+        [Range(0, 6)]
         public int AnswerOptionsCount { get; set; }
 
         [Required]

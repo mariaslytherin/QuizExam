@@ -140,6 +140,7 @@ namespace QuizExam.Core.Services
                 {
                     Id = q.Id.ToString(),
                     Content = q.Content,
+                    Points = q.Points,
                     AnswerOptions = this.repository
                         .All<AnswerOption>()
                         .Where(a => a.QuestionId == q.Id)
