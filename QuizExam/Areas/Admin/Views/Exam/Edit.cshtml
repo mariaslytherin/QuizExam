@@ -1,14 +1,14 @@
 ﻿@using QuizExam.Core.Models.Exam
 @model EditExamVM
 @{
-    ViewData["Title"] = "Edit Exam";
+    ViewData["Title"] = "Редактирай изпит";
 }
 
 <div class="row">
     <div class="col-6">
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Edit Exam</h3>
+                <h3 class="card-title">Редактирай изпит</h3>
             </div>
             <form id="edit" method="post">
                 <div class="card-body">
@@ -25,8 +25,8 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label>Subject</label>
-                        <select name="SubjectName" class="form-control" id="simpleSelect2" data-placeholder="Select a subject" disabled="disabled">
+                        <label asp-for="SubjectName"></label>
+                        <select name="SubjectName" class="form-control" id="simpleSelect2" data-placeholder="Избери предмет" disabled="disabled">
                             <option>@Model.SubjectName</option>
                         </select>
                     </div>
@@ -37,8 +37,8 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Edit</button>
-                    <a asp-action="GetExamsList" class="btn btn-outline-primary" style="width:auto">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Редактирай</button>
+                    <a asp-action="GetExamsList" class="btn btn-outline-primary" style="width:auto">Назад</a>
                 </div>
             </form>
         </div>

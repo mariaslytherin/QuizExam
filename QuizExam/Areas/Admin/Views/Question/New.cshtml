@@ -32,8 +32,8 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Create</button>
-                    <a asp-action="viewExam" asp-controller="exam" asp-route-id="@Url.ActionContext.RouteData.Values["id"]" class="btn btn-outline-primary" style="width:auto">Cancel</a>
+                    <button asp-route-examId="@Url.ActionContext.RouteData.Values["id"]" type="submit" class="btn btn-primary">Добави</button>
+                    <a asp-action="viewExam" asp-controller="exam" asp-route-id="@Url.ActionContext.RouteData.Values["id"]" class="btn btn-outline-primary" style="width:auto">Назад</a>
                 </div>
             </form>
         </div>

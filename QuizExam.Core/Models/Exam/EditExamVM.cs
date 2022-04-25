@@ -16,9 +16,10 @@ namespace QuizExam.Core.Models.Exam
         [Display(Name = "Описание")]
         public string? Description { get; set; }
 
-        [Display(Name = "Maximum score")]
+        [Display(Name = "Максимален брой точки")]
         public int? MaxScore { get; set; }
 
+        [Display(Name = "Предмет")]
         public string SubjectName { get; set; }
     }
 }

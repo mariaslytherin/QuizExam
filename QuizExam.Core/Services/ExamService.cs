@@ -70,7 +70,7 @@ namespace QuizExam.Core.Services
 
             if (exam != null)
             {
-                await this.repository.DeleteAsync<Exam>(exam.Id);
+                exam.IsDeleted = true;
                 await this.repository.SaveChangesAsync();
                 result = true;
             }
@@ -88,6 +88,7 @@ namespace QuizExam.Core.Services
                 exam.Title = model.Title;
                 exam.Description = model.Description;
                 exam.MaxScore = model.MaxScore;
+                exam.ModifyDate = DateTime.Today;
                 await this.repository.SaveChangesAsync();
                 result = true;
             }
@@ -135,7 +136,7 @@ namespace QuizExam.Core.Services
         {
             var exam = await this.repository.GetByIdAsync<Exam>(id);
             var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
-            var questions = this.repository.All<Question>().Where(q => q.ExamId == id)
+            var questions = this.repository.All<Question>().Where(q => q.ExamId == id && !q.IsDeleted)
                 .Select(q => new QuestionExamVM
                 {
                     Id = q.Id.ToString(),
@@ -143,7 +144,7 @@ namespace QuizExam.Core.Services
                     Points = q.Points,
                     AnswerOptions = this.repository
                         .All<AnswerOption>()
-                        .Where(a => a.QuestionId == q.Id)
+                        .Where(a => a.QuestionId == q.Id && !a.IsDeleted)
                         .Select(a => new AnswerOptionVM
                         {
                             Content = a.Content,

@@ -5,10 +5,11 @@
 
 <div class="row">
     <div class="col-12">
-        <a asp-action="new" asp-controller="exam" class="btn btn-block btn-outline-info" style="width: 130px; margin-bottom: 10px;">New Exam</a>
+        <a asp-action="new" asp-controller="exam" class="btn btn-block btn-outline-info" style="width: 130px; margin-bottom: 10px;">Нов изпит</a>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Exams</h3>
+                <h3 class="card-title">Изпити</h3>
+                @*TODO*@
                 @*<div class="card-tools">
                     <div class="input-group input-group-sm" style="width: 150px;">
                     <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
@@ -22,15 +23,15 @@
             </div>
 
             <div class="card-body table-responsive p-0" style="overflow: inherit !important">
-                <table class="table table-hover text-nowrap">
+                <table class="table table-hover text-wrap">
                     <thead>
                         <tr>
                             <th></th>
-                            <th style="text-align: center;">Title</th>
-                            <th style="text-align: center;">Subject</th>
-                            <th style="text-align: center;">Create Date</th>
-                            <th style="text-align: center;">Published</th>
-                            <th style="text-align: center;">Actions</th>
+                            <th style="text-align: center;">Заглавие</th>
+                            <th style="text-align: center;">Предмет</th>
+                            <th style="text-align: center;">Дата на създаване</th>
+                            <th style="text-align: center;">Публикуван</th>
+                            <th style="text-align: center;">Опции</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,14 +52,14 @@
                                 <td style="text-align: center;">@exam.IsActive</td>
                                 <td style="text-align: center;">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-info">Actions</button>
+                                        <button type="button" class="btn btn-info">Опции</button>
                                         <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
                                         </button>
                                         <div class="dropdown-menu" role="menu" style="">
-                                            <a class="dropdown-item" asp-action="edit" asp-controller="Exam" asp-route-id="@exam.Id">Edit</a>
+                                            <a class="dropdown-item" asp-action="edit" asp-controller="exam" asp-route-id="@exam.Id">Редакция</a>
                                             <form method="post">
-                                                <button type="submit" class="dropdown-item" asp-action="activate" asp-controller="exam" asp-route-id="@exam.Id">Activate</button>
-                                                <button type="submit" class="dropdown-item" asp-action="deactivate" asp-controller="exam" asp-route-id="@exam.Id">Deactivate</button>
+                                                <button type="submit" class="dropdown-item" asp-action="activate" asp-controller="exam" asp-route-id="@exam.Id">Активирай</button>
+                                                <button type="submit" class="dropdown-item" asp-action="deactivate" asp-controller="exam" asp-route-id="@exam.Id">Деактивирай</button>
                                             </form>
                                         </div>
                                     </div>
