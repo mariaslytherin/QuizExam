@@ -26,4 +26,9 @@
 
         public const string UnsuccessfulAddQuestionMessage = "Неуспешно създаване на въпрос!";
     }
+
+    public static class WarningMessageConstants
+    {
+        public const string WarningMessage = "WarningMessage";
+    }
 }
