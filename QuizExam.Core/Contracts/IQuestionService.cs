@@ -10,5 +10,11 @@ namespace QuizExam.Core.Contracts
         Task<Question> GetQuestionById(string id);
 
         bool HasAnswerOptions(string id);
+
+        Task<EditQuestionVM> GetQuestionForEdit(string id);
+
+        Task<bool> Edit(EditQuestionVM model);
+
+        Task<bool> Delete(string id);
     }
 }

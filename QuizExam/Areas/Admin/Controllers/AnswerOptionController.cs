@@ -20,7 +20,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> NewOption(string id)
         {
-            var test = this.questionService.HasAnswerOptions(id);
+            var options = this.answerService.GetOptions(id);
 
             return View("QuestionAnswerOption");
         }
@@ -30,7 +30,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData[ErrorMessageConstants.UnsuccessfulAddQuestionMessage] = ErrorMessageConstants.UnsuccessfulAddQuestionMessage;
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulAddQuestionMessage;
                 return View(model);
             }
 
@@ -46,6 +46,22 @@ namespace QuizExam.Areas.Admin.Controllers
             
 
             return RedirectToAction("NewOption", new { id = model.QuestionId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (await this.answerService.Delete(id))
+            {
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyDeletedOptionMessage;
+            }
+            else
+            {
+                throw new Exception("An error appeard!");
+            }
+
+            //TODO
+            return new OkResult();
         }
     }
 }

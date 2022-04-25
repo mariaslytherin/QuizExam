@@ -19,6 +19,10 @@
         public const string SuccessfullyAddedExamMessage = "Успешно създадохте изпит!";
 
         public const string SuccessfullyAddedQuestionMessage = "Успешно създадохте въпрос!";
+
+        public const string SuccessfullyDeletedQuestionMessage = "Успешно изтрихте въпрос!";
+
+        public const string SuccessfullyDeletedOptionMessage = "Успешно изтрихте опция за отговор!";
     }
     public static class ErrorMessageConstants
     {

@@ -1,4 +1,5 @@
 ﻿using QuizExam.Core.Contracts;
+using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Core.Models.Question;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Repositories;
@@ -36,11 +37,58 @@ namespace QuizExam.Core.Services
             return question.Id;
         }
 
+        public async Task<bool> Delete(string id)
+        {
+            bool result = false;
+            var question = await this.repository.GetByIdAsync<Question>(id);
+
+            if (question != null)
+            {
+                question.IsDeleted = true;
+                await this.repository.SaveChangesAsync();
+                result = true;
+            }
+
+            return result;
+        }
+
+        public async Task<bool> Edit(EditQuestionVM model)
+        {
+            bool result = false;
+            var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(model.Id));
+
+            if (question != null)
+            {
+                question.Content = model.Content;
+                question.Rule = model.Rule;
+                question.Points = model.Points;
+                question.ModifyDate = DateTime.Today;
+                await this.repository.SaveChangesAsync();
+                result = true;
+            }
+
+            return result;
+        }
+
         public async Task<Question> GetQuestionById(string id)
         {
             var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(id));
 
             return question;
+        }
+
+        public async Task<EditQuestionVM> GetQuestionForEdit(string id)
+        {
+            var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(id));
+            var model = new EditQuestionVM
+            {
+                Id = question.Id.ToString(),
+                Content = question.Content,
+                Rule = question.Rule,
+                Points = question.Points,
+            };
+
+            return model;
         }
 
         public bool HasAnswerOptions(string id)
