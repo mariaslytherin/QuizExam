@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using QuizExam.Infrastructure.Data.Constants;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuizExam.Infrastructure.Data
 {
@@ -8,7 +9,7 @@ namespace QuizExam.Infrastructure.Data
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
-        [StringLength(100)]
+        [StringLength(SubjectValidationConstants.NameMaxLength)]
         public string Name { get; set; }
 
         public bool IsActive { get; set; } = true;

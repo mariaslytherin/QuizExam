@@ -1,4 +1,5 @@
-﻿using QuizExam.Infrastructure.Data.Enums;
+﻿using QuizExam.Infrastructure.Data.Constants;
+using QuizExam.Infrastructure.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,7 +11,7 @@ namespace QuizExam.Infrastructure.Data
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
-        [StringLength(300)]
+        [StringLength(QuestionValidationConstants.ContentMaxLength)]
         public string Content { get; set; }
 
         [Required]
@@ -24,13 +25,13 @@ namespace QuizExam.Infrastructure.Data
 
         public QuestionTypeEnum Type { get; set; }
 
-        [StringLength(400)]
+        [StringLength(QuestionValidationConstants.RuleMaxLength)]
         public string? Rule { get; set; }
 
         [Required]
         public double Points { get; set; }
 
-        [Range(0, 6)]
+        [Range(QuestionValidationConstants.MinAnswerOptionsCount, QuestionValidationConstants.MaxAnswerOptionsCount)]
         public int AnswerOptionsCount { get; set; }
 
         [Required]

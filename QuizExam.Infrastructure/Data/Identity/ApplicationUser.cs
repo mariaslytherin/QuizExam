@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using QuizExam.Infrastructure.Data.Constants;
 using System.ComponentModel.DataAnnotations;
 
 namespace QuizExam.Infrastructure.Data.Identity
 {
     public class ApplicationUser : IdentityUser
     {
-        [StringLength(50)]
+        [StringLength(UserValidationConstants.FirstNameMaxLength)]
         public string? FirstName { get; set; }
 
-        [StringLength(50)]
+        [StringLength(UserValidationConstants.LastNameMaxLength)]
         public string? LastName { get; set; }
     }
 }
