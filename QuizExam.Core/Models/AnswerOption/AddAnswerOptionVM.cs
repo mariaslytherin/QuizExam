@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using QuizExam.Core.Constants;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuizExam.Core.Models.AnswerOption
 {
@@ -6,7 +7,8 @@ namespace QuizExam.Core.Models.AnswerOption
     {
         public string QuestionId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+        [Display(Name = "Опция")]
         public string AnswerOption { get; set; }
     }
 }

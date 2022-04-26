@@ -39,7 +39,6 @@ namespace QuizExam.Areas.Admin.Controllers
             {
                 TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedQuestionMessage;
                 TempData[WarningMessageConstants.WarningMessage] = "Добавете възможни опции за договор!";
-                TempData["QuestionContent"] = model.Content;
             }
             else
             {
@@ -54,7 +53,7 @@ namespace QuizExam.Areas.Admin.Controllers
             var question = await this.questionService.GetQuestionForEdit(id);
             var options = this.answerOptionService.GetOptions(id);
 
-            ViewBag.ExamId = examId;
+            TempData["ExamId"] = examId;
 
             if (options.Count() != 0)
             {

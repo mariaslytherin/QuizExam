@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Редакция";
+    var examId = TempData["ExamId"];
 }
 
 <div class="row d-flex justify-content-center">
@@ -29,14 +30,14 @@
                         <input asp-for="Points" type="number" min="0.0" step=".1" style="width: 25%;" class="form-control" aria-required="true">
                         <span asp-validation-for="Points" class="text-danger"></span>
                     </div>
+                    <div class="row col-sm-4">
+                        <a asp-action="newOption" asp-controller="answerOption" asp-route-id="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Добави</a>
+                        <a asp-action="setCorrectAnswers" asp-controller="answerOption" asp-route-id="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Марк</a>
+                    </div>
                     <div class="card-body table-responsive p-0" style="overflow: inherit !important">
-                        <table class="table table-hover text-nowrap">
+                        <table class="table table-hover text-wrap">
                             <thead>
                                 <tr>
-                                    <th style="text-align: center;">
-                                        <a asp-action="newOption" asp-controller="answerOption" asp-route-id="@Model.Id" class="btn btn-info">Добави</a>
-                                        <button type="button" class="btn btn-info">Маркирай</button>
-                                    </th>
                                     <th style="text-align: center;">Опция</th>
                                     <th style="text-align: center;">Вярно/Невярно</th>
                                 </tr>
@@ -49,7 +50,14 @@
                                         <tr>
                                             <td class="text-center py-0 align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    <button type="submit" class="btn btn-danger" asp-action="delete" asp-controller="answerOption" asp-route-id="@option.Id"><i class="fas fa-trash"></i></button>
+                                                    <button type="submit" class="btn btn-danger"
+                                                    asp-action="delete"
+                                                    asp-controller="answerOption"
+                                                    asp-route-id="@option.Id"
+                                                    asp-route-questionId="@option.QuestionId"
+                                                    asp-route-examId="@examId">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
                                                 </div>
                                             </td>
                                             <td style="text-align: center;">@option.Content</td>
@@ -62,8 +70,8 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button asp-route-examId="@ViewBag.ExamId" type="submit" class="btn btn-primary">Редактирай</button>
-                    <a asp-action="viewExam" asp-controller="exam" asp-route-id="@ViewBag.ExamId" class="btn btn-outline-primary" style="width:auto">Назад</a>
+                    <button asp-route-examId="@examId" type="submit" class="btn btn-primary">Редактирай</button>
+                    <a asp-action="viewExam" asp-controller="exam" asp-route-id="@examId" class="btn btn-outline-primary" style="width:auto">Назад</a>
                 </div>
             </form>
         </div>

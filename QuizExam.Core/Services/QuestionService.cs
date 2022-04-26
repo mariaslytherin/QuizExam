@@ -40,7 +40,7 @@ namespace QuizExam.Core.Services
         public async Task<bool> Delete(string id)
         {
             bool result = false;
-            var question = await this.repository.GetByIdAsync<Question>(id);
+            var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(id));
 
             if (question != null)
             {
