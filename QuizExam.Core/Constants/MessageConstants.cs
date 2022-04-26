@@ -20,6 +20,8 @@
 
         public const string SuccessfullyAddedQuestionMessage = "Успешно създадохте въпрос!";
 
+        public const string SuccessfullyAddedOptionMessage = "Успешно добавихте опция!";
+
         public const string SuccessfullyDeletedQuestionMessage = "Успешно изтрихте въпрос!";
 
         public const string SuccessfullyDeletedOptionMessage = "Успешно изтрихте опция за отговор!";
@@ -29,6 +31,8 @@
         public const string ErrorMessage = "ErrorMessage";
 
         public const string UnsuccessfulAddQuestionMessage = "Неуспешно създаване на въпрос!";
+
+        public const string UnsuccessfullAddOptionMessage = "Неуспешно добавяне на опция!";
     }
 
     public static class WarningMessageConstants

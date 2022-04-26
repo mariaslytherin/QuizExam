@@ -9,20 +9,20 @@
     </script>
 }
 
-@if (ViewData[ErrorMessageConstants.ErrorMessage] != null)
+@if (TempData[ErrorMessageConstants.ErrorMessage] != null)
 {
     <script>
         $(function() {
-            toastr.error('@ViewData[ErrorMessageConstants.ErrorMessage]?.ToString()');
+            toastr.error('@TempData[ErrorMessageConstants.ErrorMessage]?.ToString()');
         });
     </script>
 }
 
-@if (ViewData[WarningMessageConstants.WarningMessage] != null)
+@if (TempData[WarningMessageConstants.WarningMessage] != null)
 {
     <script>
         $(function() {
-            toastr.warning('@ViewData[WarningMessageConstants.WarningMessage]?.ToString()');
+            toastr.warning('@TempData[WarningMessageConstants.WarningMessage]?.ToString()');
             });
     </script>
 }
