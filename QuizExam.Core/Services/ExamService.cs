@@ -132,11 +132,11 @@ namespace QuizExam.Core.Services
             };
         }
 
-        public async Task<ViewExamVM> GetExamForView(Guid id)
+        public async Task<ViewExamVM> GetExamForView(string id)
         {
-            var exam = await this.repository.GetByIdAsync<Exam>(id);
+            var exam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(id));
             var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
-            var questions = this.repository.All<Question>().Where(q => q.ExamId == id && !q.IsDeleted)
+            var questions = this.repository.All<Question>().Where(q => q.ExamId == Guid.Parse(id) && !q.IsDeleted)
                 .Select(q => new QuestionExamVM
                 {
                     Id = q.Id.ToString(),

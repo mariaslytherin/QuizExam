@@ -28,7 +28,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> ViewExam(string id)
         {
-            var exam = await this.examService.GetExamForView(Guid.Parse(id));
+            var exam = await this.examService.GetExamForView(id);
 
             return View("View", exam);
         }

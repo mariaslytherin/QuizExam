@@ -23,7 +23,7 @@
     </div>
 </header>
 @*TODO*@
-@foreach(var question in Model.Questions)
+@foreach (var question in Model.Questions)
 {
     <div class="row d-flex justify-content-center">
         <div class="col-lg-6">
@@ -34,14 +34,10 @@
                             <i class="fas fa-minus"></i>
                         </button>
                     </div>
-                    @*<div class="row col-sm-4">
-                        <a class="btn btn-outline-secondary btn-sm" style="width: 70px; margin-right: 5px; height: fit-content;">Edit</a>
-                        <button type="button" class="btn btn-outline-dark btn-sm" style="width: 70px; height: fit-content;">Delete</button>
-                    </div>*@
                 </div>
                 <div class="card-body" style="display: block;">
                     @question.Content
-                    @foreach(var option in question.AnswerOptions)
+                    @foreach (var option in question.AnswerOptions)
                     {
                         <div class="custom-control custom-checkbox">
                             <input class="custom-control-input" type="checkbox" id="customCheckbox2">
@@ -50,9 +46,11 @@
                     }
                 </div>
                 <div class="card-footer" style="display: block;">
-                    <div class="row col-sm-4">
-                        <a asp-action="edit" asp-controller="question" asp-route-id="@question.Id" asp-route-examId="@Model.Id" class="btn btn-outline-secondary btn-sm" style="width: 70px; margin-right: 5px; height: fit-content;">Edit</a>
-                        <button asp-action="delete" asp-controller="question" asp-route-id="@question.Id" asp-route-examId="@Model.Id" type="button" class="btn btn-outline-dark btn-sm" style="width: 70px; height: fit-content;">Delete</button>
+                    <div class="row">
+                        <form method="post" class="col-sm-4">
+                            <a asp-action="edit" asp-controller="question" asp-route-id="@question.Id" asp-route-examId="@Model.Id" class="btn btn-outline-secondary btn-sm" style="width: 70px; margin-right: 5px; height: fit-content;">Edit</a>
+                            <button asp-action="Delete" asp-controller="Question" asp-route-id="@question.Id" asp-route-examId="@Model.Id" type="submit" class="btn btn-outline-dark btn-sm" style="width: 70px; height: fit-content;">Delete</button>
+                        </form>
                     </div>
                 </div>
             </div>
