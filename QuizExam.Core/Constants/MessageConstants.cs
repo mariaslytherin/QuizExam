@@ -25,18 +25,30 @@
         public const string SuccessfullyDeletedQuestionMessage = "Успешно изтрихте въпрос!";
 
         public const string SuccessfullyDeletedOptionMessage = "Успешно изтрихте опция за отговор!";
+
+        public const string SuccessfullyAddedCorrectAnswerMessage = "Успешно записахте верен отговор!";
     }
     public static class ErrorMessageConstants
     {
         public const string ErrorMessage = "ErrorMessage";
 
+        public const string UnsuccessfulEdit = "Неуспешна редакция!";
+
         public const string UnsuccessfulAddQuestionMessage = "Неуспешно създаване на въпрос!";
 
         public const string UnsuccessfullAddOptionMessage = "Неуспешно добавяне на опция!";
+
+        public const string ErrorMustCheckAnswerMessage = "Отбележете 1 верен отговор на въпроса!";
+
+        public const string ErrorMustCheckOnlyOneMessage = "Въпросът може да има само 1 верен отговор!";
     }
 
     public static class WarningMessageConstants
     {
         public const string WarningMessage = "WarningMessage";
+
+        public const string WarningCannotAddOptionMessage = "Един въпрос не може да има повече от 6 опции за отговор!";
+
+        public const string WarningAddOptionsMessage = "Добавете възможни опции за отговор!";
     }
 }

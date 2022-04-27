@@ -25,6 +25,11 @@ html {
     bottom: 0;
 }
 
+.card {
+    border-color: #a6a6a6 !important;
+    border-width: 1px !important;
+}
+
 .card-primary:not(.card-outline) > .card-header {
     background-color: #008080;
 }

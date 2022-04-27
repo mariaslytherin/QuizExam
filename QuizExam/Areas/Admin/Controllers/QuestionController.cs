@@ -38,7 +38,7 @@ namespace QuizExam.Areas.Admin.Controllers
             if (questionId != Guid.Empty || questionId != null)
             {
                 TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedQuestionMessage;
-                TempData[WarningMessageConstants.WarningMessage] = "Добавете възможни опции за договор!";
+                TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningAddOptionsMessage;
             }
             else
             {
@@ -74,7 +74,7 @@ namespace QuizExam.Areas.Admin.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = "Неуспешна редакция!";
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEdit;
                     return View(model);
                 }
 
@@ -102,7 +102,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (await this.questionService.Delete(id))
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = "Успешно изтриване!";
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyDeletedQuestionMessage;
             }
             else
             {

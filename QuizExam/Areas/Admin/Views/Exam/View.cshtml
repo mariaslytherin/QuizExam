@@ -22,13 +22,15 @@
         <a asp-action="new" asp-controller="question" asp-route-id="@Model.Id" class="btn btn-success" style="width:auto; margin-bottom: 10px;">Добави въпрос</a>
     </div>
 </header>
-@*TODO*@
-@foreach (var question in Model.Questions)
+@for (int i = 0; i < Model.Questions.Count; i++)
 {
+    var question = Model.Questions[i];
+    var orderNumber = i + 1;
     <div class="row d-flex justify-content-center">
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-header">
+                    <h3 class="card-title font-weight-bold border border-dark" style="width: 20px; text-align: center;">@orderNumber</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                             <i class="fas fa-minus"></i>
@@ -36,12 +38,12 @@
                     </div>
                 </div>
                 <div class="card-body" style="display: block;">
-                    @question.Content
+                    <p class="font-weight-bold">@question.Content</p>
                     @foreach (var option in question.AnswerOptions)
                     {
-                        <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" id="customCheckbox2">
-                            <label for="customCheckbox2" class="custom-control-label">@option.Content</label>
+                        <div class="form-check" style="margin-left: 50px;">
+                            <input asp-for="@option.IsCorrect" class="form-check-input" id="customCheckbox2" disabled />
+                            <label asp-for="@option.IsCorrect" class="form-check-label">@option.Content</label>
                         </div>
                     }
                 </div>
