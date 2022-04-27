@@ -32,14 +32,15 @@
                     </div>
                     <div class="row col-sm-4">
                         <a asp-action="newOption" asp-controller="answerOption" asp-route-id="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Добави</a>
-                        <a asp-action="setCorrectAnswers" asp-controller="answerOption" asp-route-id="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Марк</a>
+                        <a asp-action="SetCorrectAnswer" asp-controller="answerOption" asp-route-id="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Марк</a>
                     </div>
                     <div class="card-body table-responsive p-0" style="overflow: inherit !important">
                         <table class="table table-hover text-wrap">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th style="text-align: center;">Опция</th>
-                                    <th style="text-align: center;">Вярно/Невярно</th>
+                                    <th style="text-align: center;">Верен/Грешен</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,14 +55,14 @@
                                                     asp-action="delete"
                                                     asp-controller="answerOption"
                                                     asp-route-id="@option.Id"
-                                                    asp-route-questionId="@option.QuestionId"
+                                                    asp-route-questionId="@Model.Id"
                                                     asp-route-examId="@examId">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
                                             </td>
                                             <td style="text-align: center;">@option.Content</td>
-                                            <td style="text-align: center;">@option.IsCorrect</td>
+                                            <td style="text-align: center;">@(option.IsCorrect ? "Верен" : "Грешен")</td>
                                         </tr>
                                     }
                                 }

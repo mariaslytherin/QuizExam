@@ -1,43 +1,39 @@
-﻿@using QuizExam.Core.Models.Question
-@model QuestionExamVM
+﻿@using QuizExam.Core.Models.AnswerOption
+@model SetCorrectAnswerVM
 
 @{
-    var content = TempData["QuestionContent"];
-    var options = ViewBag.Options;
+    var options = (List<SelectListItem>)ViewBag.Options;
+    var questionContent = TempData["QuestionContent"];
+    var examId = TempData["ExamId"];
 }
 
 <div class="row d-flex justify-content-center">
     <div class="col-lg-6">
         <div class="card">
             <div class="card-header">
-                <div class="card-tools">
-                    @*<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>*@
-                </div>
-                @*<div class="row col-sm-4">
-                    <a class="btn btn-outline-secondary btn-sm" style="width: 70px; margin-right: 5px; height: fit-content;">Edit</a>
-                    <button type="button" class="btn btn-outline-dark btn-sm" style="width: 70px; height: fit-content;">Delete</button>
-                    </div>*@
+                <p class="font-weight-bold">@questionContent</p>
             </div>
-            <div class="card-body" style="display: block;">
-                @content
-                @foreach (var option in options)
-                {
-                    <div class="custom-control custom-checkbox" style="margin-left: 30px; margin-top: 10px;">
-                        <input class="custom-control-input" type="checkbox" id="customCheckbox2">
-                        <label for="customCheckbox2" class="custom-control-label">@option.Content</label>
+            <form method="post">
+                <div class="card-body" style="display: block;">
+                    <input type="hidden" asp-for="@Model.QuestionId" name="QuestionId" value="@Model.QuestionId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @for (int i = 0; i < Model.Options.Count; i++)
+                    {
+                        <div class="form-check" style="margin-left: 50px;">
+                            <input type="hidden" asp-for="@Model.Options[i].Id" />
+                            <input type="hidden" asp-for="@Model.Options[i].Content" />
+                            <input asp-for="@Model.Options[i].IsCorrect" class="form-check-input" id="customCheckbox2" />
+                            <label asp-for="@Model.Options[i].IsCorrect" class="form-check-label">@Model.Options[i].Content</label>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer" style="display: block;">
+                    <div class="row">
+                        <button type="submit" asp-route-examId="@examId" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: 5px; height: fit-content;">Редактирай</button>
+                        <a asp-action="edit" asp-controller="question" asp-route-id="@Model.QuestionId" asp-route-examId="@examId" class="btn btn-outline-dark btn-sm" style="width: 70px; height: fit-content;">Назад</a>
                     </div>
-                }
-            </div>
-            <div class="card-footer" style="display: block;">
-                <div class="row">
-                    <form method="post" class="col-sm-4">
-                        <a asp-action="edit" asp-controller="question" class="btn btn-outline-secondary btn-sm" style="width: 70px; margin-right: 5px; height: fit-content;">Edit</a>
-                        <button asp-action="Delete" asp-controller="Question" type="submit" class="btn btn-outline-dark btn-sm" style="width: 70px; height: fit-content;">Delete</button>
-                    </form>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

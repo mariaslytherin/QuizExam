@@ -43,13 +43,35 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public IEnumerable<AnswerOption> GetOptions(string questionId)
+        public IEnumerable<AnswerOptionVM> GetOptions(string questionId)
         {
             var answerOptions = this.repository.All<AnswerOption>()
                 .Where(a => a.QuestionId == Guid.Parse(questionId) && !a.IsDeleted)
+                .Select(a => new AnswerOptionVM
+                {
+                    Id = a.Id.ToString(),
+                    Content = a.Content,
+                    IsCorrect = a.IsCorrect,
+                })
                 .ToList();
 
             return answerOptions;
+        }
+
+        public async Task<bool> SetCorrectAnswer(SetCorrectAnswerVM model)
+        {
+            bool result = false;
+            var optionId = model.Options.Where(o => o.IsCorrect).Select(o => o.Id).SingleOrDefault();
+            var option = await this.repository.GetByIdAsync<AnswerOption>(Guid.Parse(optionId));
+
+            if (option != null)
+            {
+                option.IsCorrect = true;
+                await this.repository.SaveChangesAsync();
+                result = true;
+            }
+
+            return result;
         }
     }
 }

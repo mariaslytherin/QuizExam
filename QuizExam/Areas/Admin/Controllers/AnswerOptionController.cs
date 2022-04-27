@@ -21,7 +21,14 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> NewOption(string id, string examId)
         {
-            var options = this.answerService.GetOptions(id);
+            var options = this.answerService.GetOptions(id).ToList();
+
+            if (options.Count == 6)
+            {
+                TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningCannotAddOptionMessage;
+                return RedirectToAction("Edit", "Question", new { id = id, examId = examId });
+            }
+
             TempData["ExamId"] = examId;
 
             return View("QuestionAnswerOption");
@@ -48,24 +55,50 @@ namespace QuizExam.Areas.Admin.Controllers
             return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = examId });
         }
 
-        public async Task<IActionResult> SetCorrectAnswers(string id, string examId)
+        public async Task<IActionResult> SetCorrectAnswer(string id, string examId)
         {
             var options = this.answerService.GetOptions(id);
             var question = await this.questionService.GetQuestionById(id);
             TempData["ExamId"] = examId;
             TempData["QuestionContent"] = question.Content;
 
-            ViewBag.Options = options;
+            var model = new SetCorrectAnswerVM
+            {
+                QuestionId = question.Id.ToString(),
+                Options = options.ToList()
+            };
 
-            return View("SetCorrectAnswerOptions");
+            return View("SetCorrectAnswerOptions", model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetCorrectAnswers(QuestionExamVM model, string examId)
+        public async Task<IActionResult> SetCorrectAnswer(SetCorrectAnswerVM model, string examId)
         {
+            var checkedOptions = model.Options.Where(o => o.IsCorrect).ToList().Count;
+
+            if (checkedOptions == 0)
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
+                return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId = examId });
+            }
+            else if(checkedOptions > 1)
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckOnlyOneMessage;
+                return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId = examId });
+            }
+
+            if (await this.answerService.SetCorrectAnswer(model))
+            {
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedCorrectAnswerMessage;
+            }
+            else
+            {
+                throw new Exception("An error appeard!");
+            }
+
             TempData["ExamId"] = examId;
 
-            return View("QuestionAnswerOption");
+            return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = examId });
         }
 
         [HttpPost]

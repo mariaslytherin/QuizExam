@@ -7,8 +7,10 @@ namespace QuizExam.Core.Contracts
     {
         Task<bool> Create(AddAnswerOptionVM model);
 
-        IEnumerable<AnswerOption> GetOptions(string questionId);
+        IEnumerable<AnswerOptionVM> GetOptions(string questionId);
 
         Task<bool> Delete(string id);
+
+        Task<bool> SetCorrectAnswer(SetCorrectAnswerVM model);
     }
 }
