@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Models;
+using QuizExam.Core.Models.User;
 using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Areas.Admin.Controllers
@@ -31,22 +32,17 @@ namespace QuizExam.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers(int p = 1, int s = 5)
         {
-            var users = await this.userService.GetAllUsers();
-            var userRolesList = new List<UserListVM>();
-            
-            foreach (var user in users)
+            var users = await this.userService.GetAllUsers(p, s);
+
+            foreach (var user in users.Users)
             {
-                var currentUserVM = new UserListVM();
-                currentUserVM.Id = user.Id;
-                currentUserVM.Name = $"{user.FirstName} {user.LastName}";
-                currentUserVM.Email = user.Email;
-                currentUserVM.Roles = new List<string>(await this.userManager.GetRolesAsync(user));
-                userRolesList.Add(currentUserVM);
+                var currentUser = await this.userService.GetUserById(user.Id);
+                user.Roles = new List<string>(await this.userManager.GetRolesAsync(currentUser));
             }
 
-            return View("UsersList", userRolesList);
+            return View("UsersList", users);
         }
 
         public async Task<IActionResult> Edit(string id)

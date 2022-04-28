@@ -19,18 +19,27 @@ namespace QuizExam.Areas.Admin.Controllers
             this.subjectService = subjectService;
         }
 
-        public async Task<IActionResult> GetExamsList()
+        public async Task<IActionResult> GetExamsList(int p = 1, int s = 10)
         {
-            var exams = await this.examService.GetAllExams();
+            var exams = await this.examService.GetAllExams(p, s);
 
             return View("ExamsList", exams);
         }
 
         public async Task<IActionResult> ViewExam(string id)
         {
-            var exam = await this.examService.GetExamForView(id);
+            try
+            {
+                var exam = await this.examService.GetExamForView(id);
 
-            return View("View", exam);
+                return View("View", exam);
+
+            }
+            catch (Exception ex)
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = "Не съществува такъв изпит!";
+                return RedirectToAction(nameof(GetExamsList));
+            }
         }
 
         public async Task<IActionResult> NewAsync()

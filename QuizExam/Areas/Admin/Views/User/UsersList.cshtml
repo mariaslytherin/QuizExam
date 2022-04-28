@@ -1,5 +1,5 @@
 ﻿@using QuizExam.Core.Models
-@model List<UserListVM>
+@model UserListVM
 @{
 }
 
@@ -9,16 +9,16 @@
             @*<div class="card-header">
                 <h3 class="card-title">Users</h3>
                 <div class="card-tools">
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
+                <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                <div class="input-group-append">
+                <button type="submit" class="btn btn-default">
+                <i class="fas fa-search"></i>
+                </button>
                 </div>
-            </div>*@
+                </div>
+                </div>
+                </div>*@
 
             <div class="card-body table-responsive p-0" style="overflow: inherit !important">
                 <table class="table table-hover text-nowrap">
@@ -31,7 +31,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var user in Model)
+                        @foreach (var user in Model.Users)
                         {
                             <tr>
                                 <td style="text-align: center">@user.Name</td>
@@ -45,8 +45,12 @@
                         }
                     </tbody>
                 </table>
+                <paging page-no="@Model.PageNo"
+                        page-size="@Model.PageSize"
+                        total-records="@Model.TotalRecords"
+                        page-size-dropdown-items="5-10-15">
+                </paging>
             </div>
         </div>
     </div>
 </div>
-<partial name="_UserMessages" />

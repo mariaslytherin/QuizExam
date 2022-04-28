@@ -7,7 +7,7 @@ namespace QuizExam.Core.Contracts
     {
         Task<bool> Create(NewExamVM model);
 
-        Task<IEnumerable<ExamListVM>> GetAllExams();
+        Task<ExamListVM> GetAllExams(int? page, int? size);
 
         Task<Exam> GetExamById(Guid id);
 

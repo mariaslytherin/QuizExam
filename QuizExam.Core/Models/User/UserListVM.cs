@@ -1,13 +1,15 @@
-﻿namespace QuizExam.Core.Models
+﻿using QuizExam.Core.Models.User;
+
+namespace QuizExam.Core.Models
 {
     public class UserListVM
     {
-        public string Id { get; set; }
+        public int PageNo { get; set; }
 
-        public string Name { get; set; }
+        public int PageSize { get; set; }
 
-        public string Email { get; set; }
+        public int TotalRecords { get; set; }
 
-        public IEnumerable<string> Roles { get; set; }
+        public List<UserVM> Users { get; set; }
     }
 }

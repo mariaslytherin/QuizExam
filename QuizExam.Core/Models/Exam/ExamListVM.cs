@@ -2,14 +2,12 @@
 {
     public class ExamListVM
     {
-        public string Id { get; set; }
+        public int? PageNo { get; set; }
 
-        public string Title { get; set; }
+        public int? PageSize { get; set; }
 
-        public string SubjectName { get; set; }
+        public int TotalRecords { get; set; }
 
-        public DateTime CreateDate { get; set; }
-
-        public string IsActive { get; set; }
+        public List<ViewExamVM> Exams { get; set; }
     }
 }

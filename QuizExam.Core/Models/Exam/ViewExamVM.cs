@@ -12,6 +12,10 @@ namespace QuizExam.Core.Models.Exam
 
         public string SubjectName { get; set; }
 
+        public DateTime CreateDate { get; set; }
+
+        public string IsActive { get; set; }
+
         public IList<QuestionExamVM> Questions { get; set; }
     }
 }

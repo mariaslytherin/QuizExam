@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Models;
+using QuizExam.Core.Models.User;
 using QuizExam.Infrastructure.Data.Identity;
 using QuizExam.Infrastructure.Data.Repositories;
 
@@ -31,9 +32,30 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetAllUsers()
+        public async Task<UserListVM> GetAllUsers(int page, int size)
         {
-            return await this.repository.All<ApplicationUser>().ToListAsync();
+            var model = new UserListVM()
+            {
+                PageNo = page,
+                PageSize = size
+            };
+
+            var users = await this.repository.All<ApplicationUser>()
+                .Select(u => new UserVM
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    Name = $"{u.FirstName} {u.LastName}",
+                })
+                .OrderBy(u => u.Email)
+                .Skip(page * size - size)
+                .Take(size)
+                .ToListAsync();
+
+            model.TotalRecords = await this.repository.All<ApplicationUser>().CountAsync();
+            model.Users = users;
+
+            return model;
         }
 
         public async Task<ApplicationUser> GetUserById(string id)
