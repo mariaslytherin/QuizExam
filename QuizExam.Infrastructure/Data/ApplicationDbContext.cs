@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using QuizExam.Infrastructure.Data.Identity;
+using QuizExam.Infrastructure.InitialSeed;
 
 namespace QuizExam.Infrastructure.Data
 {
@@ -14,6 +15,8 @@ namespace QuizExam.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new InitialDataConfiguration<Subject>(@"InitialSeed/subjects.json"));
+
             base.OnModelCreating(builder);
         }
 

@@ -1,0 +1,22 @@
+﻿[
+  {
+    "Id": "e45bcdae-9f76-4761-96ef-eedc22fe0aaa",
+    "Name": "Математика",
+    "IsActive": "true"
+  },
+  {
+    "Id": "e71efbaf-c151-4cf6-81a0-c1c4aa7a3548",
+    "Name": "География и икономика",
+    "IsActive": "true"
+  },
+  {
+    "Id": "830f38c7-d1f1-4952-8437-68ea7e9555b9",
+    "Name": "История и цивилизация",
+    "IsActive": "true"
+  },
+  {
+    "Id": "cce5f418-8df6-437f-b2aa-b1fee0455c85",
+    "Name": "Химия и опазване на околната среда",
+    "IsActive": "true"
+  }
+]
