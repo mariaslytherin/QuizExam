@@ -1,7 +1,7 @@
 ﻿@using QuizExam.Core.Models.Exam
 @model NewExamVM
 @{
-    ViewData["Title"] = "Create Exam";
+    ViewData["Title"] = "Нов изпит";
     var subjects = (List<SelectListItem>)ViewBag.Subjects;
 }
 
@@ -9,37 +9,37 @@
     <div class="col-6">
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Create new exam</h3>
+                <h3 class="card-title">Нов изпит</h3>
             </div>
             <form id="edit" method="post">
                 <div class="card-body">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Title" class="form-label"></label>
-                        <input asp-for="Title" type="text" class="form-control" placeholder="Enter exam title..." aria-required="true">
+                        <input asp-for="Title" type="text" class="form-control" placeholder="Въведи заглавие..." aria-required="true">
                         <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Description" class="form-label"></label>
-                        <textarea asp-for="Description" type="text" class="form-control" placeholder="Enter exam description..." aria-required="true"></textarea>
+                        <textarea asp-for="Description" type="text" class="form-control" placeholder="Въведи описание..." aria-required="true"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="SubjectId"></label>
-                        <select asp-for="SubjectId" asp-items="@subjects" name="SubjectId" class="form-control" id="simpleSelect2" data-placeholder="Select a subject">
+                        <select asp-for="SubjectId" asp-items="@subjects" name="SubjectId" class="form-control" id="simpleSelect2" data-placeholder="Избери предмет">
                             <option></option>
                         </select>
                         <span asp-validation-for="SubjectId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="MaxScore" class="form-label"></label>
-                        <input asp-for="MaxScore" type="number" style="width: 25%;" class="form-control" placeholder="Score" aria-required="true">
+                        <input asp-for="MaxScore" type="number" min="0.0" step=".1" style="width: 25%;" class="form-control" placeholder="Точки" aria-required="true">
                         <span asp-validation-for="MaxScore" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Create</button>
-                    <a asp-action="GetExamsList" class="btn btn-outline-primary" style="width:auto">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Създай</button>
+                    <a asp-action="GetExamsList" class="btn btn-outline-primary" style="width:auto">Назад</a>
                 </div>
             </form>
         </div>
