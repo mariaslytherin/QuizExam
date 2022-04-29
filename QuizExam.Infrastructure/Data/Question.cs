@@ -16,13 +16,14 @@ namespace QuizExam.Infrastructure.Data
 
         [Required]
         [Column(TypeName = "datetime")]
-        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
         [Column(TypeName = "date")]
         public DateTime ModifyDate { get; set; }
 
         public bool IsDeleted { get; set; } = false;
 
+        //TODO
         public QuestionTypeEnum Type { get; set; }
 
         [StringLength(QuestionValidationConstants.RuleMaxLength)]
@@ -31,6 +32,7 @@ namespace QuizExam.Infrastructure.Data
         [Required]
         public double Points { get; set; }
 
+        //TODO
         [Range(QuestionValidationConstants.MinAnswerOptionsCount, QuestionValidationConstants.MaxAnswerOptionsCount)]
         public int AnswerOptionsCount { get; set; }
 

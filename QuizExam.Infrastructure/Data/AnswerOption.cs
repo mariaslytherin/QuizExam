@@ -28,5 +28,7 @@ namespace QuizExam.Infrastructure.Data
 
         [ForeignKey(nameof(QuestionId))]
         public Question Question { get; set; }
+
+        public ICollection<TakeAnswer> TakeAnswers { get; set; } = new List<TakeAnswer>();
     }
 }

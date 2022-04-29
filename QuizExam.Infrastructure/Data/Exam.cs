@@ -29,7 +29,7 @@ namespace QuizExam.Infrastructure.Data
 
         public int? QuestionsCount { get; set; }
 
-        public int? MaxScore { get; set; }
+        public double? MaxScore { get; set; }
 
         [Required]
         public Guid SubjectId { get; set; }
@@ -38,5 +38,7 @@ namespace QuizExam.Infrastructure.Data
         public Subject Subject { get; set; }
 
         public ICollection<Question> Questions { get; set; } = new List<Question>();
+
+        public ICollection<TakeExam> Takes { get; set; } = new List<TakeExam>();
     }
 }

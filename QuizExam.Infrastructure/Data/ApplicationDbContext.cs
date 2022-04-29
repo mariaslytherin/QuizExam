@@ -15,6 +15,16 @@ namespace QuizExam.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<TakeAnswer>()
+                .HasOne(t => t.TakeExam)
+                .WithMany(t => t.TakeAnswers)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<TakeAnswer>()
+                .HasOne(a => a.AnswerOption)
+                .WithMany(a => a.TakeAnswers)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.ApplyConfiguration(new InitialDataConfiguration<Subject>(@"InitialSeed/subjects.json"));
 
             base.OnModelCreating(builder);
@@ -27,5 +37,9 @@ namespace QuizExam.Infrastructure.Data
         public DbSet<Question> Questions { get; set; }
 
         public DbSet<AnswerOption> AnswerOptions { get; set; }
+
+        public DbSet<TakeExam> TakeExams { get; set; }
+
+        public DbSet<TakeAnswer> TakeAnswers { get; set; }
     }
 }

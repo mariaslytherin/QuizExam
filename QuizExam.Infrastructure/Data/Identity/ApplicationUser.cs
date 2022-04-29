@@ -11,5 +11,7 @@ namespace QuizExam.Infrastructure.Data.Identity
 
         [StringLength(UserValidationConstants.LastNameMaxLength)]
         public string? LastName { get; set; }
+
+        public ICollection<TakeExam> Takes { get; set; } = new List<TakeExam>();
     }
 }
