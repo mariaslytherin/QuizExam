@@ -74,16 +74,11 @@ namespace QuizExam.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> SetCorrectAnswer(SetCorrectAnswerVM model, string examId)
         {
-            var checkedOptions = model.Options.Where(o => o.IsCorrect).ToList().Count;
+            var answerId = model.CorrectAnswerId;
 
-            if (checkedOptions == 0)
+            if (answerId == null)
             {
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
-                return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId = examId });
-            }
-            else if(checkedOptions > 1)
-            {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckOnlyOneMessage;
                 return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId = examId });
             }
 

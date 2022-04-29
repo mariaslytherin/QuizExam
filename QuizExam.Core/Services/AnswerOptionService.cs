@@ -61,12 +61,19 @@ namespace QuizExam.Core.Services
         public async Task<bool> SetCorrectAnswer(SetCorrectAnswerVM model)
         {
             bool result = false;
-            var optionId = model.Options.Where(o => o.IsCorrect).Select(o => o.Id).SingleOrDefault();
-            var option = await this.repository.GetByIdAsync<AnswerOption>(Guid.Parse(optionId));
 
-            if (option != null)
+            foreach (var option in model.Options)
             {
-                option.IsCorrect = true;
+                var currentOption = await this.repository.GetByIdAsync<AnswerOption>(Guid.Parse(option.Id));
+                currentOption.IsCorrect = false;
+                await this.repository.SaveChangesAsync();
+            }
+
+            var correctAnswer = await this.repository.GetByIdAsync<AnswerOption>(Guid.Parse(model.CorrectAnswerId));
+
+            if (correctAnswer != null)
+            {
+                correctAnswer.IsCorrect = true;
                 await this.repository.SaveChangesAsync();
                 result = true;
             }
