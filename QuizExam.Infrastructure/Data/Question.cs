@@ -36,5 +36,7 @@ namespace QuizExam.Infrastructure.Data
         public Exam Exam { get; set; }
 
         public ICollection<AnswerOption> Answers { get; set; } = new List<AnswerOption>();
+
+        public ICollection<TakeAnswer> TakeAnswers { get; set; } = new List<TakeAnswer>();
     }
 }

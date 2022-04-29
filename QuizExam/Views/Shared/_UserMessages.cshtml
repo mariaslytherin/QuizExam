@@ -1,28 +1,28 @@
 ﻿@using QuizExam.Core.Constants
 
-@if (ViewData[SuccessMessageConstants.SuccessMessage] != null)
+@if (TempData[SuccessMessageConstants.SuccessMessage] != null)
 {
     <script>
         $(function() {
-            toastr.success('@ViewData[SuccessMessageConstants.SuccessMessage]?.ToString()');
+            toastr.success('@TempData[SuccessMessageConstants.SuccessMessage]?.ToString()');
         });
     </script>
 }
 
-@if (ViewData[ErrorMessageConstants.ErrorMessage] != null)
+@if (TempData[ErrorMessageConstants.ErrorMessage] != null)
 {
     <script>
         $(function() {
-            toastr.error('@ViewData[ErrorMessageConstants.ErrorMessage]?.ToString()');
-            });
+            toastr.error('@TempData[ErrorMessageConstants.ErrorMessage]?.ToString()');
+        });
     </script>
 }
 
-@if (ViewData[WarningMessageConstants.WarningMessage] != null)
+@if (TempData[WarningMessageConstants.WarningMessage] != null)
 {
     <script>
         $(function() {
-            toastr.warning('@ViewData[WarningMessageConstants.WarningMessage]?.ToString()');
-            });
+            toastr.warning('@TempData[WarningMessageConstants.WarningMessage]?.ToString()');
+        });
     </script>
 }

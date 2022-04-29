@@ -32,6 +32,8 @@
     {
         public const string ErrorMessage = "ErrorMessage";
 
+        public const string ErrorAppeardMessage = "Възникна грешка!";
+
         public const string UnsuccessfulEdit = "Неуспешна редакция!";
 
         public const string UnsuccessfulAddQuestionMessage = "Неуспешно създаване на въпрос!";
@@ -41,6 +43,10 @@
         public const string ErrorMustCheckAnswerMessage = "Отбележете 1 верен отговор на въпроса!";
 
         public const string ErrorMustCheckOnlyOneMessage = "Въпросът може да има само 1 верен отговор!";
+
+        public const string ErrorExamNotFoundMessage = "Не успяхме да намерим този изпит!";
+
+        public const string ErrorExamNotActiveAnymoreMessage = "Изпитът вече не е активен!";
     }
 
     public static class WarningMessageConstants

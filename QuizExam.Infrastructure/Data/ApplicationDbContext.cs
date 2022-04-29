@@ -25,6 +25,11 @@ namespace QuizExam.Infrastructure.Data
                 .WithMany(a => a.TakeAnswers)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<TakeAnswer>()
+                .HasOne(a => a.Question)
+                .WithMany(a => a.TakeAnswers)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.ApplyConfiguration(new InitialDataConfiguration<Subject>(@"InitialSeed/subjects.json"));
 
             base.OnModelCreating(builder);

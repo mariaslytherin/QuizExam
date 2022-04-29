@@ -21,6 +21,12 @@ namespace QuizExam.Infrastructure.Data
         public AnswerOption AnswerOption { get; set; }
 
         [Required]
+        public Guid QuestionId { get; set; }
+
+        [ForeignKey(nameof(QuestionId))]
+        public Question Question { get; set; }
+
+        [Required]
         [Column(TypeName = "datetime")]
         public DateTime CreateDate { get; set; } = DateTime.Now;
 

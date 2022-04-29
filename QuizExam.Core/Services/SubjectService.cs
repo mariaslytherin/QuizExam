@@ -58,21 +58,6 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<bool> Delete(Guid id)
-        {
-            bool result = false;
-            var subject = await this.repository.GetByIdAsync<Subject>(id);
-
-            if (subject != null)
-            {
-                await this.repository.DeleteAsync<Subject>(subject.Id);
-                await this.repository.SaveChangesAsync();
-                result = true;
-            }
-
-            return result;
-        }
-
         public async Task<bool> Edit(SubjectVM model)
         {
             bool result = false;

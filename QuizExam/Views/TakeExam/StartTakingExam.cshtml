@@ -1,0 +1,15 @@
+﻿@using QuizExam.Core.Models.Exam
+@model ExamVM
+
+<header class="bg-dark bg-gradient text-white" style="margin-bottom: 15px;">
+    <div class="container px-4 text-center">
+        <p class="lead">Изпит по @Model.SubjectName</p>
+        <h1 class="fw-bolder">@Model.Title</h1>
+        <p>@Model.Description</p>
+        <label>Брой въпроси: @Model.QuestionsCount</label>
+        <p class="lead">Искате ли да започнете?</p>
+    </div>
+    <div class="row d-flex justify-content-center">
+        <a asp-action="take" asp-controller="takeExam" asp-route-examId="@Model.Id" class="btn btn-success" style="width:auto; margin-bottom: 10px;">Започни</a>
+    </div>
+</header>

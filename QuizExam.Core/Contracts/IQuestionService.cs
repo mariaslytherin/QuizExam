@@ -9,6 +9,10 @@ namespace QuizExam.Core.Contracts
 
         Task<Question> GetQuestionById(string id);
 
+        Task<Question> GetQuestionForTake(string examId, int order);
+
+        Task<Guid[]> GetQuestionIds(string examId);
+
         bool HasAnswerOptions(string id);
 
         Task<EditQuestionVM> GetQuestionForEdit(string id);

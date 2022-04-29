@@ -34,7 +34,7 @@
                             <div class="card-body">
                                 <h6 class="card-title">@exam.SubjectName</h6>
                                 <p class="card-text">@exam.Description</p>
-                                <a asp-action="start" asp-controller="exam" class="btn btn-primary">Решавай</a>
+                                <a asp-action="start" asp-controller="takeExam" asp-route-examId="@exam.Id" class="btn btn-primary">Решавай</a>
                             </div>
                         </div>
                     </div>

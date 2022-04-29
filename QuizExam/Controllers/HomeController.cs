@@ -21,7 +21,7 @@ namespace QuizExam.Controllers
         public async Task<IActionResult> Index()
         {
             var exams = await this.examService.GetAllExams(null, null);
-
+            
             return View(exams);
         }
 

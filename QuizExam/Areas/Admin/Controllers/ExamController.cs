@@ -35,9 +35,9 @@ namespace QuizExam.Areas.Admin.Controllers
                 return View("View", exam);
 
             }
-            catch (Exception ex)
+            catch
             {
-                TempData[ErrorMessageConstants.ErrorMessage] = "Не съществува такъв изпит!";
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
                 return RedirectToAction(nameof(GetExamsList));
             }
         }

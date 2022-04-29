@@ -1,0 +1,78 @@
+﻿@using QuizExam.Core.Models.TakeQuestion
+@model TakeQuestionVM
+
+@{
+    var questionContent = TempData["QuestionContent"];
+    var examId = TempData["ExamId"];
+}
+
+<div class="row d-flex justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <p class="font-weight-bold">@questionContent</p>
+            </div>
+            <form method="post">
+                <div class="card-body" style="display: block;">
+                    <input type="hidden" asp-for="@Model.QuestionId" name="QuestionId" />
+                    <input type="hidden" asp-for="@Model.TakeExamId" name="TakeExamId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @for (int i = 1; i < Model.TakeAnswers.Count; i++)
+                    {
+                        <div class="form-check" style="margin-left: 50px;">
+                            <input type="hidden" asp-for="@Model.TakeAnswers[i].AnswerId" />
+                            <input type="hidden" asp-for="@Model.TakeAnswers[i].Content" />
+                            <input asp-for="@Model.TakeAnswers[i].Selected" type="radio" class="form-check-input" checked />
+                            <label asp-for="@Model.TakeAnswers[i].Selected" class="form-check-label">@Model.TakeAnswers[i].Content</label>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer" style="display: block;">
+                    <div class="row">
+                        <button type="submit" asp-action="add" asp-controller="takeAnswer" asp-route-examId="@examId" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: 5px; height: fit-content; float: right;">Следващ</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@*@model Guid[]
+
+@{
+    Guid currentId = Guid.Empty;
+}
+
+<div class="content" style="margin-top: 20px;">
+    <div class="container-fluid" style="width:100%; height:auto; display:flex; flex-wrap: wrap;">
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            currentId = Model[i];
+            <a name="@Model[i]" id="question" class="btn btn-info question" style="margin-right: 2px; margin-bottom: 3px;">@i</a>
+        }
+    </div>
+</div>
+<div id="dvPartialView">
+</div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+         $('[id*=question]').on('click', function () {
+             $.ajax({
+                 url: '@Url.Action("GetQuestion", "Question")',
+                 dataType: "html",
+                 data: { "id": $(this).attr('name') },
+                 type: "GET",
+                 contentType: "application/json",
+                 success: function (response) {
+                     $('#dvPartialView').html(response);
+                 },
+                 error: function (err) {
+                     alert(err.responseText);
+                 }
+             });
+         });
+     });
+</script>*@

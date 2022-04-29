@@ -9,7 +9,9 @@ namespace QuizExam.Core.Contracts
 
         Task<ExamListVM> GetAllExams(int? page, int? size);
 
-        Task<Exam> GetExamById(Guid id);
+        Task<ExamVM> GetExamInfo(string id);
+
+        Task<Exam> GetExamById(string id);
 
         Task<EditExamVM> GetExamForEdit(Guid id);
 

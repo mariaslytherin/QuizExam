@@ -1,4 +1,5 @@
-﻿using QuizExam.Core.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using QuizExam.Core.Contracts;
 using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Core.Models.Question;
 using QuizExam.Infrastructure.Data;
@@ -22,19 +23,34 @@ namespace QuizExam.Core.Services
 
         public async Task<Guid> Create(NewQuestionVM model)
         {
-            var question = new Question
+            try
             {
-                ExamId = Guid.Parse(model.ExamId),
-                Content = model.Content,
-                Rule = model.Rule,
-                Points = model.Points,
-            };
+                bool isExam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(model.ExamId)) != null ? true : false;
 
+                if (isExam)
+                {
+                    var question = new Question
+                    {
+                        ExamId = Guid.Parse(model.ExamId),
+                        Content = model.Content,
+                        Rule = model.Rule,
+                        Points = model.Points,
+                    };
 
-            await this.repository.AddAsync(question);
-            await this.repository.SaveChangesAsync();
+                    await this.repository.AddAsync(question);
+                    await this.repository.SaveChangesAsync();
 
-            return question.Id;
+                    return question.Id;
+                }
+                else
+                {
+                    return Guid.Empty;
+                }
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(Question)}'. ");
+            }
         }
 
         public async Task<bool> Delete(string id)
@@ -89,6 +105,25 @@ namespace QuizExam.Core.Services
             };
 
             return model;
+        }
+
+        public async Task<Question> GetQuestionForTake(string examId, int order)
+        {
+            var allQuestions = await this.repository.All<Question>()
+                .Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
+                .ToListAsync();
+
+            return allQuestions[order];
+        }
+
+        public async Task<Guid[]> GetQuestionIds(string examId)
+        {
+            var questionIds = await this.repository.All<Question>()
+                .Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
+                .Select(q => q.Id)
+                .ToArrayAsync();
+
+            return questionIds;
         }
 
         public bool HasAnswerOptions(string id)

@@ -5,7 +5,6 @@ using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Models.Question;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Repositories;
-using System.Linq;
 
 namespace QuizExam.Core.Services
 {
@@ -134,9 +133,16 @@ namespace QuizExam.Core.Services
             return model;
         }
 
-        public async Task<Exam> GetExamById(Guid id)
+        public async Task<Exam> GetExamById(string id)
         {
-            return await this.repository.GetByIdAsync<Exam>(id);
+            try
+            {
+                return await this.repository.GetByIdAsync<Exam>(Guid.Parse(id));
+            }
+            catch
+            {
+                throw new NullReferenceException($"Object of type '{nameof(Exam)}' was not found. ");
+            }
         }
 
         public async Task<EditExamVM> GetExamForEdit(Guid id)
@@ -205,9 +211,42 @@ namespace QuizExam.Core.Services
                     };
                 }
             }
-            catch (NullReferenceException ex)
+            catch
             {
-                throw new Exception("There is no such an object.");
+                throw new ArgumentNullException($"Object of type '{nameof(Exam)}' was not found. ");
+            }
+        }
+
+        public async Task<ExamVM> GetExamInfo(string id)
+        {
+            try
+            {
+                Exam exam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(id));
+
+                if (exam != null)
+                {
+                    var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
+                    var questionsCount = await this.repository.AllReadonly<Question>()
+                        .Where(q => q.ExamId == exam.Id && !q.IsDeleted)
+                        .CountAsync();
+
+                    ExamVM model = new ExamVM
+                    {
+                        Id = exam.Id.ToString(),
+                        Title = exam.Title,
+                        Description = exam.Description,
+                        SubjectName = subject.Name,
+                        QuestionsCount = questionsCount,
+                    };
+
+                    return model;
+                }
+
+                return null;
+            }
+            catch
+            {
+                throw new NullReferenceException($"Object of type '{nameof(Exam)}' was not found. ");
             }
         }
     }

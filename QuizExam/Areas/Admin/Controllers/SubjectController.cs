@@ -98,20 +98,5 @@ namespace QuizExam.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(GetSubjectsList));
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (await this.subjectService.Delete(Guid.Parse(id)))
-            {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyDeletedSubjectMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
-
-            return RedirectToAction(nameof(GetSubjectsList));
-        }
     }
 }
