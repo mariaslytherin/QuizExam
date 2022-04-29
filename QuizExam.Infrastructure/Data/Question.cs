@@ -23,18 +23,11 @@ namespace QuizExam.Infrastructure.Data
 
         public bool IsDeleted { get; set; } = false;
 
-        //TODO
-        public QuestionTypeEnum Type { get; set; }
-
         [StringLength(QuestionValidationConstants.RuleMaxLength)]
         public string? Rule { get; set; }
 
         [Required]
         public double Points { get; set; }
-
-        //TODO
-        [Range(QuestionValidationConstants.MinAnswerOptionsCount, QuestionValidationConstants.MaxAnswerOptionsCount)]
-        public int AnswerOptionsCount { get; set; }
 
         [Required]
         public Guid ExamId { get; set; }

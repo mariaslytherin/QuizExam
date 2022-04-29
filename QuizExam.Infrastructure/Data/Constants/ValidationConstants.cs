@@ -17,10 +17,6 @@
         public const int ContentMaxLength = 300;
 
         public const int RuleMaxLength = 400;
-
-        public const int MinAnswerOptionsCount = 0;
-
-        public const int MaxAnswerOptionsCount = 6;
     }
     public class SubjectValidationConstants
     {
