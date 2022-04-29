@@ -16,20 +16,20 @@
                 <div class="card-body" style="display: block;">
                     <input type="hidden" asp-for="@Model.QuestionId" name="QuestionId" />
                     <input type="hidden" asp-for="@Model.TakeExamId" name="TakeExamId" />
+                    <input type="hidden" asp-for="@Model.Order" name="Order"/>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    @for (int i = 1; i < Model.TakeAnswers.Count; i++)
+                    @for (int i = 0; i < Model.TakeAnswers.Count; i++)
                     {
                         <div class="form-check" style="margin-left: 50px;">
                             <input type="hidden" asp-for="@Model.TakeAnswers[i].AnswerId" />
                             <input type="hidden" asp-for="@Model.TakeAnswers[i].Content" />
-                            <input asp-for="@Model.TakeAnswers[i].Selected" type="radio" class="form-check-input" checked />
-                            <label asp-for="@Model.TakeAnswers[i].Selected" class="form-check-label">@Model.TakeAnswers[i].Content</label>
+                            <input asp-for="@Model.CheckedOptionId" value="@Model.TakeAnswers[i].AnswerId" type="radio" class="form-check-input" /> @Model.TakeAnswers[i].Content
                         </div>
                     }
                 </div>
                 <div class="card-footer" style="display: block;">
                     <div class="row">
-                        <button type="submit" asp-action="add" asp-controller="takeAnswer" asp-route-examId="@examId" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: 5px; height: fit-content; float: right;">Следващ</button>
+                        <button type="submit" asp-action="add" asp-controller="takeAnswer" asp-route-examId="@examId" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: 5px; height: fit-content;">Следващ</button>
                     </div>
                 </div>
             </form>

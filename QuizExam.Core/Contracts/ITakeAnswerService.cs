@@ -4,6 +4,6 @@ namespace QuizExam.Core.Contracts
 {
     public interface ITakeAnswerService
     {
-        Task<bool> AddAnswer(string takeId, TakeAnswerVM model);
+        Task<bool> AddAnswer(string takeId, string checkedAnswerId, string questionId);
     }
 }

@@ -15,24 +15,15 @@ namespace QuizExam.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(TakeQuestionVM model, string examId)
+        public async Task<IActionResult> Add(TakeQuestionVM model, string examId)
         {
-            var checkedOptions = model.TakeAnswers.Where(o => o.Selected).ToList().Count;
-
-            if (checkedOptions == 0)
+            if (model.CheckedOptionId == null)
             {
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
-                return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId = examId });
-            }
-            else if (checkedOptions > 1)
-            {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckOnlyOneMessage;
-                return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId = examId });
+                return RedirectToAction("GetQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order });
             }
 
-            var answer = model.TakeAnswers.Where(a => a.Selected);
-
-            if (true)//await this.takeAnswerService.AddAnswer(takeId, answer))
+            if (await this.takeAnswerService.AddAnswer(model.TakeExamId, model.CheckedOptionId, model.QuestionId))
             {
                 TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedCorrectAnswerMessage;
             }
@@ -43,7 +34,7 @@ namespace QuizExam.Controllers
 
             TempData["ExamId"] = examId;
 
-            return RedirectToAction("GetQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order });
+            return RedirectToAction("GetQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order + 1 });
         }
     }
 }

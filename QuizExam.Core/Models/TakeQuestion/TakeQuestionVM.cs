@@ -10,6 +10,8 @@ namespace QuizExam.Core.Models.TakeQuestion
 
         public int Order { get; set; }
 
+        public string CheckedOptionId { get; set; }
+
         public List<TakeAnswerVM> TakeAnswers { get; set; }
     }
 }

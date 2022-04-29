@@ -30,7 +30,7 @@
                     @foreach (var option in question.AnswerOptions)
                     {
                         <div class="form-check" style="margin-left: 50px;">
-                            <input asp-for="@option.IsCorrect" value="@option.IsCorrect" type="radio" class="form-check-input" disabled />
+                            <input asp-for="@option.IsCorrect" value="@option.IsCorrect" class="form-check-input" disabled />
                             <label asp-for="@option.IsCorrect" class="form-check-label">@option.Content</label>
                         </div>
                     }

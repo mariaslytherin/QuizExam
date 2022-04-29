@@ -109,11 +109,23 @@ namespace QuizExam.Core.Services
 
         public async Task<Question> GetQuestionForTake(string examId, int order)
         {
-            var allQuestions = await this.repository.All<Question>()
+            try
+            {
+                var allQuestions = await this.repository.All<Question>()
                 .Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
                 .ToListAsync();
 
-            return allQuestions[order];
+                if (allQuestions.Count() < order)
+                {
+                    return null;
+                }
+
+                return allQuestions[order];
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Object of type '{nameof(Question)}' was not found on index {order}. ");
+            }
         }
 
         public async Task<Guid[]> GetQuestionIds(string examId)
