@@ -1,9 +1,10 @@
 ﻿using QuizExam.Core.Models.TakeAnswer;
+using QuizExam.Core.Models.TakeQuestion;
 
 namespace QuizExam.Core.Contracts
 {
     public interface ITakeAnswerService
     {
-        Task<bool> AddAnswer(string takeId, string checkedAnswerId, string questionId);
+        Task<bool> AddAnswer(TakeQuestionVM model, string examId);
     }
 }

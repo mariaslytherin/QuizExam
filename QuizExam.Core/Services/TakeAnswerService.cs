@@ -1,6 +1,10 @@
-﻿using QuizExam.Core.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using QuizExam.Core.Contracts;
+using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Models.TakeAnswer;
+using QuizExam.Core.Models.TakeQuestion;
 using QuizExam.Infrastructure.Data;
+using QuizExam.Infrastructure.Data.Enums;
 using QuizExam.Infrastructure.Data.Repositories;
 
 namespace QuizExam.Core.Services
@@ -14,20 +18,20 @@ namespace QuizExam.Core.Services
             this.repository = repository;
         }
 
-        public async Task<bool> AddAnswer(string takeId, string checkedAnswerId, string questionId)
+        public async Task<bool> AddAnswer(TakeQuestionVM model, string examId)
         {
             try
             {
                 var result = false;
-                var takeExam = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(takeId));
+                var takeExam = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(model.TakeExamId));
 
-                if (takeId != null)
+                if (takeExam != null)
                 {
                     var answer = new TakeAnswer
                     {
-                        TakeExamId = Guid.Parse(takeId),
-                        AnswerOptionId = Guid.Parse(checkedAnswerId),
-                        QuestionId = Guid.Parse(questionId),
+                        TakeExamId = Guid.Parse(model.TakeExamId),
+                        AnswerOptionId = Guid.Parse(model.CheckedOptionId),
+                        QuestionId = Guid.Parse(model.QuestionId),
                     };
                     await this.repository.AddAsync(answer);
                     await this.repository.SaveChangesAsync();

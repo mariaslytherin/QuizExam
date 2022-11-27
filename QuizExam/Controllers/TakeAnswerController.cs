@@ -8,10 +8,14 @@ namespace QuizExam.Controllers
     public class TakeAnswerController : Controller
     {
         private readonly ITakeAnswerService takeAnswerService;
+        private readonly IQuestionService questionService;
 
-        public TakeAnswerController(ITakeAnswerService takeAnswerService)
+        public TakeAnswerController(
+            ITakeAnswerService takeAnswerService,
+            IQuestionService questionService)
         {
             this.takeAnswerService = takeAnswerService;
+            this.questionService = questionService;
         }
 
         [HttpPost]
@@ -23,7 +27,7 @@ namespace QuizExam.Controllers
                 return RedirectToAction("GetQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order });
             }
 
-            if (await this.takeAnswerService.AddAnswer(model.TakeExamId, model.CheckedOptionId, model.QuestionId))
+            if (await this.takeAnswerService.AddAnswer(model, examId))
             {
                 TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedCorrectAnswerMessage;
             }
@@ -34,7 +38,14 @@ namespace QuizExam.Controllers
 
             TempData["ExamId"] = examId;
 
-            return RedirectToAction("GetQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order + 1 });
+            if (await this.questionService.IsLastQuestion(model.Order + 1, examId))
+            {
+                return RedirectToAction("GetTakeResult", "TakeExam", new { takeExamId = model.TakeExamId });
+            }
+            else
+            {
+                return RedirectToAction("GetQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order + 1 });
+            }
         }
     }
 }

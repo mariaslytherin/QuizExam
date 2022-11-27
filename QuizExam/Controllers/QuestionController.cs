@@ -52,7 +52,8 @@ namespace QuizExam.Controllers
                 }
                 else
                 {
-                    return View();
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                    return View("Index", "Home");
                 }
             }
             catch

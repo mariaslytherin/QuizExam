@@ -1,8 +1,14 @@
-﻿using QuizExam.Core.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using QuizExam.Core.Contracts;
+using QuizExam.Core.Models.AnswerOption;
+using QuizExam.Core.Models.Exam;
+using QuizExam.Core.Models.Question;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Enums;
 using QuizExam.Infrastructure.Data.Identity;
 using QuizExam.Infrastructure.Data.Repositories;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuizExam.Core.Services
 {
@@ -42,6 +48,85 @@ namespace QuizExam.Core.Services
             catch
             {
                 throw new InvalidOperationException($"Can't create an instance of '{nameof(TakeExam)}'. ");
+            }
+        }
+
+        public async Task<ViewExamVM> GetExamForView(string id)
+        {
+            try
+            {
+                var take = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(id));
+                var exam = await this.repository.GetByIdAsync<Exam>(take.ExamId);
+                var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
+
+                if (take != null)
+                {
+                    take.Status = TakeExamStatusEnum.Finished;
+                    await this.repository.SaveChangesAsync();
+
+                    var questions = await this.repository.All<Question>().Where(q => q.ExamId == exam.Id && !q.IsDeleted)
+                        .Select(q => new QuestionExamVM
+                        {
+                            Content = q.Content,
+                            Points = q.Points,
+                            AnswerOptions = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id)
+                                .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == take.Id),
+                                      option => option.Id,
+                                      answer => answer.AnswerOptionId,
+                                      (option, answer) => new
+                                      {
+                                          option,
+                                          answer,
+                                      })
+                                .SelectMany(
+                                      x => x.answer.DefaultIfEmpty(),
+                                      (option, answer) => new AnswerOptionVM
+                                      {
+                                          Id = answer.Id.ToString(),
+                                          Content = option.option.Content,
+                                          IsCorrect = option.option.IsCorrect,
+                                      }).ToList(),
+                        }).ToListAsync();
+
+                    return new ViewExamVM
+                    {
+                        Id = take.Id.ToString(),
+                        Title = exam.Title,
+                        Description = exam.Description,
+                        SubjectName = subject.Name,
+                        Questions = questions,
+                    };
+                }
+                else
+                {
+                    return new ViewExamVM
+                    {
+                        Id = exam.Id.ToString(),
+                        Title = exam.Title,
+                        Description = exam.Description,
+                        SubjectName = subject.Name,
+                        Questions = new List<QuestionExamVM>(),
+                    };
+                }
+            }
+            catch
+            {
+                throw new ArgumentNullException($"Object of type '{nameof(Exam)}' was not found. ");
+            }
+        }
+
+        public async Task<bool> TakeExists(string userId, string examId)
+        {
+            try
+            {
+                var takeExists = await this.repository.All<TakeExam>()
+                    .AnyAsync(t => t.ExamId.ToString() == examId && t.UserId == userId && (t.Status != TakeExamStatusEnum.Finished));
+
+                return takeExists;
+            }
+            catch
+            {
+                throw new Exception($"An error appeard.");
             }
         }
     }

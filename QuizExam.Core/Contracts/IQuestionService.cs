@@ -20,5 +20,7 @@ namespace QuizExam.Core.Contracts
         Task<bool> Edit(EditQuestionVM model);
 
         Task<bool> Delete(string id);
+
+        Task<bool> IsLastQuestion(int order, string examId);
     }
 }

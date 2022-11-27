@@ -28,6 +28,15 @@ namespace QuizExam.Controllers
 
         public async Task<IActionResult> Start(string examId)
         {
+            var user = await this.userManager.GetUserAsync(User);
+            var takeExists = await this.takeExamService.TakeExists(user.Id, examId);
+
+            if (takeExists)
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = "Вече сте започнали да решавате този изпит!";
+                return RedirectToAction("Index", "Home");
+            }
+
             try
             {
                 var exam = await this.examService.GetExamInfo(examId);
@@ -72,6 +81,22 @@ namespace QuizExam.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTakeResult(string takeExamId)
+        {
+            try
+            {
+                var take = await this.takeExamService.GetExamForView(takeExamId);
+
+                return View("ViewTakeExam", take);
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
+                return Ok();
+            }
         }
     }
 }

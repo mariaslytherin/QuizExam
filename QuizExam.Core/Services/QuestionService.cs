@@ -112,10 +112,10 @@ namespace QuizExam.Core.Services
             try
             {
                 var allQuestions = await this.repository.All<Question>()
-                .Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
-                .ToListAsync();
+                    .Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
+                    .ToListAsync();
 
-                if (allQuestions.Count() < order)
+                if (allQuestions.Count() == order)
                 {
                     return null;
                 }
@@ -144,6 +144,20 @@ namespace QuizExam.Core.Services
                 .Any(a => a.QuestionId == Guid.Parse(id));
 
             return hasAnswerOptions;
+        }
+
+        public async Task<bool> IsLastQuestion(int order, string examId)
+        {
+            var allQuestions = await this.repository.All<Question>()
+                        .Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
+                        .ToListAsync();
+
+            if (allQuestions.Count() == order)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
