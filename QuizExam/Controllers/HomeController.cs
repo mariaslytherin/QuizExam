@@ -20,7 +20,7 @@ namespace QuizExam.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var exams = await this.examService.GetAllExams(null, null);
+            var exams = await this.examService.GetExamsForUser();
             
             return View(exams);
         }

@@ -33,3 +33,11 @@ html {
 .card-primary:not(.card-outline) > .card-header {
     background-color: #008080;
 }
+
+.custom-checkbox .custom-control-input-danger:disabled:checked ~ .custom-control-label::before {
+    background-color: #dc3545;
+}
+
+.custom-checkbox .custom-control-input-green:disabled:checked ~ .custom-control-label::before {
+    background-color: #28a745;
+}

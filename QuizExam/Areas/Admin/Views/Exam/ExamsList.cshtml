@@ -38,7 +38,7 @@
                     <tbody>
                         @foreach (var exam in Model.Exams)
                         {
-                            <tr @(exam.IsActive == "No" ? ("style=" + "background-color:" + "gray;") : string.Empty)>
+                            <tr @(exam.IsActive == "Не" ? ("style=" + "background-color:" + "gray;") : string.Empty)>
                                 <td class="text-right py-0 align-middle">
                                     <form method="post">
                                         <div class="btn-group btn-group-sm">

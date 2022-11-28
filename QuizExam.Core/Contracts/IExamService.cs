@@ -9,6 +9,8 @@ namespace QuizExam.Core.Contracts
 
         Task<ExamListVM> GetAllExams(int? page, int? size);
 
+        Task<List<ViewExamVM>> GetExamsForUser();
+
         Task<ExamVM> GetExamInfo(string id);
 
         Task<Exam> GetExamById(string id);

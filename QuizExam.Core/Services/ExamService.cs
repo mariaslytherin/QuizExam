@@ -101,16 +101,17 @@ namespace QuizExam.Core.Services
             var exams = await this.repository.All<Exam>()
                 .Where(e => !e.IsDeleted)
                 .Join(this.repository.All<Subject>(),
-                      e => e.SubjectId, s => s.Id,
-                (e, s) => new ViewExamVM()
-                {
-                    Id = e.Id.ToString(),
-                    Title = e.Title,
-                    SubjectName = s.Name,
-                    Description = e.Description,
-                    CreateDate = e.CreateDate,
-                    IsActive = e.IsActive ? "Да" : "Не",
-                })
+                      e => e.SubjectId,
+                      s => s.Id,
+                     (e, s) => new ViewExamVM()
+                     {
+                         Id = e.Id.ToString(),
+                         Title = e.Title,
+                         SubjectName = s.Name,
+                         Description = e.Description,
+                         CreateDate = e.CreateDate,
+                         IsActive = e.IsActive ? "Да" : "Не",
+                     })
                 .ToListAsync();
 
             if (size.HasValue && page.HasValue)
@@ -131,6 +132,25 @@ namespace QuizExam.Core.Services
             model.Exams = exams;
 
             return model;
+        }
+
+        public async Task<List<ViewExamVM>> GetExamsForUser()
+        {
+            var exams = await this.repository.All<Exam>()
+                .Where(e => !e.IsDeleted && e.IsActive)
+                .Join(this.repository.All<Subject>(),
+                      e => e.SubjectId,
+                      s => s.Id,
+                      (e, s) => new ViewExamVM()
+                      {
+                          Id = e.Id.ToString(),
+                          Title = e.Title,
+                          SubjectName = s.Name,
+                          Description = e.Description
+                      })
+                .ToListAsync();
+
+            return exams;
         }
 
         public async Task<Exam> GetExamById(string id)

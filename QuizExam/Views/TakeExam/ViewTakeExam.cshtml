@@ -1,10 +1,11 @@
-﻿@using QuizExam.Core.Models.Exam
-@model ViewExamVM
+﻿@using QuizExam.Core.Models.TakeExam
+@model TakeExamVM
 
 <header class="bg-dark bg-gradient text-white" style="margin-bottom: 15px;">
     <div class="container px-4 text-center">
         <h1 class="fw-bolder">@Model.Title</h1>
         <p class="lead">@Model.Description</p>
+        <p class="lead">@Model.ResultScore / @Model.MaxScore</p>
     </div>
 </header>
 @for (int i = 0; i < Model.Questions.Count; i++)
@@ -28,13 +29,31 @@
                     {
                         bool isChecked = option.Id != null;
 
-                        <div class="form-check" style="margin-left: 50px;">
-                            <input asp-for="@isChecked" value="@isChecked" class="form-check-input" disabled />
-                            <label asp-for="@isChecked" class="form-check-label">@option.Content</label>
-                        </div>
+                        if (isChecked && !option.IsCorrect)
+                        {
+                            <div class="custom-control custom-checkbox" style="margin-left: 50px;">
+                                <input asp-for="@isChecked" value="@isChecked" class="custom-control-input custom-control-input-danger" type="checkbox" disabled />
+                                <label asp-for="@isChecked" class="custom-control-label">@option.Content</label>
+                            </div>
+                        }
+                        else if (!isChecked && option.IsCorrect)
+                        {
+                            <div class="custom-control custom-checkbox" style="margin-left: 50px;">
+                                <input asp-for="@option.IsCorrect" value="@option.IsCorrect" class="custom-control-input custom-control-input-green custom-control-input-outline" type="checkbox" disabled />
+                                <label asp-for="@option.IsCorrect" class="custom-control-label">@option.Content</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="custom-control custom-checkbox" style="margin-left: 50px;">
+                                <input asp-for="@isChecked" value="@isChecked" class="custom-control-input custom-control-input-green" disabled />
+                                <label asp-for="@isChecked" class="custom-control-label">@option.Content</label>
+                            </div>
+                        }
                     }
                 </div>
                 <div class="card-footer" style="display: block;">
+                    <p @(question.Rule != null)>@question.Rule</p>
                 </div>
             </div>
         </div>

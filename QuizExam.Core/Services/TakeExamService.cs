@@ -4,6 +4,7 @@ using QuizExam.Core.Contracts;
 using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Models.Question;
+using QuizExam.Core.Models.TakeExam;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Enums;
 using QuizExam.Infrastructure.Data.Identity;
@@ -51,7 +52,12 @@ namespace QuizExam.Core.Services
             }
         }
 
-        public async Task<ViewExamVM> GetExamForView(string id)
+        public async Task<TakenExamsListVM> TakenExams(string id)
+        {
+            return new TakenExamsListVM();
+        }
+
+        public async Task<TakeExamVM> GetExamForView(string id)
         {
             try
             {
@@ -69,42 +75,46 @@ namespace QuizExam.Core.Services
                         {
                             Content = q.Content,
                             Points = q.Points,
+                            Rule = q.Rule,
                             AnswerOptions = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id)
                                 .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == take.Id),
-                                      option => option.Id,
-                                      answer => answer.AnswerOptionId,
-                                      (option, answer) => new
-                                      {
-                                          option,
-                                          answer,
-                                      })
+                                    option => option.Id,
+                                    answer => answer.AnswerOptionId,
+                                    (option, answer) => new
+                                    {
+                                        option,
+                                        answer,
+                                    })
                                 .SelectMany(
-                                      x => x.answer.DefaultIfEmpty(),
-                                      (option, answer) => new AnswerOptionVM
-                                      {
-                                          Id = answer.Id.ToString(),
-                                          Content = option.option.Content,
-                                          IsCorrect = option.option.IsCorrect,
-                                      }).ToList(),
+                                    x => x.answer.DefaultIfEmpty(),
+                                    (option, answer) => new AnswerOptionVM
+                                    {
+                                        Id = answer.Id.ToString(),
+                                        Content = option.option.Content,
+                                        IsCorrect = option.option.IsCorrect,
+                                    }).ToList(),
                         }).ToListAsync();
 
-                    return new ViewExamVM
+                    var resultScore = questions.Where(q => q.AnswerOptions.Any(a => a.IsCorrect && a.Id is not null)).Select(q => q.Points).Sum();
+
+                    return new TakeExamVM
                     {
                         Id = take.Id.ToString(),
                         Title = exam.Title,
-                        Description = exam.Description,
                         SubjectName = subject.Name,
+                        MaxScore = exam.MaxScore,
+                        ResultScore = resultScore,
                         Questions = questions,
                     };
                 }
                 else
                 {
-                    return new ViewExamVM
+                    return new TakeExamVM
                     {
                         Id = exam.Id.ToString(),
                         Title = exam.Title,
-                        Description = exam.Description,
                         SubjectName = subject.Name,
+                        MaxScore = exam.MaxScore,
                         Questions = new List<QuestionExamVM>(),
                     };
                 }
