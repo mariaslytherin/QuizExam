@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Models.Exam;
+using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Controllers
@@ -24,6 +25,14 @@ namespace QuizExam.Controllers
             this.takeExamService = takeExamService;
             this.examService = examService;
             this.questionService = questionService;
+        }
+
+        public async Task<IActionResult> GetTakenExams(int p = 1, int s = 10)
+        {
+            var user = await this.userManager.GetUserAsync(User);
+            var takes = await this.takeExamService.TakenExams(user.Id, p, s);
+
+            return View("TakenExams", takes);
         }
 
         public async Task<IActionResult> Start(string examId)
@@ -71,7 +80,7 @@ namespace QuizExam.Controllers
                     if (takeId != Guid.Empty)
                     {
                         int questionOrder = 0;
-                        return RedirectToAction("GetQuestion", "Question", new { takeId = takeId, examId = examId, order = questionOrder });
+                        return RedirectToAction("GetQuestion", "Question", new { takeId = takeId, examId = examId, order = questionOrder, isLast = false });
                     }
                 }
             }
@@ -81,6 +90,28 @@ namespace QuizExam.Controllers
             }
 
             return View();
+        }
+
+        public async Task<IActionResult> Finish(string takeExamId)
+        {
+            try
+            {
+                if (await this.takeExamService.FinishExam(takeExamId))
+                {
+                    var take = await this.takeExamService.GetExamForView(takeExamId);
+                    return View("ViewTakeExam", take);
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpGet]

@@ -23,32 +23,11 @@ namespace QuizExam.Controllers
         {
             try
             {
-                var question = await this.questionService.GetQuestionForTake(examId, order);
+                var question = await this.questionService.GetQuestionForTake(examId, takeId, order, isLast);
 
                 if (question != null)
                 {
-                    TempData["QuestionContent"] = question.Content;
-                    TempData["ExamId"] = question.ExamId;
-
-                    var options = this.answerService.GetOptions(question.Id.ToString());
-
-                    var model = new TakeQuestionVM();
-                    model.QuestionId = question.Id.ToString();
-                    model.TakeExamId = takeId;
-                    model.Order = order;
-                    model.TakeAnswers = new List<TakeAnswerVM>();
-
-                    foreach (var option in options)
-                    {
-                        var currentOption = new TakeAnswerVM
-                        {
-                            AnswerId = option.Id,
-                            Content = option.Content,
-                        };
-                        model.TakeAnswers.Add(currentOption);
-                    }
-
-                    return View("/Views/TakeExam/Take.cshtml", model);
+                    return View("/Views/TakeExam/Take.cshtml", question);
                 }
                 else
                 {

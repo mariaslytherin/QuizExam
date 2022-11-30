@@ -102,16 +102,30 @@ namespace QuizExam.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Activate(string id)
         {
-            if (await this.examService.Activate(Guid.Parse(id)))
+            try
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulActivationMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
+                if (!await this.examService.CanActivate(Guid.Parse(id)))
+                {
+                    TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningActivationMessage;
+                    return RedirectToAction(nameof(GetExamsList));
+                }
 
-            return RedirectToAction(nameof(GetExamsList));
+                if (await this.examService.Activate(Guid.Parse(id)))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulActivationMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                }
+
+                return RedirectToAction(nameof(GetExamsList));
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction(nameof(GetExamsList));
+            }
         }
 
         [HttpPost]

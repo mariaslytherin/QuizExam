@@ -26,5 +26,7 @@ namespace QuizExam.Core.Contracts
         Task<bool> Activate(Guid id);
 
         Task<bool> Delete(Guid id);
+
+        Task<bool> CanActivate(Guid id);
     }
 }

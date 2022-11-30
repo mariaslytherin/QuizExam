@@ -50,21 +50,33 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> Edit(string examId, string id)
         {
-            var question = await this.questionService.GetQuestionForEdit(id);
-            var options = this.answerOptionService.GetOptions(id);
-
-            TempData["ExamId"] = examId;
-
-            if (options.Count() != 0)
+            try
             {
-                ViewBag.Options = options;
-            }
-            else
-            {
-                ViewBag.Options = null;
-            }
+                var question = await this.questionService.GetQuestionForEdit(id);
+                var options = this.answerOptionService.GetOptions(id);
 
-            return View("Edit", question);
+                if (question != null && options != Enumerable.Empty<AnswerOptionVM>())
+                {
+                    TempData["ExamId"] = examId;
+                    
+                    if (options.Count() != 0)
+                    {
+                        ViewBag.Options = options;
+                    }
+
+                    return View("Edit", question);
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.UnsuccessfulAddQuestionMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                    return RedirectToAction("ViewExam", "Exam", new { id = examId });
+                }
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.UnsuccessfulAddQuestionMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("ViewExam", "Exam", new { id = examId });
+            }
         }
 
         [HttpPost]

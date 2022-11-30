@@ -1,5 +1,5 @@
 ﻿@using QuizExam.Core.Models.Exam
-@model ExamListVM
+@model List<ViewExamVM>
 
 @{
     ViewData["Title"] = "Начало";
@@ -24,7 +24,7 @@
         </div>
         <div class="content" style="margin-top: 20px;">
             <div class="container-fluid" style="width:100%; height:auto; display:flex; flex-wrap: wrap;">
-                @foreach (var exam in Model.Exams)
+                @foreach (var exam in Model)
                 {
                     <div class="col-lg-6" style="width:50%;">
                         <div class="card card-primary card-outline">

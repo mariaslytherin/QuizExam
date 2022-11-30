@@ -56,5 +56,7 @@
         public const string WarningCannotAddOptionMessage = "Един въпрос не може да има повече от 6 опции за отговор!";
 
         public const string WarningAddOptionsMessage = "Добавете възможни опции за отговор!";
+
+        public const string WarningActivationMessage = "За да активирате изпита трябва да добавите въпроси!";
     }
 }

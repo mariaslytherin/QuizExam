@@ -38,9 +38,9 @@ namespace QuizExam.Controllers
 
             TempData["ExamId"] = examId;
 
-            if (await this.questionService.IsLastQuestion(model.Order + 1, examId))
+            if (model.IsLast)
             {
-                return RedirectToAction("GetTakeResult", "TakeExam", new { takeExamId = model.TakeExamId });
+                return RedirectToAction("Finish", "TakeExam", new { takeExamId = model.TakeExamId });
             }
             else
             {

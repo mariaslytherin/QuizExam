@@ -1,5 +1,6 @@
 ﻿using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Models.TakeExam;
+using QuizExam.Infrastructure.Data;
 
 namespace QuizExam.Core.Contracts
 {
@@ -7,10 +8,12 @@ namespace QuizExam.Core.Contracts
     {
         Task<Guid> CreateTake(string userId, string examId);
 
-        Task<TakeExamVM> GetExamForView(string id);
+        Task<TakeExamVM> GetExamForView(string takeExamId);
 
         Task<bool> TakeExists(string userId, string examId);
 
-        Task<TakenExamsListVM> TakenExams(string userId);
+        Task<TakenExamsListVM> TakenExams(string userId, int? page, int? size);
+
+        Task<bool> FinishExam(string takeExamId);
     }
 }

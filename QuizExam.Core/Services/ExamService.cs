@@ -269,5 +269,12 @@ namespace QuizExam.Core.Services
                 throw new NullReferenceException($"Object of type '{nameof(Exam)}' was not found. ");
             }
         }
+
+        public async Task<bool> CanActivate(Guid id)
+        {
+            bool hasAnyQuestions = await this.repository.All<Question>().AnyAsync(q => q.ExamId == id);
+
+            return hasAnyQuestions;
+        }
     }
 }
