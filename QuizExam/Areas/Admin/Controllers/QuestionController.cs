@@ -19,7 +19,7 @@ namespace QuizExam.Areas.Admin.Controllers
             this.answerOptionService = answerOptionService;
         }
 
-        public async Task<IActionResult> New()
+        public IActionResult New()
         {
             return View("New");
         }
@@ -35,7 +35,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             var questionId = await this.questionService.Create(model);
 
-            if (questionId != Guid.Empty || questionId != null)
+            if (questionId != Guid.Empty)
             {
                 TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedQuestionMessage;
                 TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningAddOptionsMessage;
