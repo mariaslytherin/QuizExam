@@ -80,7 +80,7 @@ namespace QuizExam.Controllers
                     if (takeId != Guid.Empty)
                     {
                         int questionOrder = 0;
-                        return RedirectToAction("GetQuestion", "Question", new { takeId = takeId, examId = examId, order = questionOrder, isLast = false });
+                        return RedirectToAction("GetNextQuestion", "Question", new { takeId = takeId, examId = examId, order = questionOrder, isLast = false });
                     }
                 }
             }

@@ -132,7 +132,46 @@ namespace QuizExam.Core.Services
             }
         }
 
-        public async Task<TakeQuestionVM> GetQuestionForTake(string examId, string takeId, int order)
+        public async Task<TakeQuestionVM> GetNextQuestion(string examId, string takeId, int order)
+        {
+            try
+            {
+                var allQuestions = await this.repository.All<Question>()
+                    .Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
+                    .Select(q => new TakeQuestionVM
+                    {
+                        QuestionId = q.Id.ToString(),
+                        TakeExamId = takeId,
+                        ExamId = q.ExamId.ToString(),
+                        Content = q.Content,
+                        Order = order,
+                        TakeAnswers = this.repository.All<AnswerOption>()
+                                .Where(a => a.QuestionId == q.Id && !a.IsDeleted)
+                                .Select(a => new TakeAnswerVM
+                                {
+                                    AnswerId = a.Id.ToString(),
+                                    Content = a.Content,
+                                }).ToList(),
+                    })
+                    .ToListAsync();
+
+                var question = allQuestions[order];
+
+                if (allQuestions.Count() == order + 1)
+                {
+                    question.IsLast = true;
+                    return question;
+                }
+
+                return question;
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Object of type '{nameof(Question)}' was not found on index {order}. ");
+            }
+        }
+
+        public async Task<TakeQuestionVM> GetPreviousQuestion(string examId, string takeId, int order)
         {
             try
             {

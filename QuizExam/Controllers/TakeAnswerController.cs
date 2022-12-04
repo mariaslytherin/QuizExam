@@ -24,7 +24,7 @@ namespace QuizExam.Controllers
             if (model.CheckedOptionId == null)
             {
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
-                return RedirectToAction("GetQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order });
+                return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order });
             }
 
             if (await this.takeAnswerService.AddAnswer(model, examId))
@@ -44,7 +44,7 @@ namespace QuizExam.Controllers
             }
             else
             {
-                return RedirectToAction("GetQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order + 1 });
+                return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order + 1 });
             }
         }
     }

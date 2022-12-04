@@ -29,13 +29,17 @@
                 </div>
                 <div class="card-footer" style="display: block;">
                     <div class="row">
+                        @if (Model.Order - 1 >= 0)
+                        {
+                            <a asp-action="getPreviousQuestion" asp-controller="question" asp-route-examId="@Model.ExamId" asp-route-takeId="@Model.TakeExamId" asp-route-order="@Model.Order - 1" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: auto; height: fit-content;">Назад</a>  
+                        }
                         @if (Model.IsLast)
                         {
-                            <button type="submit" asp-action="add" asp-controller="takeAnswer" asp-route-examId="@Model.ExamId" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: 5px; height: fit-content;">Предай</button>
+                            <button type="submit" asp-action="add" asp-controller="takeAnswer" asp-route-examId="@Model.ExamId" class="btn btn-outline-primary btn-sm" style="width: 100px; margin-left: auto; height: fit-content;">Предай</button>
                         }
                         else
                         {
-                            <button type="submit" asp-action="add" asp-controller="takeAnswer" asp-route-examId="@Model.ExamId" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: 5px; height: fit-content;">Следващ</button>
+                            <button type="submit" asp-action="add" asp-controller="takeAnswer" asp-route-examId="@Model.ExamId" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-left: auto; height: fit-content;">Следващ</button>
                         }
                     </div>
                 </div>

@@ -10,7 +10,9 @@ namespace QuizExam.Core.Contracts
 
         Task<Question> GetQuestionById(string id);
 
-        Task<TakeQuestionVM> GetQuestionForTake(string examId, string takeId, int order);
+        Task<TakeQuestionVM> GetNextQuestion(string examId, string takeId, int order);
+
+        Task<TakeQuestionVM> GetPreviousQuestion(string examId, string takeId, int order);
 
         Task<Guid[]> GetQuestionIds(string examId);
 
