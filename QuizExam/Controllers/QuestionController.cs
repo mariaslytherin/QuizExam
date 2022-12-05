@@ -50,7 +50,7 @@ namespace QuizExam.Controllers
 
                 if (question != null)
                 {
-                    return View("/Views/TakeExam/Take.cshtml", question);
+                    return View("/Views/TakeExam/Back.cshtml", question);
                 }
                 else
                 {

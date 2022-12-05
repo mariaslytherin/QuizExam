@@ -47,5 +47,37 @@ namespace QuizExam.Controllers
                 return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order + 1 });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(TakeQuestionVM model, string examId)
+        {
+            if (model.CheckedOptionId == null)
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
+                return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order });
+            }
+
+            var isDeleted = await this.takeAnswerService.DeleteAnswer(model, examId);
+
+            if (await this.takeAnswerService.AddAnswer(model, examId))
+            {
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedCorrectAnswerMessage;
+            }
+            else
+            {
+                throw new Exception("An error appeard!");
+            }
+
+            TempData["ExamId"] = examId;
+
+            if (model.IsLast)
+            {
+                return RedirectToAction("Finish", "TakeExam", new { takeExamId = model.TakeExamId });
+            }
+            else
+            {
+                return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order + 1 });
+            }
+        }
     }
 }

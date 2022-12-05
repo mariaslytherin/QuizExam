@@ -31,7 +31,7 @@
                     <div class="row">
                         @if (Model.Order - 1 >= 0)
                         {
-                            <a asp-action="getPreviousQuestion" asp-controller="question" asp-route-examId="@Model.ExamId" asp-route-takeId="@Model.TakeExamId" asp-route-order="@Model.Order - 1" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: auto; height: fit-content;">Назад</a>  
+                            <a asp-action="getPreviousQuestion" asp-controller="question" asp-route-examId="@Model.ExamId" asp-route-takeId="@Model.TakeExamId" asp-route-order="@(Model.Order - 1)" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: auto; height: fit-content;">Назад</a>  
                         }
                         @if (Model.IsLast)
                         {

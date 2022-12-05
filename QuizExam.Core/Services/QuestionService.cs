@@ -175,32 +175,35 @@ namespace QuizExam.Core.Services
         {
             try
             {
-                var allQuestions = await this.repository.All<Question>()
-                    .Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
-                    .Select(q => new TakeQuestionVM
-                    {
-                        QuestionId = q.Id.ToString(),
-                        TakeExamId = takeId,
-                        ExamId = q.ExamId.ToString(),
-                        Content = q.Content,
-                        Order = order,
-                        TakeAnswers = this.repository.All<AnswerOption>()
-                                .Where(a => a.QuestionId == q.Id && !a.IsDeleted)
-                                .Select(a => new TakeAnswerVM
-                                {
-                                    AnswerId = a.Id.ToString(),
-                                    Content = a.Content,
-                                }).ToList(),
-                    })
-                    .ToListAsync();
+                var questionAnswers = await this.repository.All<Question>().Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
+                            .Select(q => new TakeQuestionVM
+                            {
+                                QuestionId = q.Id.ToString(),
+                                TakeExamId = takeId,
+                                ExamId = q.ExamId.ToString(),
+                                Content = q.Content,
+                                Order = order,
+                                TakeAnswers = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
+                                    .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == Guid.Parse(takeId) && !t.IsDeleted),
+                                        option => option.Id,
+                                        answer => answer.AnswerOptionId,
+                                        (option, answer) => new
+                                        {
+                                            option,
+                                            answer,
+                                        })
+                                    .SelectMany(
+                                        x => x.answer.DefaultIfEmpty(),
+                                        (option, answer) => new TakeAnswerVM
+                                        {
+                                            AnswerId = answer.Id.ToString(),
+                                            OptionId = option.option.Id.ToString(),
+                                            IsChecked = answer.Id.ToString() != null ? true : false,
+                                            Content = option.option.Content,
+                                        }).ToList(),
+                            }).ToListAsync();
 
-                var question = allQuestions[order];
-
-                if (allQuestions.Count() == order + 1)
-                {
-                    question.IsLast = true;
-                    return question;
-                }
+                var question = questionAnswers[order];
 
                 return question;
             }
