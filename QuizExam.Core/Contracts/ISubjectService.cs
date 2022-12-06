@@ -11,8 +11,6 @@ namespace QuizExam.Core.Contracts
 
         Task<IEnumerable<SubjectVM>> GetActiveSubjects();
 
-        Task<Subject> GetSubjectById(Guid id);
-
         Task<SubjectVM> GetSubjectForEdit(Guid id);
 
         Task<bool> Edit(SubjectVM model);

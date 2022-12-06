@@ -98,11 +98,6 @@ namespace QuizExam.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<Subject> GetSubjectById(Guid id)
-        {
-            return await this.repository.GetByIdAsync<Subject>(id);
-        }
-
         public async Task<SubjectVM> GetSubjectForEdit(Guid id)
         {
             var subject = await this.repository.GetByIdAsync<Subject>(id);
