@@ -145,13 +145,24 @@ namespace QuizExam.Core.Services
                         ExamId = q.ExamId.ToString(),
                         Content = q.Content,
                         Order = order,
-                        TakeAnswers = this.repository.All<AnswerOption>()
-                                .Where(a => a.QuestionId == q.Id && !a.IsDeleted)
-                                .Select(a => new TakeAnswerVM
-                                {
-                                    AnswerId = a.Id.ToString(),
-                                    Content = a.Content,
-                                }).ToList(),
+                        TakeAnswers = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
+                                    .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == Guid.Parse(takeId) && !t.IsDeleted),
+                                        option => option.Id,
+                                        answer => answer.AnswerOptionId,
+                                        (option, answer) => new
+                                        {
+                                            option,
+                                            answer,
+                                        })
+                                    .SelectMany(
+                                        x => x.answer.DefaultIfEmpty(),
+                                        (option, answer) => new TakeAnswerVM
+                                        {
+                                            AnswerId = answer.Id.ToString(),
+                                            OptionId = option.option.Id.ToString(),
+                                            IsChecked = answer.Id.ToString() != null ? true : false,
+                                            Content = option.option.Content,
+                                        }).ToList(),
                     })
                     .ToListAsync();
 

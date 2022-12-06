@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizExam.Core.Contracts;
+using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Models.TakeAnswer;
+using QuizExam.Core.Models.TakeExam;
 using QuizExam.Core.Models.TakeQuestion;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Enums;
@@ -23,22 +25,59 @@ namespace QuizExam.Core.Services
             try
             {
                 var result = false;
-                var takeExam = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(model.TakeExamId));
+                var answer = this.repository.All<TakeAnswer>()
+                    .Where(t => t.QuestionId == Guid.Parse(model.QuestionId) &&
+                                t.TakeExamId == Guid.Parse(model.TakeExamId))
+                    .FirstOrDefault();
 
-                if (takeExam != null)
+                if (answer != null)
                 {
-                    var answer = new TakeAnswer
+                    if (answer.AnswerOptionId != model.CheckedOptionId.ToGuid())
                     {
-                        TakeExamId = Guid.Parse(model.TakeExamId),
-                        AnswerOptionId = Guid.Parse(model.CheckedOptionId),
-                        QuestionId = Guid.Parse(model.QuestionId),
-                    };
-                    await this.repository.AddAsync(answer);
-                    await this.repository.SaveChangesAsync();
-                    result = true;
-                }
+                        await DeleteAnswer(answer.Id);
 
-                return result;
+                        var takeExam = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(model.TakeExamId));
+
+                        if (takeExam != null)
+                        {
+                            var newAnswer = new TakeAnswer
+                            {
+                                TakeExamId = Guid.Parse(model.TakeExamId),
+                                AnswerOptionId = Guid.Parse(model.CheckedOptionId),
+                                QuestionId = Guid.Parse(model.QuestionId),
+                            };
+                            await this.repository.AddAsync(newAnswer);
+                            await this.repository.SaveChangesAsync();
+                            result = true;
+                        }
+
+                        return result;
+                    }
+                    else
+                    {
+                        result = true;
+                        return result;
+                    }
+                }
+                else
+                {
+                    var takeExam = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(model.TakeExamId));
+
+                    if (takeExam != null)
+                    {
+                        var newAnswer = new TakeAnswer
+                        {
+                            TakeExamId = Guid.Parse(model.TakeExamId),
+                            AnswerOptionId = Guid.Parse(model.CheckedOptionId),
+                            QuestionId = Guid.Parse(model.QuestionId),
+                        };
+                        await this.repository.AddAsync(newAnswer);
+                        await this.repository.SaveChangesAsync();
+                        result = true;
+                    }
+
+                    return result;
+                }
             }
             catch
             {
@@ -46,22 +85,12 @@ namespace QuizExam.Core.Services
             }
         }
 
-        public async Task<bool> DeleteAnswer(TakeQuestionVM model, string examId)
+        private async Task DeleteAnswer(Guid answerId)
         {
-
             try
             {
-                bool result = false;
-                var oldAnswerId = model.TakeAnswers.Where(a => a.IsChecked).Select(a => a.AnswerId).FirstOrDefault();
-                var oldAnswer = await this.repository.GetByIdAsync<TakeAnswer>(Guid.Parse(oldAnswerId));
-
-                if (oldAnswer != null)
-                {
-                    await this.repository.DeleteAsync<TakeAnswer>(oldAnswer.Id);
-                    await this.repository.SaveChangesAsync();
-                    result = true;
-                }
-                return result;
+                await this.repository.DeleteAsync<TakeAnswer>(answerId);
+                await this.repository.SaveChangesAsync();
             }
             catch
             {

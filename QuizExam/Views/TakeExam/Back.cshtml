@@ -23,8 +23,8 @@
                         string checkedOption = Model.TakeAnswers[i].IsChecked ? "checked" : null;
                         <div class="form-check" style="margin-left: 50px;">
                             <input type="hidden" asp-for="@Model.TakeAnswers[i].AnswerId" />
-                            <input type="hidden" asp-for="@Model.TakeAnswers[i].OptionId" />
                             <input type="hidden" asp-for="@Model.TakeAnswers[i].Content" />
+                            <input type="hidden" asp-for="@Model.TakeAnswers[i].IsChecked" />
                             <input asp-for="@Model.CheckedOptionId" value="@Model.TakeAnswers[i].OptionId" checked="@checkedOption" type="radio" class="form-check-input" /> @Model.TakeAnswers[i].Content
                         </div>
                     }
@@ -33,7 +33,7 @@
                     <div class="row">
                         @if (Model.Order - 1 >= 0)
                         {
-                            <a asp-action="getPreviousQuestion" asp-controller="question" asp-route-examId="@Model.ExamId" asp-route-takeId="@Model.TakeExamId" asp-route-order="@(Model.Order - 1)" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: auto; height: fit-content;">Назад</a>  
+                            <a asp-action="getPreviousQuestion" asp-controller="question" asp-route-examId="@Model.ExamId" asp-route-takeId="@Model.TakeExamId" asp-route-order="@Model.Order - 1" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: auto; height: fit-content;">Назад</a>  
                         }
                         @if (Model.IsLast)
                         {
@@ -49,43 +49,3 @@
         </div>
     </div>
 </div>
-
-
-@*@model Guid[]
-
-@{
-    Guid currentId = Guid.Empty;
-}
-
-<div class="content" style="margin-top: 20px;">
-    <div class="container-fluid" style="width:100%; height:auto; display:flex; flex-wrap: wrap;">
-        @for (int i = 0; i < Model.Count(); i++)
-        {
-            currentId = Model[i];
-            <a name="@Model[i]" id="question" class="btn btn-info question" style="margin-right: 2px; margin-bottom: 3px;">@i</a>
-        }
-    </div>
-</div>
-<div id="dvPartialView">
-</div>
-
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-         $('[id*=question]').on('click', function () {
-             $.ajax({
-                 url: '@Url.Action("GetQuestion", "Question")',
-                 dataType: "html",
-                 data: { "id": $(this).attr('name') },
-                 type: "GET",
-                 contentType: "application/json",
-                 success: function (response) {
-                     $('#dvPartialView').html(response);
-                 },
-                 error: function (err) {
-                     alert(err.responseText);
-                 }
-             });
-         });
-     });
-</script>*@
