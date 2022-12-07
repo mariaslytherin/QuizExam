@@ -103,7 +103,7 @@ namespace QuizExam.Core.Services
             return question;
         }
 
-        public async Task<EditQuestionVM?> GetQuestionForEdit(string id)
+        public async Task<EditQuestionVM> GetQuestionForEdit(string id)
         {
             var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(id));
 
@@ -123,7 +123,7 @@ namespace QuizExam.Core.Services
                 }
                 else
                 {
-                    return null;
+                    return new EditQuestionVM();
                 }
             }
             catch (NullReferenceException)
