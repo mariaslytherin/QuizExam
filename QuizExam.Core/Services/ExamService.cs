@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizExam.Core.Contracts;
+using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Models.Question;
@@ -109,7 +110,7 @@ namespace QuizExam.Core.Services
                          Title = e.Title,
                          SubjectName = s.Name,
                          Description = e.Description,
-                         CreateDate = e.CreateDate,
+                         CreateDate = e.CreateDate.ToDateOnlyString(),
                          IsActive = e.IsActive ? "Да" : "Не",
                      })
                 .ToListAsync();

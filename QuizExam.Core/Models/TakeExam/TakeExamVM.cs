@@ -12,7 +12,7 @@ namespace QuizExam.Core.Models.TakeExam
 
         public string SubjectName { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public string CreateDate { get; set; }
 
         public double ResultScore { get; set; }
 

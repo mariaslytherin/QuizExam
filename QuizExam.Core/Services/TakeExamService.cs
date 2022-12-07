@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using QuizExam.Core.Contracts;
+using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Models.Question;
@@ -68,7 +69,7 @@ namespace QuizExam.Core.Services
                                         .Where(s => s.Id == e.SubjectId)
                                         .Select(s => s.Name)
                                         .FirstOrDefault(),
-                         CreateDate = t.CreateDate,
+                         CreateDate = t.CreateDate.ToDateOnlyString(),
                          MaxScore = t.Score,
                      })
             .ToListAsync();
