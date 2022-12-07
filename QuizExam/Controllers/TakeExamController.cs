@@ -27,6 +27,22 @@ namespace QuizExam.Controllers
             this.questionService = questionService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetTakeResult(string takeId)
+        {
+            try
+            {
+                var take = await this.takeExamService.GetExamForView(takeId);
+
+                return View("ViewTakeExam", take);
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
+                return Ok();
+            }
+        }
+
         public async Task<IActionResult> GetTakenExams(int p = 1, int s = 10)
         {
             var user = await this.userManager.GetUserAsync(User);
@@ -111,22 +127,6 @@ namespace QuizExam.Controllers
             {
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
                 return RedirectToAction("Index", "Home");
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetTakeResult(string takeExamId)
-        {
-            try
-            {
-                var take = await this.takeExamService.GetExamForView(takeExamId);
-
-                return View("ViewTakeExam", take);
-            }
-            catch
-            {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
-                return Ok();
             }
         }
     }

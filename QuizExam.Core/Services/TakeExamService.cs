@@ -63,7 +63,7 @@ namespace QuizExam.Core.Services
                       e => e.Id,
                      (t, e) => new TakeExamVM()
                      {
-                         Id = e.Id.ToString(),
+                         Id = t.Id.ToString(),
                          Title = e.Title,
                          SubjectName = this.repository.All<Subject>()
                                         .Where(s => s.Id == e.SubjectId)
