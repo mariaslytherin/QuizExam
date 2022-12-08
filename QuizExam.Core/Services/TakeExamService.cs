@@ -70,7 +70,8 @@ namespace QuizExam.Core.Services
                                         .Select(s => s.Name)
                                         .FirstOrDefault(),
                          CreateDate = t.CreateDate.ToDateOnlyString(),
-                         MaxScore = t.Score,
+                         ResultScore = t.Score,
+                         MaxScore = e.MaxScore,
                      })
             .ToListAsync();
 
