@@ -20,22 +20,22 @@
         <li class="nav-item menu-open">
             <a href="/" class="nav-link">
                 <p>
-                    <i class="nav-icon fa fa-list"></i>
+                    <i class="nav-icon fas fa-table"></i>
                     Активни изпити
                     <i class="fas fa-angle-left right"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a asp-controller="TakeExam" asp-action="GetTakenExams" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p> Архив </p>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="/" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p> Незавършени </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="TakeExam" asp-action="GetTakenExams" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p> Архив </p>
                     </a>
                 </li>
             </ul>

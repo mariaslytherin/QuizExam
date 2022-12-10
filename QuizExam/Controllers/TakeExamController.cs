@@ -34,7 +34,7 @@ namespace QuizExam.Controllers
             {
                 var take = await this.takeExamService.GetExamForView(takeId);
 
-                return View("ViewTakeExam", take);
+                return View("View", take);
             }
             catch
             {
@@ -48,7 +48,7 @@ namespace QuizExam.Controllers
             var user = await this.userManager.GetUserAsync(User);
             var takes = await this.takeExamService.TakenExams(user.Id, p, s);
 
-            return View("TakenExams", takes);
+            return View("Taken", takes);
         }
 
         public async Task<IActionResult> Start(string examId)
@@ -68,7 +68,7 @@ namespace QuizExam.Controllers
 
                 if (exam != null)
                 {
-                    return View("StartTakingExam", exam);
+                    return View("Start", exam);
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace QuizExam.Controllers
                 if (await this.takeExamService.FinishExam(takeExamId))
                 {
                     var take = await this.takeExamService.GetExamForView(takeExamId);
-                    return View("ViewTakeExam", take);
+                    return View("View", take);
                 }
                 else
                 {

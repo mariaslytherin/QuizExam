@@ -73,16 +73,25 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             var options = this.answerService.GetOptions(id);
             var question = await this.questionService.GetQuestionById(id);
-            TempData["ExamId"] = examId;
-            TempData["QuestionContent"] = question.Content;
 
-            var model = new SetCorrectAnswerVM
+            if (options != Enumerable.Empty<AnswerOptionVM>() || question != null)
             {
-                QuestionId = question.Id.ToString(),
-                Options = options.ToList()
-            };
+                TempData["ExamId"] = examId;
+                TempData["QuestionContent"] = question.Content;
 
-            return View("SetCorrectAnswerOptions", model);
+                var model = new SetCorrectAnswerVM
+                {
+                    QuestionId = question.Id.ToString(),
+                    Options = options.ToList()
+                };
+
+                return View("SetCorrectAnswerOptions", model);
+            }
+            else
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("Edit", "Question", new { id = id, examId = examId });
+            }
         }
 
         [HttpPost]

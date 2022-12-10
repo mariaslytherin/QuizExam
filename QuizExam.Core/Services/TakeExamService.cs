@@ -63,7 +63,7 @@ namespace QuizExam.Core.Services
                       e => e.Id,
                      (t, e) => new TakeExamVM()
                      {
-                         Id = t.Id.ToString(),
+                         Id = t.Id.ToString(), 
                          Title = e.Title,
                          SubjectName = this.repository.All<Subject>()
                                         .Where(s => s.Id == e.SubjectId)
@@ -111,7 +111,7 @@ namespace QuizExam.Core.Services
                             Content = q.Content,
                             Points = q.Points,
                             Rule = q.Rule,
-                            AnswerOptions = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id)
+                            AnswerOptions = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
                                 .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == take.Id),
                                     option => option.Id,
                                     answer => answer.AnswerOptionId,

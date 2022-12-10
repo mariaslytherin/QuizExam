@@ -19,7 +19,7 @@ namespace QuizExam.Controllers
             this.answerService = answerService;
         }
 
-        public async Task<IActionResult> GetNextQuestion(string questionId, string examId, string takeId, int order)
+        public async Task<IActionResult> GetNextQuestion(string examId, string takeId, int order)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace QuizExam.Controllers
 
                 if (question != null)
                 {
-                    return View("/Views/TakeExam/Back.cshtml", question);
+                    return View("/Views/TakeExam/Take.cshtml", question);
                 }
                 else
                 {
