@@ -1,0 +1,69 @@
+﻿@*@using QuizExam.Core.Models.TakeExam
+@model TakenExamsListVM
+@{
+    ViewData["Title"] = "Незавършени изпити";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Незавършени изпити</h3>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-wrap">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th style="text-align: center;">Заглавие</th>
+                            <th style="text-align: center;">Предмет</th>
+                            <th style="text-align: center;">Дата на полагане</th>
+                            <th style="text-align: center;">Точки</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var exam in Model.TakenExams)
+                        {
+                            <tr>
+                                <td class="text-right py-0 align-middle">
+                                    <form method="post">
+                                        <div class="btn-group btn-group-sm">
+                                            <a asp-action="getTakeResult" asp-controller="takeExam" asp-route-takeId="@exam.Id" class="btn btn-info">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </div>
+                                    </form>
+                                </td>
+                                <td style="text-align: center;">@exam.Title</td>
+                                <td style="text-align: center;">@exam.SubjectName</td>
+                                <td style="text-align: center;">@exam.CreateDate</td>
+                                <td style="text-align: center;">@exam.ResultScore / @exam.MaxScore</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <paging page-no="@Model.PageNo"
+                    page-size="@Model.PageSize"
+                    total-records="@Model.TotalRecords"
+                    page-size-dropdown-items="5-10-25">
+            </paging>
+        </div>
+    </div>
+</div>
+*@
+
+<div class="progress progress-xs">
+    <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+</div>

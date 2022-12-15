@@ -57,13 +57,13 @@ namespace QuizExam.Core.Services
         public async Task<TakenExamsListVM> TakenExams(string id, int? page, int? size)
         {
             var takes = await this.repository.All<TakeExam>()
-                .Where(t => t.Status == TakeExamStatusEnum.Finished)
+                .Where(t => t.UserId == id && t.Status == TakeExamStatusEnum.Finished)
                 .Join(this.repository.All<Exam>(),
                       t => t.ExamId,
                       e => e.Id,
                      (t, e) => new TakeExamVM()
                      {
-                         Id = t.Id.ToString(), 
+                         Id = t.Id.ToString(),
                          Title = e.Title,
                          SubjectName = this.repository.All<Subject>()
                                         .Where(s => s.Id == e.SubjectId)
@@ -91,6 +91,48 @@ namespace QuizExam.Core.Services
 
             model.TotalRecords = await this.repository.All<Exam>().Where(e => !e.IsDeleted).CountAsync();
             model.TakenExams = takes;
+
+            return model;
+        }
+
+        public async Task<UncompletedExamsVM> UncompletedExams(string id, int? page, int? size)
+        {
+            var exams = await this.repository.All<Exam>()
+                .GroupJoin(this.repository.All<TakeExam>().Where(t => t.UserId == id && t.Status != TakeExamStatusEnum.Finished),
+                    exam => exam.Id,
+                    take => take.ExamId,
+                    (exam, take) => new
+                    {
+                        exam,
+                        take,
+                    })
+                .SelectMany(
+                    x => x.take.Where(t => t != null),
+                    (exam, take) => new UncompletedExamVM
+                    {
+                        TakeId = take.Id.ToString(),
+                        Title = exam.exam.Title,
+                        AllQuestionsCount = exam.exam.Questions.Count(q => !q.IsDeleted),
+                        TakenQuestionsCount = take.TakeAnswers.Count(t => !t.IsDeleted),
+                    }).ToListAsync();
+
+            var model = new UncompletedExamsVM()
+            {
+                PageNo = page,
+                PageSize = size
+            };
+
+            model.TotalRecords = exams.Count();
+
+            if(size.HasValue && page.HasValue)
+            {
+                exams = exams
+                    .OrderBy(e => e.Title)
+                    .Skip((int)(page * size - size))
+                    .Take((int)size).ToList();
+            }
+
+            model.UncompletedExams = exams;
 
             return model;
         }

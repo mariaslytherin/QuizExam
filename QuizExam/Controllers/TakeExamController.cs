@@ -51,6 +51,14 @@ namespace QuizExam.Controllers
             return View("Taken", takes);
         }
 
+        public async Task<IActionResult> GetUncompletedExams(int p = 1, int s = 10)
+        {
+            var user = await this.userManager.GetUserAsync(User);
+            var exams = this.takeExamService.UncompletedExams(user.Id, p, s);
+
+            return View("Uncompleted", exams);
+        }
+
         public async Task<IActionResult> Start(string examId)
         {
             var user = await this.userManager.GetUserAsync(User);

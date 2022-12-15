@@ -21,13 +21,13 @@
             <a href="/" class="nav-link">
                 <p>
                     <i class="nav-icon fas fa-table"></i>
-                    Активни изпити
+                    Моите изпити
                     <i class="fas fa-angle-left right"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="/" class="nav-link">
+                    <a asp-controller="TakeExam" asp-action="GetUncompletedExams" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p> Незавършени </p>
                     </a>

@@ -14,6 +14,8 @@ namespace QuizExam.Core.Contracts
 
         Task<TakenExamsListVM> TakenExams(string userId, int? page, int? size);
 
+        Task<UncompletedExamsVM> UncompletedExams(string userId, int? page, int? size);
+
         Task<bool> FinishExam(string takeExamId);
     }
 }
