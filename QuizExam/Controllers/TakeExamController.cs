@@ -13,18 +13,15 @@ namespace QuizExam.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ITakeExamService takeExamService;
         private readonly IExamService examService;
-        private readonly IQuestionService questionService;
 
         public TakeExamController(
             UserManager<ApplicationUser> userManager,
             ITakeExamService takeExamService,
-            IExamService examService,
-            IQuestionService questionService)
+            IExamService examService)
         {
             this.userManager = userManager;
             this.takeExamService = takeExamService;
             this.examService = examService;
-            this.questionService = questionService;
         }
 
         [HttpGet]
@@ -54,7 +51,7 @@ namespace QuizExam.Controllers
         public async Task<IActionResult> GetUncompletedExams(int p = 1, int s = 10)
         {
             var user = await this.userManager.GetUserAsync(User);
-            var exams = this.takeExamService.UncompletedExams(user.Id, p, s);
+            var exams = await this.takeExamService.UncompletedExams(user.Id, p, s);
 
             return View("Uncompleted", exams);
         }
