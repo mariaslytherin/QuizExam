@@ -56,6 +56,11 @@ namespace QuizExam.Controllers
             return View("Uncompleted", exams);
         }
 
+        public IActionResult Confirm()
+        {
+            return PartialView("_ConfirmPartial");
+        }
+
         public async Task<IActionResult> Start(string examId)
         {
             var user = await this.userManager.GetUserAsync(User);

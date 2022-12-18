@@ -5,6 +5,7 @@
     ViewData["Title"] = "Начало";
 }
 
+<div id="PlaceHolder"></div>
 <div class="container-fluid">
     <h2 class="text-center display-5">Добре дошли в QuizExam!</h2>
     <form method="post" data-select2-id="10">
@@ -35,6 +36,13 @@
                                 <h6 class="card-title">@exam.SubjectName</h6>
                                 <p class="card-text">@exam.Description</p>
                                 <a asp-action="start" asp-controller="takeExam" asp-route-examId="@exam.Id" class="btn btn-primary">Решавай</a>
+                                <button type="button"
+                                    class="btn btn-primary"
+                                    data-toggle="ajax-modal"
+                                    data-target="#confirm"
+                                    data-url="@Url.Action("Confirm", "TakeExam")">
+                                    Тест
+                                </button>
                             </div>
                         </div>
                     </div>
