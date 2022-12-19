@@ -36,8 +36,9 @@ namespace QuizExam.Core.Services
                     TakeExam newTake = new TakeExam()
                     {
                         UserId = userId,
-                        ExamId = Guid.Parse(examId),
-                        Status = TakeExamStatusEnum.Started
+                        ExamId = examId.ToGuid(),
+                        Status = TakeExamStatusEnum.Started,
+                        ModifyDate = DateTime.Now,
                     };
 
                     await this.repository.AddAsync(newTake);
@@ -265,6 +266,7 @@ namespace QuizExam.Core.Services
 
                 take.Score = resultScore;
                 take.Status = TakeExamStatusEnum.Finished;
+                take.ModifyDate = DateTime.Now;
                 await this.repository.SaveChangesAsync();
                 result = true;
             }
