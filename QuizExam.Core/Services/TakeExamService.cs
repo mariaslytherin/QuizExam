@@ -114,6 +114,8 @@ namespace QuizExam.Core.Services
                         Title = exam.exam.Title,
                         AllQuestionsCount = exam.exam.Questions.Count(q => !q.IsDeleted),
                         TakenQuestionsCount = take.TakeAnswers.Count(t => !t.IsDeleted),
+                        SubjectName = exam.exam.Subject.Name,
+                        StartDate = take.CreateDate.ToDateOnlyString(),
                     }).ToListAsync();
 
             var model = new UncompletedExamsVM()
@@ -148,6 +150,7 @@ namespace QuizExam.Core.Services
                 if (take != null)
                 {
                     var questions = await this.repository.All<Question>().Where(q => q.ExamId == exam.Id && !q.IsDeleted)
+                        .OrderBy(q => q.CreateDate)
                         .Select(q => new QuestionExamVM
                         {
                             Content = q.Content,

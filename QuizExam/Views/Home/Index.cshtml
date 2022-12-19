@@ -5,49 +5,39 @@
     ViewData["Title"] = "Начало";
 }
 
-<div id="PlaceHolder"></div>
 <div class="container-fluid">
     <h2 class="text-center display-5">Добре дошли в QuizExam!</h2>
-    <form method="post" data-select2-id="10">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="form-group">
-                    <div class="input-group input-group-lg">
-                        <input type="search" class="form-control form-control-lg" placeholder="Търси..." value="">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-lg btn-default">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="form-group">
+                <div class="input-group input-group-lg">
+                    <input type="search" class="form-control form-control-lg" placeholder="Търси..." value="">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-lg btn-default">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="content" style="margin-top: 20px;">
-            <div class="container-fluid" style="width:100%; height:auto; display:flex; flex-wrap: wrap;">
-                @foreach (var exam in Model)
-                {
-                    <div class="col-lg-6" style="width:50%;">
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">
-                                <h5 class="m-0">@exam.Title</h5>
-                            </div>
-                            <div class="card-body">
-                                <h6 class="card-title">@exam.SubjectName</h6>
-                                <p class="card-text">@exam.Description</p>
-                                <a asp-action="start" asp-controller="takeExam" asp-route-examId="@exam.Id" class="btn btn-primary">Решавай</a>
-                                <button type="button"
-                                    class="btn btn-primary"
-                                    data-toggle="ajax-modal"
-                                    data-target="#confirm"
-                                    data-url="@Url.Action("Confirm", "TakeExam")">
-                                    Тест
-                                </button>
-                            </div>
+    </div>
+    <div class="content" style="margin-top: 20px;">
+        <div class="container-fluid" style="width:100%; height:auto; display:flex; flex-wrap: wrap;">
+            @foreach (var exam in Model)
+            {
+                <div class="col-lg-6" style="width:50%;">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h5 class="m-0">@exam.Title</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title">@exam.SubjectName</h6>
+                            <p class="card-text">@exam.Description</p>
+                            <a asp-action="start" asp-controller="takeExam" asp-route-examId="@exam.Id" class="btn btn-primary">Решавай</a>
                         </div>
                     </div>
-                }
-            </div>
+                </div>
+            }
         </div>
-    </form>
+    </div>
 </div>

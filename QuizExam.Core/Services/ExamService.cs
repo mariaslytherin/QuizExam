@@ -192,24 +192,25 @@ namespace QuizExam.Core.Services
                 if (hasQuestions)
                 {
                     var questions = this.repository.All<Question>().Where(q => q.ExamId == id.ToGuid() && !q.IsDeleted)
-                    .Select(q => new QuestionExamVM
-                    {
-                        Id = q.Id.ToString(),
-                        Content = q.Content,
-                        Points = q.Points,
-                        AnswerOptions = this.repository
-                            .All<AnswerOption>()
-                            .Where(a => a.QuestionId == q.Id && !a.IsDeleted)
-                            .Select(a => new AnswerOptionVM
-                            {
-                                Content = a.Content,
-                                IsCorrect = a.IsCorrect,
-                            })
-                            .DefaultIfEmpty()
-                            .ToList()
-                    })
-                    .DefaultIfEmpty()
-                    .ToList();
+                        .OrderBy(q => q.CreateDate)
+                        .Select(q => new QuestionExamVM
+                        {
+                            Id = q.Id.ToString(),
+                            Content = q.Content,
+                            Points = q.Points,
+                            AnswerOptions = this.repository
+                                .All<AnswerOption>()
+                                .Where(a => a.QuestionId == q.Id && !a.IsDeleted)
+                                .Select(a => new AnswerOptionVM
+                                {
+                                    Content = a.Content,
+                                    IsCorrect = a.IsCorrect,
+                                })
+                                .DefaultIfEmpty()
+                                .ToList()
+                        })
+                        .DefaultIfEmpty()
+                        .ToList();
 
                     return new ViewExamVM
                     {
@@ -263,7 +264,7 @@ namespace QuizExam.Core.Services
                     return model;
                 }
 
-                return null;
+                return new ExamVM();
             }
             catch
             {
