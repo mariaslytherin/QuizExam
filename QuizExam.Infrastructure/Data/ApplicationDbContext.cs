@@ -30,6 +30,52 @@ namespace QuizExam.Infrastructure.Data
                 .WithMany(a => a.TakeAnswers)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            string ADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
+            string ADMIN_ROLE_ID = "341743f0-asd2–42de-afbf-59kmkkmk72cf6";
+            string STUDENT_ROLE_ID = "daab2d3d-6652-4ef9-9d43-0ec02c7dc78f";
+
+            //Seed user roles
+            builder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Name = "Administrator",
+                NormalizedName = "ADMINISTRATOR",
+                Id = ADMIN_ROLE_ID,
+                ConcurrencyStamp = ADMIN_ROLE_ID
+            },
+            new IdentityRole
+            {
+                Name = "Student",
+                NormalizedName = "STUDENT",
+                Id = STUDENT_ROLE_ID,
+                ConcurrencyStamp = STUDENT_ROLE_ID
+            });
+
+            //Create Admin user
+            var adminUser = new ApplicationUser
+            {
+                Id = ADMIN_ID,
+                Email = "admin@admin.com",
+                EmailConfirmed = true,
+                FirstName = "Admin",
+                LastName = "Admin",
+                UserName = "admin@admin.com",
+                NormalizedUserName = "ADMIN@ADMIN.COM"
+            };
+
+            //Set Admin user password
+            PasswordHasher<ApplicationUser> phAdmin = new PasswordHasher<ApplicationUser>();
+            adminUser.PasswordHash = phAdmin.HashPassword(adminUser, "Admin_1234");
+
+            //Seed user
+            builder.Entity<ApplicationUser>().HasData(adminUser);
+
+            //Set Admin role to Admin user
+            builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            {
+                RoleId = ADMIN_ROLE_ID,
+                UserId = ADMIN_ID
+            });
+
             builder.ApplyConfiguration(new InitialDataConfiguration<Subject>(@"InitialSeed/subjects.json"));
 
             base.OnModelCreating(builder);

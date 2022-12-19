@@ -16,7 +16,7 @@ namespace QuizExam.Infrastructure.InitialSeed
 
         public void Configure(EntityTypeBuilder<T> builder)
         {
-            string? jsonData = GetFromFile();
+            string jsonData = GetFromFile();
 
             if (jsonData != null)
             {
@@ -26,9 +26,9 @@ namespace QuizExam.Infrastructure.InitialSeed
             }
         }
 
-        private string? GetFromFile()
+        private string GetFromFile()
         {
-            string? result = null;
+            string result = null;
 
             if (File.Exists(filePath))
             {
