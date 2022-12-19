@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizExam.Core.Contracts;
+using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Core.Models.Question;
 using QuizExam.Core.Models.TakeAnswer;
@@ -28,13 +29,13 @@ namespace QuizExam.Core.Services
         {
             try
             {
-                bool isExam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(model.ExamId)) != null ? true : false;
+                bool isExam = await this.repository.GetByIdAsync<Exam>(model.ExamId.ToGuid()) != null ? true : false;
 
                 if (isExam)
                 {
                     var question = new Question
                     {
-                        ExamId = Guid.Parse(model.ExamId),
+                        ExamId = model.ExamId.ToGuid(),
                         Content = model.Content,
                         Rule = model.Rule,
                         Points = model.Points,
@@ -59,7 +60,7 @@ namespace QuizExam.Core.Services
         public async Task<bool> Delete(string id)
         {
             bool result = false;
-            var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(id));
+            var question = await this.repository.GetByIdAsync<Question>(id.ToGuid());
 
             if (question != null)
             {
@@ -76,7 +77,7 @@ namespace QuizExam.Core.Services
             try
             {
                 bool result = false;
-                var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(model.Id));
+                var question = await this.repository.GetByIdAsync<Question>(model.Id.ToGuid());
 
                 if (question != null)
                 {
@@ -98,14 +99,14 @@ namespace QuizExam.Core.Services
 
         public async Task<Question> GetQuestionById(string id)
         {
-            var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(id));
+            var question = await this.repository.GetByIdAsync<Question>(id.ToGuid());
 
             return question;
         }
 
         public async Task<EditQuestionVM> GetQuestionForEdit(string id)
         {
-            var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(id));
+            var question = await this.repository.GetByIdAsync<Question>(id.ToGuid());
 
             try
             {
@@ -137,7 +138,7 @@ namespace QuizExam.Core.Services
             try
             {
                 var allQuestions = await this.repository.All<Question>()
-                    .Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
+                    .Where(q => q.ExamId == examId.ToGuid() && !q.IsDeleted)
                     .Select(q => new TakeQuestionVM
                     {
                         QuestionId = q.Id.ToString(),
@@ -146,7 +147,7 @@ namespace QuizExam.Core.Services
                         Content = q.Content,
                         Order = order,
                         TakeAnswers = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
-                                    .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == Guid.Parse(takeId) && !t.IsDeleted),
+                                    .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == takeId.ToGuid() && !t.IsDeleted),
                                         option => option.Id,
                                         answer => answer.AnswerOptionId,
                                         (option, answer) => new
@@ -186,7 +187,7 @@ namespace QuizExam.Core.Services
         {
             try
             {
-                var questionAnswers = await this.repository.All<Question>().Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
+                var questionAnswers = await this.repository.All<Question>().Where(q => q.ExamId == examId.ToGuid() && !q.IsDeleted)
                             .Select(q => new TakeQuestionVM
                             {
                                 QuestionId = q.Id.ToString(),
@@ -195,7 +196,7 @@ namespace QuizExam.Core.Services
                                 Content = q.Content,
                                 Order = order,
                                 TakeAnswers = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
-                                    .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == Guid.Parse(takeId) && !t.IsDeleted),
+                                    .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == takeId.ToGuid() && !t.IsDeleted),
                                         option => option.Id,
                                         answer => answer.AnswerOptionId,
                                         (option, answer) => new
@@ -227,7 +228,7 @@ namespace QuizExam.Core.Services
         public async Task<Guid[]> GetQuestionIds(string examId)
         {
             var questionIds = await this.repository.All<Question>()
-                .Where(q => q.ExamId == Guid.Parse(examId) && !q.IsDeleted)
+                .Where(q => q.ExamId == examId.ToGuid() && !q.IsDeleted)
                 .Select(q => q.Id)
                 .ToArrayAsync();
 
@@ -237,7 +238,7 @@ namespace QuizExam.Core.Services
         public bool HasAnswerOptions(string id)
         {
             var hasAnswerOptions = this.repository.All<AnswerOption>()
-                .Any(a => a.QuestionId == Guid.Parse(id));
+                .Any(a => a.QuestionId == id.ToGuid());
 
             return hasAnswerOptions;
         }

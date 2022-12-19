@@ -40,7 +40,7 @@ namespace QuizExam.Core.Services
                 Title = model.Title,
                 Description = model.Description,
                 MaxScore = model.MaxScore,
-                SubjectId = Guid.Parse(model.SubjectId),
+                SubjectId = model.SubjectId.ToGuid(),
             };
 
             await this.repository.AddAsync(exam);
@@ -82,7 +82,7 @@ namespace QuizExam.Core.Services
         public async Task<bool> Edit(EditExamVM model)
         {
             bool result = false;
-            var exam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(model.Id));
+            var exam = await this.repository.GetByIdAsync<Exam>(model.Id.ToGuid());
 
             if (exam != null)
             {
@@ -158,7 +158,7 @@ namespace QuizExam.Core.Services
         {
             try
             {
-                return await this.repository.GetByIdAsync<Exam>(Guid.Parse(id));
+                return await this.repository.GetByIdAsync<Exam>(id.ToGuid());
             }
             catch
             {
@@ -185,13 +185,13 @@ namespace QuizExam.Core.Services
         {
             try
             {
-                var exam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(id));
+                var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
                 var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
-                var hasQuestions = await this.repository.All<Question>().AnyAsync(q => q.ExamId == Guid.Parse(id) && !q.IsDeleted);
+                var hasQuestions = await this.repository.All<Question>().AnyAsync(q => q.ExamId == id.ToGuid() && !q.IsDeleted);
 
                 if (hasQuestions)
                 {
-                    var questions = this.repository.All<Question>().Where(q => q.ExamId == Guid.Parse(id) && !q.IsDeleted)
+                    var questions = this.repository.All<Question>().Where(q => q.ExamId == id.ToGuid() && !q.IsDeleted)
                     .Select(q => new QuestionExamVM
                     {
                         Id = q.Id.ToString(),
@@ -242,7 +242,7 @@ namespace QuizExam.Core.Services
         {
             try
             {
-                Exam exam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(id));
+                Exam exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
                 if (exam != null)
                 {

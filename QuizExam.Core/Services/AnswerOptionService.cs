@@ -1,4 +1,5 @@
 ﻿using QuizExam.Core.Contracts;
+using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Repositories;
@@ -18,7 +19,7 @@ namespace QuizExam.Core.Services
         {
             try
             {
-                var question = await this.repository.GetByIdAsync<Question>(Guid.Parse(model.QuestionId));
+                var question = await this.repository.GetByIdAsync<Question>(model.QuestionId.ToGuid());
 
                 if (question != null)
                 {
@@ -50,7 +51,7 @@ namespace QuizExam.Core.Services
             try
             {
                 bool result = false;
-                var option = await this.repository.GetByIdAsync<AnswerOption>(Guid.Parse(id));
+                var option = await this.repository.GetByIdAsync<AnswerOption>(id.ToGuid());
 
                 if (option != null)
                 {
@@ -74,7 +75,7 @@ namespace QuizExam.Core.Services
                 if (questionId != null)
                 {
                     var answerOptions = this.repository.All<AnswerOption>()
-                        .Where(a => a.QuestionId == Guid.Parse(questionId) && !a.IsDeleted)
+                        .Where(a => a.QuestionId == questionId.ToGuid() && !a.IsDeleted)
                         .Select(a => new AnswerOptionVM
                         {
                             Id = a.Id.ToString(),
@@ -102,12 +103,12 @@ namespace QuizExam.Core.Services
 
                 foreach (var option in model.Options)
                 {
-                    var currentOption = await this.repository.GetByIdAsync<AnswerOption>(Guid.Parse(option.Id));
+                    var currentOption = await this.repository.GetByIdAsync<AnswerOption>(option.Id.ToGuid());
                     currentOption.IsCorrect = false;
                     await this.repository.SaveChangesAsync();
                 }
 
-                var correctAnswer = await this.repository.GetByIdAsync<AnswerOption>(Guid.Parse(model.CorrectAnswerId));
+                var correctAnswer = await this.repository.GetByIdAsync<AnswerOption>(model.CorrectAnswerId.ToGuid());
 
                 if (correctAnswer != null)
                 {

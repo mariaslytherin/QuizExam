@@ -36,15 +36,15 @@ namespace QuizExam.Core.Services
                     {
                         await DeleteAnswer(answer.Id);
 
-                        var takeExam = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(model.TakeExamId));
+                        var takeExam = await this.repository.GetByIdAsync<TakeExam>(model.TakeExamId.ToGuid());
 
                         if (takeExam != null)
                         {
                             var newAnswer = new TakeAnswer
                             {
-                                TakeExamId = Guid.Parse(model.TakeExamId),
-                                AnswerOptionId = Guid.Parse(model.CheckedOptionId),
-                                QuestionId = Guid.Parse(model.QuestionId),
+                                TakeExamId = model.TakeExamId.ToGuid(),
+                                AnswerOptionId = model.CheckedOptionId.ToGuid(),
+                                QuestionId = model.QuestionId.ToGuid(),
                             };
                             await this.repository.AddAsync(newAnswer);
                             await this.repository.SaveChangesAsync();
@@ -61,15 +61,15 @@ namespace QuizExam.Core.Services
                 }
                 else
                 {
-                    var takeExam = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(model.TakeExamId));
+                    var takeExam = await this.repository.GetByIdAsync<TakeExam>(model.TakeExamId.ToGuid());
 
                     if (takeExam != null)
                     {
                         var newAnswer = new TakeAnswer
                         {
-                            TakeExamId = Guid.Parse(model.TakeExamId),
-                            AnswerOptionId = Guid.Parse(model.CheckedOptionId),
-                            QuestionId = Guid.Parse(model.QuestionId),
+                            TakeExamId = model.TakeExamId.ToGuid(),
+                            AnswerOptionId = model.CheckedOptionId.ToGuid(),
+                            QuestionId = model.QuestionId.ToGuid(),
                         };
                         await this.repository.AddAsync(newAnswer);
                         await this.repository.SaveChangesAsync();

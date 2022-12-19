@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizExam.Core.Contracts;
+using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.Subject;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Repositories;
@@ -61,7 +62,7 @@ namespace QuizExam.Core.Services
         public async Task<bool> Edit(SubjectVM model)
         {
             bool result = false;
-            var subject = await this.repository.GetByIdAsync<Subject>(Guid.Parse(model.Id));
+            var subject = await this.repository.GetByIdAsync<Subject>(model.Id.ToGuid());
 
             if (subject != null)
             {
