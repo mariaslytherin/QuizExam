@@ -151,7 +151,7 @@ namespace QuizExam.Core.Services
             return model;
         }
 
-        public async Task<TakeExamVM> GetExamForView(string takeExamId)
+        public async Task<TakeExamVM> GetTakeForView(string takeExamId)
         {
             try
             {

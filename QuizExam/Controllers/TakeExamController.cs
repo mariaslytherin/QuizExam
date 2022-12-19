@@ -32,7 +32,7 @@ namespace QuizExam.Controllers
         {
             try
             {
-                var take = await this.takeExamService.GetExamForView(takeId);
+                var take = await this.takeExamService.GetTakeForView(takeId);
 
                 return View("View", take);
             }
@@ -140,7 +140,7 @@ namespace QuizExam.Controllers
             {
                 if (await this.takeExamService.FinishExam(takeExamId))
                 {
-                    var take = await this.takeExamService.GetExamForView(takeExamId);
+                    var take = await this.takeExamService.GetTakeForView(takeExamId);
                     return View("View", take);
                 }
                 else

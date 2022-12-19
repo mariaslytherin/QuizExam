@@ -10,7 +10,7 @@ namespace QuizExam.Core.Contracts
 
         Task<TakeExam> GetTakeExamById(string takeId);
 
-        Task<TakeExamVM> GetExamForView(string takeExamId);
+        Task<TakeExamVM> GetTakeForView(string takeExamId);
 
         Task<bool> TakeExists(string userId, string examId);
 
