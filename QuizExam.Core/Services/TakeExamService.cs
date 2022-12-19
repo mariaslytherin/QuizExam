@@ -54,6 +54,18 @@ namespace QuizExam.Core.Services
             }
         }
 
+        public async Task<TakeExam> GetTakeExamById(string takeId)
+        {
+            try
+            {
+                return await this.repository.GetByIdAsync<TakeExam>(takeId.ToGuid());
+            }
+            catch
+            {
+                throw new NullReferenceException($"Object of type '{nameof(Exam)}' was not found. ");
+            }
+        }
+
         public async Task<TakenExamsListVM> TakenExams(string id, int? page, int? size)
         {
             var takes = await this.repository.All<TakeExam>()

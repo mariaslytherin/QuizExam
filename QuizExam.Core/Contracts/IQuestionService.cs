@@ -14,11 +14,13 @@ namespace QuizExam.Core.Contracts
 
         Task<TakeQuestionVM> GetPreviousQuestion(string examId, string takeId, int order);
 
+        int GetLastNotTakenQuestionOrder(string takeId, string examId);
+
         Task<Guid[]> GetQuestionIds(string examId);
 
         bool HasAnswerOptions(string id);
 
-        Task<EditQuestionVM?> GetQuestionForEdit(string id);
+        Task<EditQuestionVM> GetQuestionForEdit(string id);
 
         Task<bool> Edit(EditQuestionVM model);
 

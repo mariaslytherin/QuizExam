@@ -13,15 +13,18 @@ namespace QuizExam.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ITakeExamService takeExamService;
         private readonly IExamService examService;
+        private readonly IQuestionService questionService;
 
         public TakeExamController(
             UserManager<ApplicationUser> userManager,
             ITakeExamService takeExamService,
-            IExamService examService)
+            IExamService examService,
+            IQuestionService questionService)
         {
             this.userManager = userManager;
             this.takeExamService = takeExamService;
             this.examService = examService;
+            this.questionService = questionService;
         }
 
         [HttpGet]
@@ -91,6 +94,19 @@ namespace QuizExam.Controllers
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
                 return RedirectToAction("Index", "Home");
             }
+        }
+
+        public async Task<IActionResult> Continue(string takeId)
+        {
+            var takeExam = await this.takeExamService.GetTakeExamById(takeId);
+            var questionOrder = this.questionService.GetLastNotTakenQuestionOrder(takeId, takeExam.ExamId.ToString());
+
+            return RedirectToAction("GetNextQuestion", "Question", new
+            {
+                takeId = takeId,
+                examId = takeExam.ExamId.ToString(),
+                order = questionOrder
+            });
         }
 
         public async Task<IActionResult> Take(string examId)

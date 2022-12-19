@@ -8,6 +8,8 @@ namespace QuizExam.Core.Contracts
     {
         Task<Guid> CreateTake(string userId, string examId);
 
+        Task<TakeExam> GetTakeExamById(string takeId);
+
         Task<TakeExamVM> GetExamForView(string takeExamId);
 
         Task<bool> TakeExists(string userId, string examId);

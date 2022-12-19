@@ -225,6 +225,23 @@ namespace QuizExam.Core.Services
             }
         }
 
+        public int GetLastNotTakenQuestionOrder(string takeId, string examId)
+        {
+            try
+            {
+                var takenQuestionsCount = this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == takeId.ToGuid()).Count();
+                var allQuestionsCount = this.repository.All<Question>().Where(q => q.ExamId == examId.ToGuid() && !q.IsDeleted).Count();
+                var order = takenQuestionsCount;
+
+                return order;
+            }
+            catch
+            {
+
+                throw;
+            }
+        }
+
         public async Task<Guid[]> GetQuestionIds(string examId)
         {
             var questionIds = await this.repository.All<Question>()
