@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Вход";
     Layout = null;
 }
 
@@ -30,7 +30,7 @@
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Sign in to start exercising</p>
+                <p class="login-box-msg">Влезте в профила си, за да започнете да се упражнявате</p>
 
                 <form id="account" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -55,7 +55,7 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-4">
-                            <button id="login-submit" type="submit" class="btn btn-primary btn-block">Log in</button>
+                            <button id="login-submit" type="submit" class="btn btn-primary btn-block">Вход</button>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -73,10 +73,10 @@
                 <!-- /.social-auth-links -->
 
                 <p class="mb-1">
-                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    <a id="forgot-password" asp-page="./ForgotPassword">Забравена парола?</a>
                 </p>
                 <p class="mb-0">
-                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Регистриране на потребител</a>
                 </p>
             </div>
             <!-- /.login-card-body -->

@@ -1,7 +1,7 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Регистрация";
     Layout = null;
 }
 
@@ -29,33 +29,33 @@
 
         <div class="card">
             <div class="card-body register-card-body">
-                <p class="login-box-msg">Create a new account</p>
+                <p class="login-box-msg">Създаване на акаунт</p>
 
                 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-floating">
                         <label asp-for="Input.FirstName"></label>
-                        <input asp-for="Input.FirstName" class="form-control" placeholder="First name" autocomplete="firstName" aria-required="true">
+                        <input asp-for="Input.FirstName" class="form-control" placeholder="Име..." autocomplete="firstName" aria-required="true">
                         <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
                         <label asp-for="Input.LastName"></label>
-                        <input asp-for="Input.LastName" class="form-control" placeholder="Last name" autocomplete="lastName" aria-required="true">
+                        <input asp-for="Input.LastName" class="form-control" placeholder="Фамилия..." autocomplete="lastName" aria-required="true">
                         <span asp-validation-for="Input.LastName" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
                         <label asp-for="Input.Email"></label>
-                        <input asp-for="Input.Email" class="form-control" placeholder="Email" autocomplete="username" aria-required="true" />
+                        <input asp-for="Input.Email" class="form-control" placeholder="Имейл..." autocomplete="username" aria-required="true" />
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
                         <label asp-for="Input.Password"></label>
-                        <input asp-for="Input.Password" class="form-control" placeholder="Password" autocomplete="new-password" aria-required="true" />
+                        <input asp-for="Input.Password" class="form-control" placeholder="Парола..." autocomplete="new-password" aria-required="true" />
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
                         <label asp-for="Input.ConfirmPassword"></label>
-                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm password" autocomplete="new-password" aria-required="true" />
+                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Повтори парола..." autocomplete="new-password" aria-required="true" />
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
                     <div class="row">
@@ -69,7 +69,7 @@
                         </div>*@
                         <!-- /.col -->
                         <div class="col-5" style="margin-top: 15px; margin-bottom: 10px;">
-                            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Регистриране</button>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -88,7 +88,7 @@
                 </div>*@
 
                 <p class="mb-0">
-                    <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">I already have an account</a>
+                    <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Вече имам акаунт</a>
                 </p>
             </div>
             <!-- /.form-box -->

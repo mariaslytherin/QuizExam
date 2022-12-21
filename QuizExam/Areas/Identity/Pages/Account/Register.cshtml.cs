@@ -72,14 +72,14 @@ namespace QuizExam.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Полето {0} е задължително.")]
             [StringLength(50, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
-            [Display(Name = "First name")]
+            [Display(Name = "Име")]
             public string FirstName { get; set; }
 
             [Required]
             [StringLength(50, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
-            [Display(Name = "Last name")]
+            [Display(Name = "Фамилия")]
             public string LastName { get; set; }
 
             /// <summary>
@@ -88,7 +88,7 @@ namespace QuizExam.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Имейл")]
             public string Email { get; set; }
 
             /// <summary>
@@ -96,9 +96,9 @@ namespace QuizExam.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "Полето {0} трябва да съдържа най-малко {2} и най-много {1} символа.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Парола")]
             public string Password { get; set; }
 
             /// <summary>
@@ -106,8 +106,8 @@ namespace QuizExam.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Повтори парола")]
+            [Compare("Password", ErrorMessage = "Паролата и повторно въведената парола не съвпадат.")]
             public string ConfirmPassword { get; set; }
         }
 
