@@ -10,6 +10,8 @@
 
         public const string SuccessfulDeactivationMessage = "Успешно деактивиране!";
 
+        public const string SuccessfulDeletionMessage = "Успешно изтриване!";
+
         public const string SuccessfulAddedRoleMessage = "Успешно добавихте потребителя към роля!";
 
         public const string SuccessfullyAddedSubjectMessage = "Успешно добавихте предмет!";
@@ -35,6 +37,10 @@
         public const string ErrorAppeardMessage = "Възникна грешка!";
 
         public const string UnsuccessfulEdit = "Неуспешна редакция!";
+
+        public const string UnsuccessfulDeletionMessage = "Неуспешно изтриване!";
+
+        public const string UnsuccessfulExamCreationMessage = "Не успяхме да създадем този изпит!";
 
         public const string UnsuccessfulAddQuestionMessage = "Неуспешно създаване на въпрос!";
 

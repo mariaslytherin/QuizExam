@@ -19,6 +19,7 @@ namespace QuizExam.Core.Models.Exam
         [Display(Name = "Максимален брой точки")]
         public double? MaxScore { get; set; }
 
+        [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
         [Display(Name = "Предмет")]
         public string SubjectName { get; set; }
     }

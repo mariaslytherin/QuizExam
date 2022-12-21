@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
+using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.Exam;
 
 namespace QuizExam.Areas.Admin.Controllers
@@ -21,9 +22,16 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> GetExamsList(int p = 1, int s = 10)
         {
-            var exams = await this.examService.GetAllExams(p, s);
+            try
+            {
+                var exams = await this.examService.GetAllExams(p, s);
 
-            return View("ExamsList", exams);
+                return View("ExamsList", exams);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         public async Task<IActionResult> ViewExam(string id)
@@ -60,23 +68,45 @@ namespace QuizExam.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> New(NewExamVM model)
         {
-            if (await this.examService.Create(model))
+            if (!ModelState.IsValid)
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedExamMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
+                return View();
             }
 
-            return RedirectToAction(nameof(GetExamsList));
+            try
+            {
+                await this.examService.Create(model);
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedExamMessage;
+                return RedirectToAction(nameof(GetExamsList));
+            }
+            catch
+            {
+                TempData[SuccessMessageConstants.SuccessMessage] = ErrorMessageConstants.UnsuccessfulExamCreationMessage;
+                return RedirectToAction(nameof(GetExamsList));
+            }
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            var exam = await this.examService.GetExamForEdit(Guid.Parse(id));
+            try
+            {
+                var exam = await this.examService.GetExamForEdit(id.ToGuid());
 
-            return View("Edit", exam);
+                if (!string.IsNullOrEmpty(exam.Id))
+                {
+                    return View("Edit", exam);
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
+                    return RedirectToAction(nameof(GetExamsList));
+                }
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
+                return RedirectToAction(nameof(GetExamsList));
+            }
         }
 
         [HttpPost]
@@ -87,16 +117,24 @@ namespace QuizExam.Areas.Admin.Controllers
                 return View(model);
             }
 
-            if (await this.examService.Edit(model))
+            try
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulEditMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
+                if (await this.examService.Edit(model))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulEditMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEdit;
+                }
 
-            return RedirectToAction(nameof(GetExamsList));
+                return RedirectToAction(nameof(GetExamsList));
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEdit;
+                return RedirectToAction(nameof(GetExamsList));
+            }
         }
 
         [HttpPost]
@@ -104,13 +142,13 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                if (!await this.examService.CanActivate(Guid.Parse(id)))
+                if (!await this.examService.CanActivate(id.ToGuid()))
                 {
                     TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningActivationMessage;
                     return RedirectToAction(nameof(GetExamsList));
                 }
 
-                if (await this.examService.Activate(Guid.Parse(id)))
+                if (await this.examService.Activate(id.ToGuid()))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulActivationMessage;
                 }
@@ -131,31 +169,47 @@ namespace QuizExam.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Deactivate(string id)
         {
-            if (await this.examService.Deactivate(Guid.Parse(id)))
+            try
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeactivationMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
+                if (await this.examService.Deactivate(id.ToGuid()))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeactivationMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                }
 
-            return RedirectToAction(nameof(GetExamsList));
+                return RedirectToAction(nameof(GetExamsList));
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction(nameof(GetExamsList));
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            if (await this.examService.Delete(Guid.Parse(id)))
+            try
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = "Успешно изтриване!";
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
+                if (await this.examService.Delete(id.ToGuid()))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeletionMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeletionMessage;
+                }
 
-            return RedirectToAction(nameof(GetExamsList));
+                return RedirectToAction(nameof(GetExamsList));
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeletionMessage;
+                return RedirectToAction(nameof(GetExamsList));
+            }
         }
     }
 }

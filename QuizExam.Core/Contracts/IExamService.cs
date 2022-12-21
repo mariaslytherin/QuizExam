@@ -5,15 +5,13 @@ namespace QuizExam.Core.Contracts
 {
     public interface IExamService
     {
-        Task<bool> Create(NewExamVM model);
+        Task Create(NewExamVM model);
 
         Task<ExamListVM> GetAllExams(int? page, int? size);
 
         Task<List<ViewExamVM>> GetExamsForUser();
 
         Task<ExamVM> GetExamInfo(string id);
-
-        Task<Exam> GetExamById(string id);
 
         Task<EditExamVM> GetExamForEdit(Guid id);
 

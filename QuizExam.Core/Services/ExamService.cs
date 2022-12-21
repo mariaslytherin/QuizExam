@@ -33,7 +33,7 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<bool> Create(NewExamVM model)
+        public async Task Create(NewExamVM model)
         {
             var exam = new Exam()
             {
@@ -45,8 +45,6 @@ namespace QuizExam.Core.Services
 
             await this.repository.AddAsync(exam);
             await this.repository.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<bool> Deactivate(Guid id)
@@ -154,31 +152,29 @@ namespace QuizExam.Core.Services
             return exams;
         }
 
-        public async Task<Exam> GetExamById(string id)
-        {
-            try
-            {
-                return await this.repository.GetByIdAsync<Exam>(id.ToGuid());
-            }
-            catch
-            {
-                throw new NullReferenceException($"Object of type '{nameof(Exam)}' was not found. ");
-            }
-        }
-
         public async Task<EditExamVM> GetExamForEdit(Guid id)
         {
             var exam = await this.repository.GetByIdAsync<Exam>(id);
-            var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
 
-            return new EditExamVM()
+            if (exam != null)
             {
-                Id = exam.Id.ToString(),
-                Title = exam.Title,
-                Description = exam.Description,
-                MaxScore = exam.MaxScore,
-                SubjectName = subject.Name,
-            };
+                var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
+
+                if (subject != null)
+                {
+                    return new EditExamVM()
+                    {
+                        Id = exam.Id.ToString(),
+                        Title = exam.Title,
+                        Description = exam.Description,
+                        MaxScore = exam.MaxScore,
+                        SubjectName = subject.Name,
+                    };
+                }
+                return new EditExamVM();
+            }
+
+            return new EditExamVM();
         }
 
         public async Task<ViewExamVM> GetExamForView(string id)

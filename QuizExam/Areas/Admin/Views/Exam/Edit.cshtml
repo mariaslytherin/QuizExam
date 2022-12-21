@@ -25,14 +25,13 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="SubjectName"></label>
-                        <select name="SubjectName" class="form-control" id="simpleSelect2" data-placeholder="Избери предмет" disabled="disabled">
-                            <option>@Model.SubjectName</option>
-                        </select>
+                        <label asp-for="SubjectName" class="form-label"></label>
+                        <input asp-for="SubjectName" type="text" class="form-control" aria-required="true" readonly>
+                        <span asp-validation-for="SubjectName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="MaxScore" class="form-label"></label>
-                        <input asp-for="MaxScore" type="number" style="width: 25%;" class="form-control" placeholder="Score" aria-required="true">
+                        <input asp-for="MaxScore" type="number" min="0.0" step=".1" style="width: 25%;" class="form-control" placeholder="Score" aria-required="true">
                         <span asp-validation-for="MaxScore" class="text-danger"></span>
                     </div>
                 </div>
