@@ -47,7 +47,7 @@ namespace QuizExam.Test.ExamServiceTests
             };
             
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.Activate(exam.Id.ToString());
+            bool result = await service.ActivateAsync(exam.Id.ToString());
 
             Assert.IsFalse(result);
         }
@@ -56,7 +56,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task ActivateExistingExamMustReturnTrue()
         {
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.Activate(ExamId_Math);
+            bool result = await service.ActivateAsync(ExamId_Math);
 
             Assert.IsTrue(result);
         }
@@ -72,7 +72,7 @@ namespace QuizExam.Test.ExamServiceTests
             };
 
             var service = serviceProvider.GetService<IExamService>();
-            Assert.CatchAsync<DbUpdateException>(async () => await service.Create(model), "NOT NULL constraint failed: Exams.Title");
+            Assert.CatchAsync<DbUpdateException>(async () => await service.CreateAsync(model), "NOT NULL constraint failed: Exams.Title");
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace QuizExam.Test.ExamServiceTests
             };
 
             var service = serviceProvider.GetService<IExamService>();
-            Assert.CatchAsync<DbUpdateException>(async () => await service.Create(model));
+            Assert.CatchAsync<DbUpdateException>(async () => await service.CreateAsync(model));
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace QuizExam.Test.ExamServiceTests
             };
 
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.Deactivate(exam.Id.ToString());
+            bool result = await service.DeactivateAsync(exam.Id.ToString());
 
             Assert.IsFalse(result);
         }
@@ -111,7 +111,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task DectivationOfExistingExamMustReturnTrue()
         {
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.Deactivate(ExamId_Math);
+            bool result = await service.DeactivateAsync(ExamId_Math);
 
             Assert.IsTrue(result);
         }
@@ -128,7 +128,7 @@ namespace QuizExam.Test.ExamServiceTests
             };
 
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.Delete(exam.Id.ToString());
+            bool result = await service.DeleteAsync(exam.Id.ToString());
 
             Assert.IsFalse(result);
         }
@@ -137,7 +137,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task DeletionOfExistingExamMustReturnTrue()
         {
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.Delete(ExamId_Math);
+            bool result = await service.DeleteAsync(ExamId_Math);
 
             Assert.IsTrue(result);
         }
@@ -154,7 +154,7 @@ namespace QuizExam.Test.ExamServiceTests
             };
 
             var service = serviceProvider.GetService<IExamService>();
-            Assert.CatchAsync<DbUpdateException>(async () => await service.Edit(model), "NOT NULL constraint failed: Exams.Title");
+            Assert.CatchAsync<DbUpdateException>(async () => await service.EditAsync(model), "NOT NULL constraint failed: Exams.Title");
         }
 
         [Test]
@@ -170,7 +170,7 @@ namespace QuizExam.Test.ExamServiceTests
             };
 
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.Edit(model);
+            bool result = await service.EditAsync(model);
 
             Assert.IsFalse(result);
         }
@@ -188,7 +188,7 @@ namespace QuizExam.Test.ExamServiceTests
             };
 
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.Edit(model);
+            bool result = await service.EditAsync(model);
             Assert.IsTrue(result);
         }
 
@@ -196,7 +196,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetAllExamsMethodMustReturnExamListModel()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetAllExams(1, 10);
+            var result = await service.GetAllExamsAsync(1, 10);
 
             Assert.IsNotNull(result);
             Assert.That(result, Is.TypeOf<ExamListVM>());
@@ -207,7 +207,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamsForUserMethodMustReturnZeroListOfExams()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamsForUser();
+            var result = await service.GetExamsForUserAsync();
 
             Assert.IsNotNull(result);
             Assert.That(result, Is.TypeOf<List<ViewExamVM>>());
@@ -218,7 +218,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamForEditMethodMustReturnEmptyModelWhenExamDoesNotExist()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamForEdit(Guid.NewGuid().ToString());
+            var result = await service.GetExamForEditAsync(Guid.NewGuid().ToString());
 
             Assert.That(result, Is.TypeOf<EditExamVM>());
             Assert.IsNull(result.Id);
@@ -228,7 +228,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamForEditMethodMustReturnModelWhenExamExists()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamForEdit(ExamId_Math);
+            var result = await service.GetExamForEditAsync(ExamId_Math);
 
             Assert.That(result, Is.TypeOf<EditExamVM>());
             Assert.IsNotNull(result.Id);
@@ -238,7 +238,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamForViewMustReturnEmptyModelIfExamDoesNotExist()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamForView(Guid.NewGuid().ToString());
+            var result = await service.GetExamForViewAsync(Guid.NewGuid().ToString());
 
             Assert.That(result, Is.TypeOf<ViewExamVM>());
             Assert.IsNull(result.Id);
@@ -248,7 +248,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamForViewMustReturnEmptyQuestionsListWhenExamDoesNotHaveQuestions()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamForView(ExamId_Math);
+            var result = await service.GetExamForViewAsync(ExamId_Math);
 
             Assert.That(result, Is.TypeOf<ViewExamVM>());
             Assert.That(result.Questions.Count(), Is.EqualTo(0));
@@ -258,7 +258,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamForViewMustReturnFilledModelIfExamHasQuestions()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamForView(ExamId_Bg);
+            var result = await service.GetExamForViewAsync(ExamId_Bg);
 
             Assert.That(result, Is.TypeOf<ViewExamVM>());
             Assert.That(result.Questions.Count(), Is.EqualTo(1));
@@ -268,7 +268,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamInfoMustReturnEmptyModelIfExamDoesNotExists()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamInfo(Guid.NewGuid().ToString());
+            var result = await service.GetExamInfoAsync(Guid.NewGuid().ToString());
 
             Assert.That(result, Is.TypeOf<ExamVM>());
             Assert.IsNull(result.Id);
@@ -278,7 +278,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamInfoMustReturnFilledModelWithZeroQuestionsCount()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamInfo(ExamId_Math);
+            var result = await service.GetExamInfoAsync(ExamId_Math);
 
             Assert.That(result, Is.TypeOf<ExamVM>());
             Assert.IsNotNull(result.Id);
@@ -289,7 +289,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamInfoMustReturnFilledModelWithQuestionsMoreThanZero()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamInfo(ExamId_Bg);
+            var result = await service.GetExamInfoAsync(ExamId_Bg);
 
             Assert.That(result, Is.TypeOf<ExamVM>());
             Assert.IsNotNull(result.Id);
@@ -300,7 +300,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task CanActivateMethodMustReturnFalseIfExamIdDoesNotExist()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.HasAnyQuestions(Guid.NewGuid().ToString());
+            var result = await service.HasAnyQuestionsAsync(Guid.NewGuid().ToString());
 
             Assert.IsFalse(result);
         }
@@ -309,7 +309,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task CanActivateMethodMustReturnFalseIfExamDoesNotHaveQuestions()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.HasAnyQuestions(ExamId_Math);
+            var result = await service.HasAnyQuestionsAsync(ExamId_Math);
 
             Assert.IsFalse(result);
         }
@@ -318,7 +318,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task CanActivateMethodMustReturnTrueIfExamHasQuestions()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.HasAnyQuestions(ExamId_Bg);
+            var result = await service.HasAnyQuestionsAsync(ExamId_Bg);
 
             Assert.IsTrue(result);
         }
@@ -327,7 +327,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task QuestionsPointsSumEqualsMaxScoreMustReturnFalseIfExamDoesNotExist()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.QuestionsPointsSumEqualsMaxScore(Guid.NewGuid().ToString());
+            var result = await service.QuestionsPointsSumEqualsMaxScoreAsync(Guid.NewGuid().ToString());
 
             Assert.IsFalse(result);
         }
@@ -336,7 +336,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task QuestionsPointsSumEqualsMaxScoreMustReturnTrueIfPointsAreEqual()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.QuestionsPointsSumEqualsMaxScore(ExamId_Bg);
+            var result = await service.QuestionsPointsSumEqualsMaxScoreAsync(ExamId_Bg);
 
             Assert.True(result);
         }

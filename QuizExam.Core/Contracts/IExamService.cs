@@ -5,28 +5,28 @@ namespace QuizExam.Core.Contracts
 {
     public interface IExamService
     {
-        Task Create(NewExamVM model);
+        Task CreateAsync(NewExamVM model);
 
-        Task<ExamListVM> GetAllExams(int? page, int? size);
+        Task<ExamListVM> GetAllExamsAsync(int? page, int? size);
 
-        Task<List<ViewExamVM>> GetExamsForUser();
+        Task<List<ViewExamVM>> GetExamsForUserAsync();
 
-        Task<ExamVM> GetExamInfo(string id);
+        Task<ExamVM> GetExamInfoAsync(string id);
 
-        Task<EditExamVM> GetExamForEdit(string id);
+        Task<EditExamVM> GetExamForEditAsync(string id);
 
-        Task<ViewExamVM> GetExamForView(string id);
+        Task<ViewExamVM> GetExamForViewAsync(string id);
 
-        Task<bool> Edit(EditExamVM model);
+        Task<bool> EditAsync(EditExamVM model);
 
-        Task<bool> Deactivate(string id);
+        Task<bool> DeactivateAsync(string id);
 
-        Task<bool> Activate(string id);
+        Task<bool> ActivateAsync(string id);
 
-        Task<bool> Delete(string id);
+        Task<bool> DeleteAsync(string id);
 
-        Task<bool> HasAnyQuestions(string id);
+        Task<bool> HasAnyQuestionsAsync(string id);
 
-        Task<bool> QuestionsPointsSumEqualsMaxScore(string id);
+        Task<bool> QuestionsPointsSumEqualsMaxScoreAsync(string id);
     }
 }

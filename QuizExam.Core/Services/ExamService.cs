@@ -18,7 +18,7 @@ namespace QuizExam.Core.Services
             this.repository = repository;
         }
 
-        public async Task<bool> Activate(string id)
+        public async Task<bool> ActivateAsync(string id)
         {
             bool result = false;
             var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
@@ -33,7 +33,7 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task Create(NewExamVM model)
+        public async Task CreateAsync(NewExamVM model)
         {
             var exam = new Exam()
             {
@@ -47,7 +47,7 @@ namespace QuizExam.Core.Services
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<bool> Deactivate(string id)
+        public async Task<bool> DeactivateAsync(string id)
         {
             bool result = false;
             var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
@@ -62,7 +62,7 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<bool> Delete(string id)
+        public async Task<bool> DeleteAsync(string id)
         {
             bool result = false;
             var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
@@ -77,7 +77,7 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<bool> Edit(EditExamVM model)
+        public async Task<bool> EditAsync(EditExamVM model)
         {
             bool result = false;
             var exam = await this.repository.GetByIdAsync<Exam>(model.Id.ToGuid());
@@ -95,7 +95,7 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<ExamListVM> GetAllExams(int? page, int? size)
+        public async Task<ExamListVM> GetAllExamsAsync(int? page, int? size)
         {
             var exams = await this.repository.All<Exam>()
                 .Where(e => !e.IsDeleted)
@@ -133,7 +133,7 @@ namespace QuizExam.Core.Services
             return model;
         }
 
-        public async Task<List<ViewExamVM>> GetExamsForUser()
+        public async Task<List<ViewExamVM>> GetExamsForUserAsync()
         {
             var exams = await this.repository.All<Exam>()
                 .Where(e => !e.IsDeleted && e.IsActive)
@@ -152,7 +152,7 @@ namespace QuizExam.Core.Services
             return exams;
         }
 
-        public async Task<EditExamVM> GetExamForEdit(string id)
+        public async Task<EditExamVM> GetExamForEditAsync(string id)
         {
             var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
@@ -177,7 +177,7 @@ namespace QuizExam.Core.Services
             return new EditExamVM();
         }
 
-        public async Task<ViewExamVM> GetExamForView(string id)
+        public async Task<ViewExamVM> GetExamForViewAsync(string id)
         {
             var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
@@ -234,7 +234,7 @@ namespace QuizExam.Core.Services
             return new ViewExamVM();
         }
 
-        public async Task<ExamVM> GetExamInfo(string id)
+        public async Task<ExamVM> GetExamInfoAsync(string id)
         {
             var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
@@ -260,14 +260,14 @@ namespace QuizExam.Core.Services
             return new ExamVM();
         }
 
-        public async Task<bool> HasAnyQuestions(string id)
+        public async Task<bool> HasAnyQuestionsAsync(string id)
         {
             bool hasAnyQuestions = await this.repository.All<Question>().AnyAsync(q => q.ExamId == id.ToGuid());
 
             return hasAnyQuestions;
         }
 
-        public async Task<bool> QuestionsPointsSumEqualsMaxScore(string id)
+        public async Task<bool> QuestionsPointsSumEqualsMaxScoreAsync(string id)
         {
             var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
