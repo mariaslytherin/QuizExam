@@ -63,6 +63,8 @@
 
         public const string WarningAddOptionsMessage = "Добавете възможни опции за отговор!";
 
-        public const string WarningActivationMessage = "За да активирате изпита трябва да добавите въпроси!";
+        public const string WarningExamMissingQuestionsMessage = "За да активирате изпита трябва да добавите въпроси!";
+
+        public const string WarningExamNotEqualPointsMessage = "За да активирате изпита сбора от точките на въпросите трябва да е равен на максималния брой точки на изпита!";
     }
 }

@@ -28,8 +28,9 @@ namespace QuizExam.Areas.Admin.Controllers
 
                 return View("ExamsList", exams);
             }
-            catch (Exception)
+            catch
             {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
                 return RedirectToAction("Index");
             }
         }
@@ -52,17 +53,25 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> NewAsync()
         {
-            var subjects = await this.subjectService.GetActiveSubjects();
+            try
+            {
+                var subjects = await this.subjectService.GetActiveSubjects();
 
-            ViewBag.Subjects = subjects
-                .Select(s => new SelectListItem()
-                {
-                    Text = s.Name,
-                    Value = s.Id.ToString(),
-                })
-                .ToList();
+                ViewBag.Subjects = subjects
+                    .Select(s => new SelectListItem()
+                    {
+                        Text = s.Name,
+                        Value = s.Id.ToString(),
+                    })
+                    .ToList();
 
-            return View("New");
+                return View("New");
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction(nameof(GetExamsList));
+            }
         }
 
         [HttpPost]
@@ -90,7 +99,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                var exam = await this.examService.GetExamForEdit(id.ToGuid());
+                var exam = await this.examService.GetExamForEdit(id);
 
                 if (!string.IsNullOrEmpty(exam.Id))
                 {
@@ -142,13 +151,19 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                if (!await this.examService.CanActivate(id.ToGuid()))
+                if (!await this.examService.HasAnyQuestions(id))
                 {
-                    TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningActivationMessage;
+                    TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningExamMissingQuestionsMessage;
                     return RedirectToAction(nameof(GetExamsList));
                 }
 
-                if (await this.examService.Activate(id.ToGuid()))
+                if (!await this.examService.QuestionsPointsSumEqualsMaxScore(id))
+                {
+                    TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningExamNotEqualPointsMessage;
+                    return RedirectToAction(nameof(GetExamsList));
+                }
+
+                if (await this.examService.Activate(id))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulActivationMessage;
                 }
@@ -171,7 +186,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                if (await this.examService.Deactivate(id.ToGuid()))
+                if (await this.examService.Deactivate(id))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeactivationMessage;
                 }
@@ -194,7 +209,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                if (await this.examService.Delete(id.ToGuid()))
+                if (await this.examService.Delete(id))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeletionMessage;
                 }

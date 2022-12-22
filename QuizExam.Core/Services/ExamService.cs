@@ -18,10 +18,10 @@ namespace QuizExam.Core.Services
             this.repository = repository;
         }
 
-        public async Task<bool> Activate(Guid id)
+        public async Task<bool> Activate(string id)
         {
             bool result = false;
-            var exam = await this.repository.GetByIdAsync<Exam>(id);
+            var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
             if (exam != null)
             {
@@ -47,10 +47,10 @@ namespace QuizExam.Core.Services
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<bool> Deactivate(Guid id)
+        public async Task<bool> Deactivate(string id)
         {
             bool result = false;
-            var exam = await this.repository.GetByIdAsync<Exam>(id);
+            var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
             if (exam != null)
             {
@@ -62,10 +62,10 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<bool> Delete(Guid id)
+        public async Task<bool> Delete(string id)
         {
             bool result = false;
-            var exam = await this.repository.GetByIdAsync<Exam>(id);
+            var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
             if (exam != null)
             {
@@ -152,9 +152,9 @@ namespace QuizExam.Core.Services
             return exams;
         }
 
-        public async Task<EditExamVM> GetExamForEdit(Guid id)
+        public async Task<EditExamVM> GetExamForEdit(string id)
         {
-            var exam = await this.repository.GetByIdAsync<Exam>(id);
+            var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
             if (exam != null)
             {
@@ -179,15 +179,18 @@ namespace QuizExam.Core.Services
 
         public async Task<ViewExamVM> GetExamForView(string id)
         {
-            try
+            var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
+
+            if (exam != null)
             {
-                var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
                 var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
                 var hasQuestions = await this.repository.All<Question>().AnyAsync(q => q.ExamId == id.ToGuid() && !q.IsDeleted);
 
                 if (hasQuestions)
                 {
-                    var questions = this.repository.All<Question>().Where(q => q.ExamId == id.ToGuid() && !q.IsDeleted)
+                    var test = id.ToGuid();
+
+                    var questions = this.repository.All<Question>().Where(q => q.ExamId == test && !q.IsDeleted)
                         .OrderBy(q => q.CreateDate)
                         .Select(q => new QuestionExamVM
                         {
@@ -202,10 +205,8 @@ namespace QuizExam.Core.Services
                                     Content = a.Content,
                                     IsCorrect = a.IsCorrect,
                                 })
-                                .DefaultIfEmpty()
                                 .ToList()
                         })
-                        .DefaultIfEmpty()
                         .ToList();
 
                     return new ViewExamVM
@@ -229,50 +230,55 @@ namespace QuizExam.Core.Services
                     };
                 }
             }
-            catch
-            {
-                throw new ArgumentNullException($"Object of type '{nameof(Exam)}' was not found. ");
-            }
+
+            return new ViewExamVM();
         }
 
         public async Task<ExamVM> GetExamInfo(string id)
         {
-            try
-            {
-                Exam exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
+            var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
-                if (exam != null)
+            if (exam != null)
+            {
+                var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
+                var questionsCount = await this.repository.AllReadonly<Question>()
+                    .Where(q => q.ExamId == exam.Id && !q.IsDeleted)
+                    .CountAsync();
+
+                ExamVM model = new ExamVM
                 {
-                    var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
-                    var questionsCount = await this.repository.AllReadonly<Question>()
-                        .Where(q => q.ExamId == exam.Id && !q.IsDeleted)
-                        .CountAsync();
+                    Id = exam.Id.ToString(),
+                    Title = exam.Title,
+                    Description = exam.Description,
+                    SubjectName = subject.Name,
+                    QuestionsCount = questionsCount,
+                };
 
-                    ExamVM model = new ExamVM
-                    {
-                        Id = exam.Id.ToString(),
-                        Title = exam.Title,
-                        Description = exam.Description,
-                        SubjectName = subject.Name,
-                        QuestionsCount = questionsCount,
-                    };
-
-                    return model;
-                }
-
-                return new ExamVM();
+                return model;
             }
-            catch
-            {
-                throw new NullReferenceException($"Object of type '{nameof(Exam)}' was not found. ");
-            }
+
+            return new ExamVM();
         }
 
-        public async Task<bool> CanActivate(Guid id)
+        public async Task<bool> HasAnyQuestions(string id)
         {
-            bool hasAnyQuestions = await this.repository.All<Question>().AnyAsync(q => q.ExamId == id);
+            bool hasAnyQuestions = await this.repository.All<Question>().AnyAsync(q => q.ExamId == id.ToGuid());
 
             return hasAnyQuestions;
+        }
+
+        public async Task<bool> QuestionsPointsSumEqualsMaxScore(string id)
+        {
+            var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
+
+            if (exam != null)
+            {
+                var questionsPointsSum = this.repository.All<Question>().Sum(q => q.Points);
+
+                return exam.MaxScore == questionsPointsSum;
+            }
+
+            return false;
         }
     }
 }
