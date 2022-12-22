@@ -12,7 +12,7 @@ namespace QuizExam.Core.Models.Exam
 
         [StringLength(500, ErrorMessage = ExamErrorMessages.ExamDescriptionMaxLength)]
         [Display(Name = "Описание")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [Display(Name = "Максимален брой точки")]
         public int? MaxScore { get; set; }

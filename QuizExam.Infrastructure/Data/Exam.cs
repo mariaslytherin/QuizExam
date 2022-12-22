@@ -14,7 +14,7 @@ namespace QuizExam.Infrastructure.Data
         public string Title { get; set; }
 
         [StringLength(ExamValidationConstants.DescriptionMaxLength)]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [Required]
         [Column(TypeName = "date")]

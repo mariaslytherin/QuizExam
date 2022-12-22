@@ -24,7 +24,7 @@ namespace QuizExam.Infrastructure.Data
         public bool IsDeleted { get; set; } = false;
 
         [StringLength(QuestionValidationConstants.RuleMaxLength)]
-        public string? Rule { get; set; }
+        public string Rule { get; set; }
 
         [Required]
         public double Points { get; set; }

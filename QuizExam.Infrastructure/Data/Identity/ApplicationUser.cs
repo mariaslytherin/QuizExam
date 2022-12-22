@@ -7,10 +7,10 @@ namespace QuizExam.Infrastructure.Data.Identity
     public class ApplicationUser : IdentityUser
     {
         [StringLength(UserValidationConstants.FirstNameMaxLength)]
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; }
 
         [StringLength(UserValidationConstants.LastNameMaxLength)]
-        public string? LastName { get; set; }
+        public string LastName { get; set; }
 
         public ICollection<TakeExam> Takes { get; set; } = new List<TakeExam>();
     }

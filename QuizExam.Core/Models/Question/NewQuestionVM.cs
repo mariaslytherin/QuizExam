@@ -14,7 +14,7 @@ namespace QuizExam.Core.Models.Question
 
         [StringLength(400, ErrorMessage = QuestionErrorMessages.QuestionRuleLength, MinimumLength = 15)]
         [Display(Name = "Правило")]
-        public string? Rule { get; set; }
+        public string Rule { get; set; }
 
         [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
         [Display(Name = "Брой точки")]

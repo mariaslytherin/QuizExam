@@ -14,7 +14,7 @@ namespace QuizExam.Core.Models.Exam
 
         [StringLength(500, ErrorMessage = ExamErrorMessages.ExamDescriptionMaxLength, MinimumLength = 10)]
         [Display(Name = "Описание")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [Display(Name = "Максимален брой точки")]
         public double? MaxScore { get; set; }

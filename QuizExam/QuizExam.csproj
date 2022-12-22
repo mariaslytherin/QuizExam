@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-QuizExam-4C151FD3-5CAA-4EDF-8949-B3707D66F1D1</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>

@@ -10,11 +10,11 @@ namespace QuizExam.Core.Models
         [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
         [StringLength(50, ErrorMessage = UserErrorMessages.NameMaxMinLength, MinimumLength = 2)]
         [Display(Name = "Име")]
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; }
 
         [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
         [StringLength(80, ErrorMessage = UserErrorMessages.NameMaxMinLength, MinimumLength = 2)]
         [Display(Name = "Фамилия")]
-        public string? LastName { get; set; }
+        public string LastName { get; set; }
     }
 }
