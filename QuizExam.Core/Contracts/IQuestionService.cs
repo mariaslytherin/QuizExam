@@ -6,24 +6,22 @@ namespace QuizExam.Core.Contracts
 {
     public interface IQuestionService
     {
-        Task<Guid> Create(NewQuestionVM model);
+        Task<Guid> CreateAsync(NewQuestionVM model);
 
-        Task<Question> GetQuestionById(string id);
+        Task<Question> GetQuestionByIdAsync(string id);
 
-        Task<TakeQuestionVM> GetNextQuestion(string examId, string takeId, int order);
+        Task<TakeQuestionVM> GetNextQuestionAsync(string examId, string takeId, int order);
 
-        Task<TakeQuestionVM> GetPreviousQuestion(string examId, string takeId, int order);
+        Task<TakeQuestionVM> GetPreviousQuestionAsync(string examId, string takeId, int order);
 
-        int GetLastNotTakenQuestionOrder(string takeId, string examId);
+        int GetLastNotTakenQuestionOrder(string takeId);
 
-        Task<Guid[]> GetQuestionIds(string examId);
+        Task<bool> HasEnoughAnswerOptions(string id);
 
-        bool HasAnswerOptions(string id);
+        Task<EditQuestionVM> GetQuestionForEditAsync(string id);
 
-        Task<EditQuestionVM> GetQuestionForEdit(string id);
+        Task<bool> EditAsync(EditQuestionVM model);
 
-        Task<bool> Edit(EditQuestionVM model);
-
-        Task<bool> Delete(string id);
+        Task<bool> DeleteAsync(string id);
     }
 }

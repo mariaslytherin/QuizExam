@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
-using QuizExam.Core.Models.TakeAnswer;
-using QuizExam.Core.Models.TakeQuestion;
 
 namespace QuizExam.Controllers
 {
@@ -23,9 +21,9 @@ namespace QuizExam.Controllers
         {
             try
             {
-                var question = await this.questionService.GetNextQuestion(examId, takeId, order);
+                var question = await this.questionService.GetNextQuestionAsync(examId, takeId, order);
 
-                if (question != null)
+                if (!String.IsNullOrEmpty(question.QuestionId))
                 {
                     return View("/Views/TakeExam/Take.cshtml", question);
                 }
@@ -46,7 +44,7 @@ namespace QuizExam.Controllers
         {
             try
             {
-                var question = await this.questionService.GetPreviousQuestion(examId, takeId, order);
+                var question = await this.questionService.GetPreviousQuestionAsync(examId, takeId, order);
 
                 if (question != null)
                 {

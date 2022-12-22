@@ -53,6 +53,8 @@
         public const string ErrorExamNotFoundMessage = "Не успяхме да намерим този изпит!";
 
         public const string ErrorExamNotActiveAnymoreMessage = "Изпитът вече не е активен!";
+
+        public const string ErrorNotEnoughAnswerOptionsMessage = "Добавете поне 2 възможни опции за отговор!";
     }
 
     public static class WarningMessageConstants

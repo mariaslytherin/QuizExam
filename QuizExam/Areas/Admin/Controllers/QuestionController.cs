@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Core.Models.Question;
-using QuizExam.Infrastructure.Data.Enums;
 
 namespace QuizExam.Areas.Admin.Controllers
 {
@@ -29,33 +27,42 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData[ErrorMessageConstants.UnsuccessfulAddQuestionMessage] = ErrorMessageConstants.UnsuccessfulAddQuestionMessage;
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulAddQuestionMessage;
                 return View(model);
             }
 
-            var questionId = await this.questionService.Create(model);
-
-            if (questionId != Guid.Empty)
+            try
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedQuestionMessage;
-                TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningAddOptionsMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
+                var questionId = await this.questionService.CreateAsync(model);
 
-            return RedirectToAction("Edit", new { id = questionId, examId = examId });
+                if (questionId != Guid.Empty)
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedQuestionMessage;
+                    TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningAddOptionsMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulAddQuestionMessage;
+                    return View(model);
+                }
+
+                return RedirectToAction("Edit", new { id = questionId, examId = examId });
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulAddQuestionMessage;
+                return View(model);
+            }
         }
 
         public async Task<IActionResult> Edit(string examId, string id)
         {
             try
             {
-                var question = await this.questionService.GetQuestionForEdit(id);
-                var options = this.answerOptionService.GetOptions(id);
+                var question = await this.questionService.GetQuestionForEditAsync(id);
+                var options = await this.answerOptionService.GetOptions(id);
 
-                if (question != null && options != Enumerable.Empty<AnswerOptionVM>())
+                if (!string.IsNullOrEmpty(question.Id) && options != Enumerable.Empty<AnswerOptionVM>())
                 {
                     TempData["ExamId"] = examId;
                     
@@ -90,38 +97,51 @@ namespace QuizExam.Areas.Admin.Controllers
                     return View(model);
                 }
 
-                if (await this.questionService.Edit(model))
+                if (!await this.questionService.HasEnoughAnswerOptions(model.Id))
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorNotEnoughAnswerOptionsMessage;
+                    return View(model);
+                }
+
+                if (await this.questionService.EditAsync(model))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulEditMessage;
+                    return RedirectToAction("ViewExam", "Exam", new { id = examId });
                 }
                 else
                 {
-                    throw new Exception("An error appeard!");
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEdit;
+                    return View(model);
                 }
             }
-            catch (Exception)
+            catch
             {
-
-                throw;
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEdit;
+                return RedirectToAction("ViewExam", "Exam", new { id = examId });
             }
-            
-
-            return RedirectToAction("ViewExam", "Exam", new { id = examId });
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(string id, string examId)
         {
-            if (await this.questionService.Delete(id))
+            try
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyDeletedQuestionMessage;
+                if (await this.questionService.DeleteAsync(id))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyDeletedQuestionMessage;
+                    return RedirectToAction("ViewExam", "Exam", new { id = examId });
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeletionMessage;
+                    return RedirectToAction("ViewExam", "Exam", new { id = examId });
+                }
             }
-            else
+            catch
             {
-                throw new Exception("An error appeard!");
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeletionMessage;
+                return RedirectToAction("ViewExam", "Exam", new { id = examId });
             }
-
-            return RedirectToAction("ViewExam", "Exam", new { id = examId });
         }
     }
 }

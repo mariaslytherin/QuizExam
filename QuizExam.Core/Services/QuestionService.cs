@@ -2,6 +2,7 @@
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.AnswerOption;
+using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Models.Question;
 using QuizExam.Core.Models.TakeAnswer;
 using QuizExam.Core.Models.TakeQuestion;
@@ -25,39 +26,32 @@ namespace QuizExam.Core.Services
             this.repository = repository;
         }
 
-        public async Task<Guid> Create(NewQuestionVM model)
+        public async Task<Guid> CreateAsync(NewQuestionVM model)
         {
-            try
+            var exam = await this.repository.GetByIdAsync<Exam>(model.ExamId.ToGuid());
+
+            if (exam != null)
             {
-                bool isExam = await this.repository.GetByIdAsync<Exam>(model.ExamId.ToGuid()) != null ? true : false;
-
-                if (isExam)
+                var question = new Question
                 {
-                    var question = new Question
-                    {
-                        ExamId = model.ExamId.ToGuid(),
-                        Content = model.Content,
-                        Rule = model.Rule,
-                        Points = model.Points,
-                    };
+                    ExamId = model.ExamId.ToGuid(),
+                    Content = model.Content,
+                    Rule = model.Rule,
+                    Points = model.Points,
+                };
 
-                    await this.repository.AddAsync(question);
-                    await this.repository.SaveChangesAsync();
+                await this.repository.AddAsync(question);
+                await this.repository.SaveChangesAsync();
 
-                    return question.Id;
-                }
-                else
-                {
-                    return Guid.Empty;
-                }
+                return question.Id;
             }
-            catch
+            else
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(Question)}'. ");
+                return Guid.Empty;
             }
         }
 
-        public async Task<bool> Delete(string id)
+        public async Task<bool> DeleteAsync(string id)
         {
             bool result = false;
             var question = await this.repository.GetByIdAsync<Question>(id.ToGuid());
@@ -72,101 +66,57 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<bool> Edit(EditQuestionVM model)
+        public async Task<bool> EditAsync(EditQuestionVM model)
         {
-            try
-            {
-                bool result = false;
-                var question = await this.repository.GetByIdAsync<Question>(model.Id.ToGuid());
+            bool result = false;
+            var question = await this.repository.GetByIdAsync<Question>(model.Id.ToGuid());
 
-                if (question != null)
-                {
-                    question.Content = model.Content;
-                    question.Rule = model.Rule;
-                    question.Points = model.Points;
-                    question.ModifyDate = DateTime.Today;
-                    await this.repository.SaveChangesAsync();
-                    result = true;
-                }
-
-                return result;
-            }
-            catch
+            if (question != null)
             {
-                throw new NullReferenceException($"Object of type '{nameof(Question)}' was not found. ");
+                question.Content = model.Content;
+                question.Rule = model.Rule;
+                question.Points = model.Points;
+                question.ModifyDate = DateTime.Today;
+                await this.repository.SaveChangesAsync();
+                result = true;
             }
+
+            return result;
         }
 
-        public async Task<Question> GetQuestionById(string id)
+        public async Task<Question> GetQuestionByIdAsync(string id)
         {
             var question = await this.repository.GetByIdAsync<Question>(id.ToGuid());
 
             return question;
         }
 
-        public async Task<EditQuestionVM> GetQuestionForEdit(string id)
+        public async Task<EditQuestionVM> GetQuestionForEditAsync(string id)
         {
             var question = await this.repository.GetByIdAsync<Question>(id.ToGuid());
 
-            try
+            if (question != null)
             {
-                if (question != null)
+                var model = new EditQuestionVM
                 {
-                    var model = new EditQuestionVM
-                    {
-                        Id = question.Id.ToString(),
-                        Content = question.Content,
-                        Rule = question.Rule,
-                        Points = question.Points,
-                    };
+                    Id = question.Id.ToString(),
+                    Content = question.Content,
+                    Rule = question.Rule,
+                    Points = question.Points,
+                };
 
-                    return model;
-                }
-                else
-                {
-                    return new EditQuestionVM();
-                }
+                return model;
             }
-            catch (NullReferenceException)
-            {
-                throw new NullReferenceException($"Object of type '{nameof(Question)}' was not found. ");
-            }
+
+            return new EditQuestionVM();
         }
 
-        public async Task<TakeQuestionVM> GetNextQuestion(string examId, string takeId, int order)
+        public async Task<TakeQuestionVM> GetNextQuestionAsync(string examId, string takeId, int order)
         {
-            try
-            {
-                var allQuestions = await this.repository.All<Question>()
-                    .Where(q => q.ExamId == examId.ToGuid() && !q.IsDeleted)
-                    .Select(q => new TakeQuestionVM
-                    {
-                        QuestionId = q.Id.ToString(),
-                        TakeExamId = takeId,
-                        ExamId = q.ExamId.ToString(),
-                        Content = q.Content,
-                        Order = order,
-                        TakeAnswers = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
-                                    .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == takeId.ToGuid() && !t.IsDeleted),
-                                        option => option.Id,
-                                        answer => answer.AnswerOptionId,
-                                        (option, answer) => new
-                                        {
-                                            option,
-                                            answer,
-                                        })
-                                    .SelectMany(
-                                        x => x.answer.DefaultIfEmpty(),
-                                        (option, answer) => new TakeAnswerVM
-                                        {
-                                            AnswerId = answer.Id.ToString(),
-                                            OptionId = option.option.Id.ToString(),
-                                            IsChecked = answer.Id.ToString() != null ? true : false,
-                                            Content = option.option.Content,
-                                        }).ToList(),
-                    })
-                    .ToListAsync();
+            var allQuestions = await this.GetQuestionWithAnswers(examId, takeId, order);
 
+            if (allQuestions.Count() != 0)
+            {
                 var question = allQuestions[order];
 
                 if (allQuestions.Count() == order + 1)
@@ -177,87 +127,70 @@ namespace QuizExam.Core.Services
 
                 return question;
             }
-            catch
-            {
-                throw new InvalidOperationException($"Object of type '{nameof(Question)}' was not found on index {order}. ");
-            }
+
+            return new TakeQuestionVM();
         }
 
-        public async Task<TakeQuestionVM> GetPreviousQuestion(string examId, string takeId, int order)
+        public async Task<TakeQuestionVM> GetPreviousQuestionAsync(string examId, string takeId, int order)
         {
-            try
-            {
-                var questionAnswers = await this.repository.All<Question>().Where(q => q.ExamId == examId.ToGuid() && !q.IsDeleted)
-                            .Select(q => new TakeQuestionVM
-                            {
-                                QuestionId = q.Id.ToString(),
-                                TakeExamId = takeId,
-                                ExamId = q.ExamId.ToString(),
-                                Content = q.Content,
-                                Order = order,
-                                TakeAnswers = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
-                                    .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == takeId.ToGuid() && !t.IsDeleted),
-                                        option => option.Id,
-                                        answer => answer.AnswerOptionId,
-                                        (option, answer) => new
-                                        {
-                                            option,
-                                            answer,
-                                        })
-                                    .SelectMany(
-                                        x => x.answer.DefaultIfEmpty(),
-                                        (option, answer) => new TakeAnswerVM
-                                        {
-                                            AnswerId = answer.Id.ToString(),
-                                            OptionId = option.option.Id.ToString(),
-                                            IsChecked = answer.Id.ToString() != null ? true : false,
-                                            Content = option.option.Content,
-                                        }).ToList(),
-                            }).ToListAsync();
+            var allQuestions = await this.GetQuestionWithAnswers(examId, takeId, order);
 
-                var question = questionAnswers[order];
+            if (allQuestions.Count() != 0)
+            {
+                var question = allQuestions[order];
 
                 return question;
             }
-            catch
-            {
-                throw new InvalidOperationException($"Object of type '{nameof(Question)}' was not found on index {order}. ");
-            }
+
+            return new TakeQuestionVM();
         }
 
-        public int GetLastNotTakenQuestionOrder(string takeId, string examId)
+        private async Task<List<TakeQuestionVM>> GetQuestionWithAnswers(string examId, string takeId, int order)
         {
-            try
-            {
-                var takenQuestionsCount = this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == takeId.ToGuid()).Count();
-                var allQuestionsCount = this.repository.All<Question>().Where(q => q.ExamId == examId.ToGuid() && !q.IsDeleted).Count();
-                var order = takenQuestionsCount;
-
-                return order;
-            }
-            catch
-            {
-
-                throw;
-            }
-        }
-
-        public async Task<Guid[]> GetQuestionIds(string examId)
-        {
-            var questionIds = await this.repository.All<Question>()
+            return await this.repository.All<Question>()
                 .Where(q => q.ExamId == examId.ToGuid() && !q.IsDeleted)
-                .Select(q => q.Id)
-                .ToArrayAsync();
-
-            return questionIds;
+                .Select(q => new TakeQuestionVM
+                {
+                    QuestionId = q.Id.ToString(),
+                    TakeExamId = takeId,
+                    ExamId = q.ExamId.ToString(),
+                    Content = q.Content,
+                    Order = order,
+                    TakeAnswers = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
+                            .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == takeId.ToGuid() && !t.IsDeleted),
+                                option => option.Id,
+                                answer => answer.AnswerOptionId,
+                                (option, answer) => new
+                                {
+                                    option,
+                                    answer,
+                                })
+                            .SelectMany(
+                                x => x.answer.DefaultIfEmpty(),
+                                (option, answer) => new TakeAnswerVM
+                                {
+                                    AnswerId = answer.Id.ToString(),
+                                    OptionId = option.option.Id.ToString(),
+                                    IsChecked = answer.Id.ToString() != null ? true : false,
+                                    Content = option.option.Content,
+                                })
+                            .ToList(),
+                }).ToListAsync();
         }
 
-        public bool HasAnswerOptions(string id)
+        public int GetLastNotTakenQuestionOrder(string takeId)
         {
-            var hasAnswerOptions = this.repository.All<AnswerOption>()
-                .Any(a => a.QuestionId == id.ToGuid());
+            var takenQuestionsCount = this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == takeId.ToGuid()).Count();
 
-            return hasAnswerOptions;
+            return takenQuestionsCount;
+        }
+
+        public async Task<bool> HasEnoughAnswerOptions(string id)
+        {
+            var hasEnoughAnswerOptions = await this.repository.All<AnswerOption>()
+                .CountAsync(a => a.QuestionId == id.ToGuid()) >= 2;
+
+            return hasEnoughAnswerOptions;
         }
     }
 }
