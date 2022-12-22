@@ -1,32 +1,20 @@
 ﻿@using QuizExam.Core.Models.Subject
-@model IEnumerable<SubjectVM>
-@{
-}
+@model IList<SubjectVM>
 
 <div class="row">
     <div class="col-12">
-        <a asp-action="NewSubject" class="btn btn-block btn-outline-success" style="width: 130px; margin-bottom: 10px;">New Subject</a>
+        <a asp-action="New" class="btn btn-block btn-outline-success" style="width: 130px; margin-bottom: 10px;">Добави</a>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Subjects</h3>
-                @*<div class="card-tools">
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-                    <div class="input-group-append">
-                    <button type="submit" class="btn btn-default">
-                    <i class="fas fa-search"></i>
-                    </button>
-                    </div>
-                    </div>
-                    </div>*@
+                <h3 class="card-title">Предмети</h3>
             </div>
 
             <div class="card-body table-responsive p-0" style="overflow: inherit !important">
                 <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
-                            <th style="text-align: center;">Name</th>
-                            <th style="text-align: center;">Actions</th>
+                            <th style="text-align: center;">Име</th>
+                            <th style="text-align: center;">Опции</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,15 +24,15 @@
                                 <td style="text-align: center;">@subject.Name</td>
                                 <td style="text-align: center;">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-info">Actions</button>
+                                        <button type="button" class="btn btn-info">Опции</button>
                                         <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
                                             <span class="sr-only">Toggle Dropdown</span>
                                         </button>
                                         <div class="dropdown-menu" role="menu" style="">
-                                            <a class="dropdown-item" asp-action="edit" asp-controller="subject" asp-route-id="@subject.Id">Edit</a>
+                                            <a class="dropdown-item" asp-action="edit" asp-controller="subject" asp-route-id="@subject.Id">Редакция</a>
                                             <form method="post">
-                                                <button type="submit" class="dropdown-item" asp-action="activate" asp-controller="subject" asp-route-id="@subject.Id">Activate</button>
-                                                <button type="submit" class="dropdown-item" asp-action="deactivate" asp-controller="subject" asp-route-id="@subject.Id">Deactivate</button>
+                                                <button type="submit" class="dropdown-item" asp-action="activate" asp-controller="subject" asp-route-id="@subject.Id">Активирай</button>
+                                                <button type="submit" class="dropdown-item" asp-action="deactivate" asp-controller="subject" asp-route-id="@subject.Id">Деактивирай</button>
                                             </form>
                                         </div>
                                     </div>

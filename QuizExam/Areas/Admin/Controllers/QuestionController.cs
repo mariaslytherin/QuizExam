@@ -93,7 +93,7 @@ namespace QuizExam.Areas.Admin.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEdit;
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEditMessage;
                     return View(model);
                 }
 
@@ -110,13 +110,13 @@ namespace QuizExam.Areas.Admin.Controllers
                 }
                 else
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEdit;
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEditMessage;
                     return View(model);
                 }
             }
             catch
             {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEdit;
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEditMessage;
                 return RedirectToAction("ViewExam", "Exam", new { id = examId });
             }
         }

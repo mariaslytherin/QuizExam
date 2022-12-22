@@ -36,7 +36,9 @@
 
         public const string ErrorAppeardMessage = "Възникна грешка!";
 
-        public const string UnsuccessfulEdit = "Неуспешна редакция!";
+        public const string UnsuccessfulEditMessage = "Неуспешна редакция!";
+
+        public const string UnsuccessfulCreationMessage = "Неуспешно създаване!";
 
         public const string UnsuccessfulDeletionMessage = "Неуспешно изтриване!";
 
@@ -55,6 +57,10 @@
         public const string ErrorExamNotActiveAnymoreMessage = "Изпитът вече не е активен!";
 
         public const string ErrorNotEnoughAnswerOptionsMessage = "Добавете поне 2 възможни опции за отговор!";
+
+        public const string UnsuccessfulActivationMessage = "Неуспешно активиране!";
+
+        public const string UnsuccessfulDeactivationMessage = "Неуспешно активиране!";
     }
 
     public static class WarningMessageConstants

@@ -15,88 +15,138 @@ namespace QuizExam.Areas.Admin.Controllers
             this.subjectService = subjectService;
         }
 
-        public IActionResult NewSubject()
+        public IActionResult New()
         {
             return View("New");
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewSubject(SubjectVM model)
+        public async Task<IActionResult> New(NewSubjectVM model)
         {
-            if (await this.subjectService.AddSubject(model))
+            try
             {
-                ViewData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedSubjectMessage;
+                await this.subjectService.CreateAsync(model);
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedSubjectMessage;
+                
+                return RedirectToAction(nameof(GetSubjectsList));
             }
-            else
+            catch
             {
-                throw new Exception("An error appeard!");
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulCreationMessage;
+                return RedirectToAction(nameof(GetSubjectsList));
             }
-
-            return RedirectToAction(nameof(GetSubjectsList));
         }
 
         public async Task<IActionResult> GetSubjectsList()
         {
-            var subjects = await this.subjectService.GetAllSubjects();
+            try
+            {
+                var subjects = await this.subjectService.GetAllSubjectsAsync();
 
-            return View("SubjectsList", subjects);
+                return View("SubjectsList", subjects);
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            var subject = await this.subjectService.GetSubjectForEdit(Guid.Parse(id));
+            try
+            {
+                var subject = await this.subjectService.GetSubjectForEditAsync(id);
 
-            return View("Edit", subject);
+                if (!String.IsNullOrEmpty(subject.Id))
+                {
+                    return View("Edit", subject);
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                    return RedirectToAction(nameof(GetSubjectsList));
+                }
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction(nameof(GetSubjectsList));
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(SubjectVM model)
+        public async Task<IActionResult> Edit(NewSubjectVM model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View(model);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
 
-            if (await this.subjectService.Edit(model))
-            {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulEditMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
+                if (await this.subjectService.EditAsync(model))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulEditMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEditMessage;
+                }
 
-            return RedirectToAction(nameof(GetSubjectsList));
+                return RedirectToAction(nameof(GetSubjectsList));
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEditMessage;
+                return RedirectToAction(nameof(GetSubjectsList));
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Activate(string id)
         {
-            if (await this.subjectService.Activate(Guid.Parse(id)))
+            try
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulActivationMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
+                if (await this.subjectService.ActivateAsync(id))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulActivationMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulActivationMessage;
+                }
 
-            return RedirectToAction(nameof(GetSubjectsList));
+                return RedirectToAction(nameof(GetSubjectsList));
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulActivationMessage;
+                return RedirectToAction(nameof(GetSubjectsList));
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Deactivate(string id)
         {
-            if (await this.subjectService.Deactivate(Guid.Parse(id)))
+            try
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeactivationMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
+                if (await this.subjectService.DeactivateAsync(id))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeactivationMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeactivationMessage;
+                }
 
-            return RedirectToAction(nameof(GetSubjectsList));
+                return RedirectToAction(nameof(GetSubjectsList));
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeactivationMessage;
+                return RedirectToAction(nameof(GetSubjectsList));
+            }
         }
     }
 }

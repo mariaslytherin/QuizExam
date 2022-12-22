@@ -5,18 +5,18 @@ namespace QuizExam.Core.Contracts
 {
     public interface ISubjectService
     {
-        Task<bool> AddSubject(SubjectVM model);
+        Task CreateAsync(NewSubjectVM model);
 
-        Task<IEnumerable<SubjectVM>> GetAllSubjects();
+        Task<IList<SubjectVM>> GetAllSubjectsAsync();
 
-        Task<IEnumerable<SubjectVM>> GetActiveSubjects();
+        Task<IEnumerable<SubjectVM>> GetActiveSubjectsAsync();
 
-        Task<SubjectVM> GetSubjectForEdit(Guid id);
+        Task<NewSubjectVM> GetSubjectForEditAsync(string id);
 
-        Task<bool> Edit(SubjectVM model);
+        Task<bool> EditAsync(NewSubjectVM model);
 
-        Task<bool> Deactivate(Guid id);
+        Task<bool> DeactivateAsync(string id);
 
-        Task<bool> Activate(Guid id);
+        Task<bool> ActivateAsync(string id);
     }
 }

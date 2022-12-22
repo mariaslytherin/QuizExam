@@ -55,7 +55,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                var subjects = await this.subjectService.GetActiveSubjects();
+                var subjects = await this.subjectService.GetActiveSubjectsAsync();
 
                 ViewBag.Subjects = subjects
                     .Select(s => new SelectListItem()
@@ -134,14 +134,14 @@ namespace QuizExam.Areas.Admin.Controllers
                 }
                 else
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEdit;
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEditMessage;
                 }
 
                 return RedirectToAction(nameof(GetExamsList));
             }
             catch
             {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEdit;
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEditMessage;
                 return RedirectToAction(nameof(GetExamsList));
             }
         }

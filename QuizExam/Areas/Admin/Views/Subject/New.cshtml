@@ -1,11 +1,11 @@
 ﻿@using QuizExam.Core.Models.Subject
-@model SubjectVM
+@model NewSubjectVM
 
-<div class="row">
+<div class="row d-flex justify-content-center">
     <div class="col-4">
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Add new subject</h3>
+                <h3 class="card-title">Добави предмет</h3>
             </div>
             <form id="edit" method="post">
                 <div class="card-body">
@@ -17,8 +17,8 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Add</button>
-                    <a asp-action="GetSubjectsList" class="btn btn-outline-primary" style="width:auto">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Добави</button>
+                    <a asp-action="GetSubjectsList" class="btn btn-outline-primary" style="width:auto">Назад</a>
                 </div>
             </form>
         </div>

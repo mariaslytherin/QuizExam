@@ -16,10 +16,10 @@ namespace QuizExam.Core.Services
             this.repository = repository;
         }
 
-        public async Task<bool> Activate(Guid id)
+        public async Task<bool> ActivateAsync(string id)
         {
             bool result = false;
-            var subject = await this.repository.GetByIdAsync<Subject>(id);
+            var subject = await this.repository.GetByIdAsync<Subject>(id.ToGuid());
 
             if (subject != null)
             {
@@ -31,7 +31,7 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<bool> AddSubject(SubjectVM model)
+        public async Task CreateAsync(NewSubjectVM model)
         {
             var subject = new Subject()
             {
@@ -40,14 +40,12 @@ namespace QuizExam.Core.Services
 
             await this.repository.AddAsync(subject);
             await this.repository.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> Deactivate(Guid id)
+        public async Task<bool> DeactivateAsync(string id)
         {
             bool result = false;
-            var subject = await this.repository.GetByIdAsync<Subject>(id);
+            var subject = await this.repository.GetByIdAsync<Subject>(id.ToGuid());
 
             if (subject != null)
             {
@@ -59,7 +57,7 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<bool> Edit(SubjectVM model)
+        public async Task<bool> EditAsync(NewSubjectVM model)
         {
             bool result = false;
             var subject = await this.repository.GetByIdAsync<Subject>(model.Id.ToGuid());
@@ -74,20 +72,19 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<IEnumerable<SubjectVM>> GetActiveSubjects()
+        public async Task<IEnumerable<SubjectVM>> GetActiveSubjectsAsync()
         {
             return await this.repository.All<Subject>()
                 .Where(s => s.IsActive)
                 .Select(s => new SubjectVM()
                 {
                     Id = s.Id.ToString(),
-                    Name = s.Name,
-                    IsActive = s.IsActive,
+                    Name = s.Name
                 })
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<SubjectVM>> GetAllSubjects()
+        public async Task<IList<SubjectVM>> GetAllSubjectsAsync()
         {
             return await this.repository.All<Subject>()
                 .Select(s => new SubjectVM()
@@ -99,15 +96,20 @@ namespace QuizExam.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<SubjectVM> GetSubjectForEdit(Guid id)
+        public async Task<NewSubjectVM> GetSubjectForEditAsync(string id)
         {
-            var subject = await this.repository.GetByIdAsync<Subject>(id);
+            var subject = await this.repository.GetByIdAsync<Subject>(id.ToGuid());
 
-            return new SubjectVM()
+            if (subject != null)
             {
-                Id = subject.Id.ToString(),
-                Name = subject.Name
-            };
+                return new NewSubjectVM()
+                {
+                    Id = subject.Id.ToString(),
+                    Name = subject.Name
+                };
+            }
+
+            return new NewSubjectVM();
         }
     }
 }

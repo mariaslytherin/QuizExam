@@ -7,9 +7,6 @@ namespace QuizExam.Core.Models.Subject
     {
         public string Id { get; set; }
 
-        [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
-        [StringLength(100, ErrorMessage = SubjectErrorMessages.SubjectNameMaxLength, MinimumLength = 2)]
-        [Display(Name = "Име на предмет")]
         public string Name { get; set; }
 
         public bool IsActive { get; set; }
