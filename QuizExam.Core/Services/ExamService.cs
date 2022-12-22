@@ -273,7 +273,7 @@ namespace QuizExam.Core.Services
 
             if (exam != null)
             {
-                var questionsPointsSum = this.repository.All<Question>().Sum(q => q.Points);
+                var questionsPointsSum = this.repository.All<Question>().Where(q => !q.IsDeleted).Sum(q => q.Points);
 
                 return exam.MaxScore == questionsPointsSum;
             }

@@ -97,7 +97,7 @@ namespace QuizExam.Areas.Admin.Controllers
                     return View(model);
                 }
 
-                if (!await this.questionService.HasEnoughAnswerOptions(model.Id))
+                if (!await this.questionService.HasEnoughAnswerOptionsAsync(model.Id))
                 {
                     TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorNotEnoughAnswerOptionsMessage;
                     return View(model);

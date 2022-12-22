@@ -258,7 +258,7 @@ namespace QuizExam.Test.QuestionServiceTests
         public async Task HasEnoughAnswerOptionsMustReturnFalseIfOptionsAreNotEnough()
         {
             var service = serviceProvider.GetService<IQuestionService>();
-            var result = await service.HasEnoughAnswerOptions(QuestionId);
+            var result = await service.HasEnoughAnswerOptionsAsync(QuestionId);
 
             Assert.IsFalse(result);
         }
@@ -267,7 +267,7 @@ namespace QuizExam.Test.QuestionServiceTests
         public async Task HasEnoughAnswerOptionsMustReturnFalseIfQuestionDoesNotExist()
         {
             var service = serviceProvider.GetService<IQuestionService>();
-            var result = await service.HasEnoughAnswerOptions(Guid.NewGuid().ToString());
+            var result = await service.HasEnoughAnswerOptionsAsync(Guid.NewGuid().ToString());
 
             Assert.IsFalse(result);
         }

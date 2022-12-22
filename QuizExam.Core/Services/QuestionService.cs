@@ -185,7 +185,7 @@ namespace QuizExam.Core.Services
             return takenQuestionsCount;
         }
 
-        public async Task<bool> HasEnoughAnswerOptions(string id)
+        public async Task<bool> HasEnoughAnswerOptionsAsync(string id)
         {
             var hasEnoughAnswerOptions = await this.repository.All<AnswerOption>()
                 .CountAsync(a => a.QuestionId == id.ToGuid()) >= 2;

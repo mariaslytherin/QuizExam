@@ -16,7 +16,7 @@ namespace QuizExam.Core.Contracts
 
         int GetLastNotTakenQuestionOrder(string takeId);
 
-        Task<bool> HasEnoughAnswerOptions(string id);
+        Task<bool> HasEnoughAnswerOptionsAsync(string id);
 
         Task<EditQuestionVM> GetQuestionForEditAsync(string id);
 
