@@ -91,7 +91,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task DectivationOfNotExistingExamMustReturnFalse()
+        public async Task DeactivationOfNotExistingExamMustReturnFalse()
         {
             var exam = new Exam()
             {
@@ -108,7 +108,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task DectivationOfExistingExamMustReturnTrue()
+        public async Task DeactivationOfExistingExamMustReturnTrue()
         {
             var service = serviceProvider.GetService<IExamService>();
             bool result = await service.DeactivateAsync(ExamId_Math);

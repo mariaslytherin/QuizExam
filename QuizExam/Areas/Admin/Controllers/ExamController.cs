@@ -24,7 +24,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                var exams = await this.examService.GetAllExams(p, s);
+                var exams = await this.examService.GetAllExamsAsync(p, s);
 
                 return View("ExamsList", exams);
             }
@@ -39,7 +39,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                var exam = await this.examService.GetExamForView(id);
+                var exam = await this.examService.GetExamForViewAsync(id);
 
                 return View("View", exam);
 
@@ -51,7 +51,7 @@ namespace QuizExam.Areas.Admin.Controllers
             }
         }
 
-        public async Task<IActionResult> NewAsync()
+        public async Task<IActionResult> New()
         {
             try
             {
@@ -84,7 +84,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             try
             {
-                await this.examService.Create(model);
+                await this.examService.CreateAsync(model);
                 TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedExamMessage;
                 return RedirectToAction(nameof(GetExamsList));
             }
@@ -99,7 +99,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                var exam = await this.examService.GetExamForEdit(id);
+                var exam = await this.examService.GetExamForEditAsync(id);
 
                 if (!string.IsNullOrEmpty(exam.Id))
                 {
@@ -128,7 +128,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             try
             {
-                if (await this.examService.Edit(model))
+                if (await this.examService.EditAsync(model))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulEditMessage;
                 }
@@ -151,19 +151,19 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                if (!await this.examService.HasAnyQuestions(id))
+                if (!await this.examService.HasAnyQuestionsAsync(id))
                 {
                     TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningExamMissingQuestionsMessage;
                     return RedirectToAction(nameof(GetExamsList));
                 }
 
-                if (!await this.examService.QuestionsPointsSumEqualsMaxScore(id))
+                if (!await this.examService.QuestionsPointsSumEqualsMaxScoreAsync(id))
                 {
                     TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningExamNotEqualPointsMessage;
                     return RedirectToAction(nameof(GetExamsList));
                 }
 
-                if (await this.examService.Activate(id))
+                if (await this.examService.ActivateAsync(id))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulActivationMessage;
                 }
@@ -186,7 +186,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                if (await this.examService.Deactivate(id))
+                if (await this.examService.DeactivateAsync(id))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeactivationMessage;
                 }
@@ -209,7 +209,7 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                if (await this.examService.Delete(id))
+                if (await this.examService.DeleteAsync(id))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeletionMessage;
                 }

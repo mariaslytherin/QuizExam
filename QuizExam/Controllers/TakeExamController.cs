@@ -77,7 +77,7 @@ namespace QuizExam.Controllers
 
             try
             {
-                var exam = await this.examService.GetExamInfo(examId);
+                var exam = await this.examService.GetExamInfoAsync(examId);
 
                 if (exam != null)
                 {
