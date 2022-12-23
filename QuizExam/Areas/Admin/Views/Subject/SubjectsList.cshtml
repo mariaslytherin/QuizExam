@@ -1,6 +1,10 @@
 ﻿@using QuizExam.Core.Models.Subject
 @model IList<SubjectVM>
 
+@{
+    ViewData["Title"] = "Предмети";
+}
+
 <div class="row">
     <div class="col-12">
         <a asp-action="New" class="btn btn-block btn-outline-success" style="width: 130px; margin-bottom: 10px;">Добави</a>

@@ -1,14 +1,15 @@
 ﻿@using QuizExam.Core.Models
 @model UserEditVM
+
 @{
-    ViewData["Title"] = "Edit User";
+    ViewData["Title"] = "Редакция";
 }
 
 <div class="row">
     <div class="col-4">
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Edit User</h3>
+                <h3 class="card-title">Редакция на потребител</h3>
             </div>
             <form id="edit" method="post">
                 <div class="card-body">
@@ -38,8 +39,8 @@
                         </div>*@
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a asp-action="GetAllUsers" class="btn btn-outline-primary" style="width:auto">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Запази</button>
+                    <a asp-action="GetAllUsers" class="btn btn-outline-primary" style="width:auto">Назад</a>
                 </div>
             </form>
         </div>
