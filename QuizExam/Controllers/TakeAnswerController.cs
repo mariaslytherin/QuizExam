@@ -8,43 +8,49 @@ namespace QuizExam.Controllers
     public class TakeAnswerController : Controller
     {
         private readonly ITakeAnswerService takeAnswerService;
-        private readonly IQuestionService questionService;
 
         public TakeAnswerController(
-            ITakeAnswerService takeAnswerService,
-            IQuestionService questionService)
+            ITakeAnswerService takeAnswerService)
         {
             this.takeAnswerService = takeAnswerService;
-            this.questionService = questionService;
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(TakeQuestionVM model, string examId)
         {
-            if (model.CheckedOptionId == null)
+            try
             {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
-                return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order });
-            }
+                if (model.CheckedOptionId == null)
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
+                    return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order });
+                }
 
-            if (await this.takeAnswerService.AddAnswer(model, examId))
-            {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulRecordMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
+                if (await this.takeAnswerService.AddAnswer(model, examId))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulRecordMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                    return RedirectToAction("Index", "Home");
+                }
 
-            TempData["ExamId"] = examId;
+                TempData["ExamId"] = examId;
 
-            if (model.IsLast)
-            {
-                return RedirectToAction("Finish", "TakeExam", new { takeExamId = model.TakeExamId });
+                if (model.IsLast)
+                {
+                    return RedirectToAction("Finish", "TakeExam", new { takeExamId = model.TakeExamId });
+                }
+                else
+                {
+                    return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId, order = model.Order + 1 });
+                }
             }
-            else
+            catch
             {
-                return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order + 1 });
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("Index", "Home");
             }
         }
     }

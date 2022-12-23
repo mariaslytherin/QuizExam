@@ -6,7 +6,7 @@ namespace QuizExam.Infrastructure.Data
     public class TakeAnswer
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         public Guid TakeExamId { get; set; }

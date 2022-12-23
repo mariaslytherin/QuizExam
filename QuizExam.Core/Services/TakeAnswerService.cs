@@ -22,66 +22,53 @@ namespace QuizExam.Core.Services
 
         public async Task<bool> AddAnswer(TakeQuestionVM model, string examId)
         {
-            try
+            var result = false;
+            var answer = this.repository.All<TakeAnswer>()
+                .Where(t => t.QuestionId == model.QuestionId.ToGuid() &&
+                            t.TakeExamId == model.TakeExamId.ToGuid())
+                .FirstOrDefault();
+
+            if (answer != null)
             {
-                var result = false;
-                var answer = this.repository.All<TakeAnswer>()
-                    .Where(t => t.QuestionId == Guid.Parse(model.QuestionId) &&
-                                t.TakeExamId == Guid.Parse(model.TakeExamId))
-                    .FirstOrDefault();
-
-                if (answer != null)
+                if (answer.AnswerOptionId != model.CheckedOptionId.ToGuid())
                 {
-                    if (answer.AnswerOptionId != model.CheckedOptionId.ToGuid())
+                    await DeleteAnswer(answer.Id);
+
+                    var newAnswer = new TakeAnswer
                     {
-                        await DeleteAnswer(answer.Id);
-
-                        var takeExam = await this.repository.GetByIdAsync<TakeExam>(model.TakeExamId.ToGuid());
-
-                        if (takeExam != null)
-                        {
-                            var newAnswer = new TakeAnswer
-                            {
-                                TakeExamId = model.TakeExamId.ToGuid(),
-                                AnswerOptionId = model.CheckedOptionId.ToGuid(),
-                                QuestionId = model.QuestionId.ToGuid(),
-                            };
-                            await this.repository.AddAsync(newAnswer);
-                            await this.repository.SaveChangesAsync();
-                            result = true;
-                        }
-
-                        return result;
-                    }
-                    else
-                    {
-                        result = true;
-                        return result;
-                    }
+                        TakeExamId = model.TakeExamId.ToGuid(),
+                        AnswerOptionId = model.CheckedOptionId.ToGuid(),
+                        QuestionId = model.QuestionId.ToGuid(),
+                    };
+                    await this.repository.AddAsync(newAnswer);
+                    await this.repository.SaveChangesAsync();
+                    result = true;
                 }
                 else
                 {
-                    var takeExam = await this.repository.GetByIdAsync<TakeExam>(model.TakeExamId.ToGuid());
-
-                    if (takeExam != null)
-                    {
-                        var newAnswer = new TakeAnswer
-                        {
-                            TakeExamId = model.TakeExamId.ToGuid(),
-                            AnswerOptionId = model.CheckedOptionId.ToGuid(),
-                            QuestionId = model.QuestionId.ToGuid(),
-                        };
-                        await this.repository.AddAsync(newAnswer);
-                        await this.repository.SaveChangesAsync();
-                        result = true;
-                    }
-
-                    return result;
+                    result = true;
                 }
+
+                return result;
             }
-            catch
+            else
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(TakeAnswer)}'. ");
+                var takeExam = await this.repository.GetByIdAsync<TakeExam>(model.TakeExamId.ToGuid());
+
+                if (takeExam != null)
+                {
+                    var newAnswer = new TakeAnswer
+                    {
+                        TakeExamId = model.TakeExamId.ToGuid(),
+                        AnswerOptionId = model.CheckedOptionId.ToGuid(),
+                        QuestionId = model.QuestionId.ToGuid(),
+                    };
+                    await this.repository.AddAsync(newAnswer);
+                    await this.repository.SaveChangesAsync();
+                    result = true;
+                }
+
+                return result;
             }
         }
 
