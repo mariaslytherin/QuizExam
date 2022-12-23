@@ -1,9 +1,9 @@
 ﻿@using QuizExam.Core.Models.AnswerOption
-@model AddAnswerOptionVM
+@model NewAnswerOptionVM
 
 @{
     ViewData["Title"] = "Добавяне";
-    var questionId = Url.ActionContext.RouteData.Values["id"];
+    var questionId = TempData["QuestionId"];
     var examId = TempData["ExamId"];
 }
 
@@ -18,14 +18,14 @@
                     <input type="hidden" name="QuestionId" value="@questionId" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="AnswerOption" class="form-label"></label>
-                        <textarea asp-for="AnswerOption" type="text" class="form-control" placeholder="Въведи опция..." aria-required="true"></textarea>
-                        <span asp-validation-for="AnswerOption" class="text-danger"></span>
+                        <label asp-for="Content" class="form-label"></label>
+                        <textarea asp-for="Content" type="text" class="form-control" placeholder="Въведи опция..." aria-required="true"></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="card-footer">
                     <form method="post">
-                        <button type="submit" asp-action="newOption" asp-controller="answerOption" asp-route-examId="@examId" class="btn btn-primary">Добави</button>
+                        <button type="submit" asp-action="new" asp-controller="answerOption" asp-route-examId="@examId" class="btn btn-primary">Добави</button>
                         <a asp-action="edit" asp-controller="question" asp-route-id="@questionId" asp-route-examId="@examId" class="btn btn-outline-primary" style="width:auto">Назад</a>
                     </form>
                 </div>

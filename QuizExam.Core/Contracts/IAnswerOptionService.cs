@@ -1,16 +1,15 @@
 ﻿using QuizExam.Core.Models.AnswerOption;
-using QuizExam.Infrastructure.Data;
 
 namespace QuizExam.Core.Contracts
 {
     public interface IAnswerOptionService
     {
-        Task<bool> Create(AddAnswerOptionVM model);
+        Task<bool> CreateAsync(NewAnswerOptionVM model);
 
-        IEnumerable<AnswerOptionVM> GetOptions(string questionId);
+        Task<IEnumerable<AnswerOptionVM>> GetOptionsAsync(string questionId);
 
-        Task<bool> Delete(string id);
+        Task<bool> DeleteAsync(string id);
 
-        Task<bool> SetCorrectAnswer(SetCorrectAnswerVM model);
+        Task<bool> SetCorrectAnswerAsync(SetCorrectAnswerVM model);
     }
 }

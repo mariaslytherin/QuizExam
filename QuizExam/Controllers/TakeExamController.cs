@@ -98,15 +98,23 @@ namespace QuizExam.Controllers
 
         public async Task<IActionResult> Continue(string takeId)
         {
-            var takeExam = await this.takeExamService.GetTakeExamById(takeId);
-            var questionOrder = this.questionService.GetLastNotTakenQuestionOrder(takeId, takeExam.ExamId.ToString());
-
-            return RedirectToAction("GetNextQuestion", "Question", new
+            try
             {
-                takeId = takeId,
-                examId = takeExam.ExamId.ToString(),
-                order = questionOrder
-            });
+                var takeExam = await this.takeExamService.GetTakeExamById(takeId);
+                var questionOrder = this.questionService.GetLastNotTakenQuestionOrder(takeId);
+
+                return RedirectToAction("GetNextQuestion", "Question", new
+                {
+                    takeId = takeId,
+                    examId = takeExam.ExamId.ToString(),
+                    order = questionOrder
+                });
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction(nameof(GetTakenExams));
+            }
         }
 
         public async Task<IActionResult> Take(string examId)

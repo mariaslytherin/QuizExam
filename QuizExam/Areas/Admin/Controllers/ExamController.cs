@@ -31,7 +31,7 @@ namespace QuizExam.Areas.Admin.Controllers
             catch
             {
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
         }
 
@@ -85,12 +85,12 @@ namespace QuizExam.Areas.Admin.Controllers
             try
             {
                 await this.examService.CreateAsync(model);
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedExamMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulCreateMessage;
                 return RedirectToAction(nameof(GetExamsList));
             }
             catch
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = ErrorMessageConstants.UnsuccessfulExamCreationMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = ErrorMessageConstants.UnsuccessfulCreateMessage;
                 return RedirectToAction(nameof(GetExamsList));
             }
         }
@@ -211,18 +211,18 @@ namespace QuizExam.Areas.Admin.Controllers
             {
                 if (await this.examService.DeleteAsync(id))
                 {
-                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeletionMessage;
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeleteMessage;
                 }
                 else
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeletionMessage;
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeleteMessage;
                 }
 
                 return RedirectToAction(nameof(GetExamsList));
             }
             catch
             {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeletionMessage;
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeleteMessage;
                 return RedirectToAction(nameof(GetExamsList));
             }
         }

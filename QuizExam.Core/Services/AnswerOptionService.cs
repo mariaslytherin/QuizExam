@@ -1,4 +1,5 @@
-﻿using QuizExam.Core.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using QuizExam.Core.Contracts;
 using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Infrastructure.Data;
@@ -15,87 +16,65 @@ namespace QuizExam.Core.Services
             this.repository = repository;
         }
 
-        public async Task<bool> Create(AddAnswerOptionVM model)
+        public async Task<bool> CreateAsync(NewAnswerOptionVM model)
         {
-            try
-            {
-                var question = await this.repository.GetByIdAsync<Question>(model.QuestionId.ToGuid());
+            var question = await this.repository.GetByIdAsync<Question>(model.QuestionId.ToGuid());
 
-                if (question != null)
+            if (question != null)
+            {
+                var answerOption = new AnswerOption
                 {
-                    var answerOption = new AnswerOption
+                    QuestionId = question.Id,
+                    Content = model.Content,
+                };
+
+                await this.repository.AddAsync(answerOption);
+                await this.repository.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteAsync(string id)
+        {
+            bool result = false;
+            var option = await this.repository.GetByIdAsync<AnswerOption>(id.ToGuid());
+
+            if (option != null)
+            {
+                option.IsDeleted = true;
+                await this.repository.SaveChangesAsync();
+                result = true;
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<AnswerOptionVM>> GetOptionsAsync(string questionId)
+        {
+            var question = await this.repository.GetByIdAsync<Question>(questionId.ToGuid());
+
+            if (question != null)
+            {
+                var answerOptions = await this.repository.All<AnswerOption>()
+                    .Where(a => a.QuestionId == questionId.ToGuid() && !a.IsDeleted)
+                    .Select(a => new AnswerOptionVM
                     {
-                        QuestionId = question.Id,
-                        Content = model.AnswerOption,
-                    };
+                        Id = a.Id.ToString(),
+                        Content = a.Content,
+                        IsCorrect = a.IsCorrect,
+                    })
+                    .ToListAsync();
 
-                    await this.repository.AddAsync(answerOption);
-                    await this.repository.SaveChangesAsync();
+                return answerOptions;
+            }
 
-                    return true;
-                }
-                return false;
-            }
-            catch (NullReferenceException)
-            {
-                throw new InvalidOperationException($"Obejct of type '{nameof(Question)}' was not found. ");
-            }
-            catch
-            {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(AnswerOption)}'. ");
-            }
+            return Enumerable.Empty<AnswerOptionVM>();
         }
 
-        public async Task<bool> Delete(string id)
-        {
-            try
-            {
-                bool result = false;
-                var option = await this.repository.GetByIdAsync<AnswerOption>(id.ToGuid());
-
-                if (option != null)
-                {
-                    option.IsDeleted = true;
-                    await this.repository.SaveChangesAsync();
-                    result = true;
-                }
-
-                return result;
-            }
-            catch (NullReferenceException)
-            {
-                throw new InvalidOperationException($"Obejct of type '{nameof(AnswerOption)}' was not found. ");
-            }
-        }
-
-        public IEnumerable<AnswerOptionVM> GetOptions(string questionId)
-        {
-            try
-            {
-                if (questionId != null)
-                {
-                    var answerOptions = this.repository.All<AnswerOption>()
-                        .Where(a => a.QuestionId == questionId.ToGuid() && !a.IsDeleted)
-                        .Select(a => new AnswerOptionVM
-                        {
-                            Id = a.Id.ToString(),
-                            Content = a.Content,
-                            IsCorrect = a.IsCorrect,
-                        })
-                        .ToList();
-
-                    return answerOptions;
-                }
-
-                return Enumerable.Empty<AnswerOptionVM>();
-            }
-            catch
-            {
-                throw new InvalidOperationException($"Could not get sequence of type '{nameof(AnswerOption)}'. ");
-            }
-        }
-
-        public async Task<bool> SetCorrectAnswer(SetCorrectAnswerVM model)
+        public async Task<bool> SetCorrectAnswerAsync(SetCorrectAnswerVM model)
         {
             try
             {
@@ -121,7 +100,7 @@ namespace QuizExam.Core.Services
             }
             catch
             {
-                throw new InvalidOperationException($"Obejct of type '{nameof(AnswerOption)}' was not found. ");
+                throw new NullReferenceException($"Obejct of type '{nameof(AnswerOption)}' was not found. ");
             }
         }
     }

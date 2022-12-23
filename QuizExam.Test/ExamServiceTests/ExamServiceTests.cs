@@ -38,16 +38,8 @@ namespace QuizExam.Test.ExamServiceTests
         [Test]
         public async Task ActivateNotExistingExamMustReturnFalse()
         {
-            var exam = new Exam()
-            {
-                Title = "Some Title Here",
-                Description = "Some Description Here",
-                MaxScore = 50,
-                SubjectId = Guid.NewGuid(),
-            };
-            
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.ActivateAsync(exam.Id.ToString());
+            bool result = await service.ActivateAsync(Guid.NewGuid().ToString());
 
             Assert.IsFalse(result);
         }
@@ -93,16 +85,8 @@ namespace QuizExam.Test.ExamServiceTests
         [Test]
         public async Task DeactivationOfNotExistingExamMustReturnFalse()
         {
-            var exam = new Exam()
-            {
-                Title = "Some Title Here",
-                Description = "Some Description Here",
-                MaxScore = 50,
-                SubjectId = Guid.NewGuid(),
-            };
-
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.DeactivateAsync(exam.Id.ToString());
+            bool result = await service.DeactivateAsync(Guid.NewGuid().ToString());
 
             Assert.IsFalse(result);
         }
@@ -119,16 +103,8 @@ namespace QuizExam.Test.ExamServiceTests
         [Test]
         public async Task DeletionOfNotExistingExamMustReturnFalse()
         {
-            var exam = new Exam()
-            {
-                Title = "Some Title Here",
-                Description = "Some Description Here",
-                MaxScore = 50,
-                SubjectId = Guid.NewGuid(),
-            };
-
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.DeleteAsync(exam.Id.ToString());
+            bool result = await service.DeleteAsync(Guid.NewGuid().ToString());
 
             Assert.IsFalse(result);
         }
@@ -143,7 +119,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public void EditMethodMustThrowExceptionIfTitleIsNull()
+        public void EditMustThrowExceptionIfTitleIsNull()
         {
             var model = new EditExamVM()
             {
@@ -158,7 +134,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task EditMethodMustReturnFalseIfExamDoesNotExist()
+        public async Task EditMustReturnFalseIfExamDoesNotExist()
         {
             var model = new EditExamVM()
             {
@@ -176,7 +152,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task EditMethodMustReturnTrueIfExamExists()
+        public async Task EditMustReturnTrueIfExamExists()
         {
             var model = new EditExamVM()
             {
@@ -193,7 +169,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task GetAllExamsMethodMustReturnExamListModel()
+        public async Task GetAllExamsMustReturnExamListModel()
         {
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.GetAllExamsAsync(1, 10);
@@ -204,7 +180,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task GetExamsForUserMethodMustReturnZeroListOfExams()
+        public async Task GetExamsForUserMustReturnZeroListOfExams()
         {
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.GetExamsForUserAsync();
@@ -215,7 +191,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task GetExamForEditMethodMustReturnEmptyModelWhenExamDoesNotExist()
+        public async Task GetExamForEditMustReturnEmptyModelWhenExamDoesNotExist()
         {
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.GetExamForEditAsync(Guid.NewGuid().ToString());
@@ -225,7 +201,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task GetExamForEditMethodMustReturnModelWhenExamExists()
+        public async Task GetExamForEditMustReturnModelWhenExamExists()
         {
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.GetExamForEditAsync(ExamId_Math);
@@ -297,7 +273,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task CanActivateMethodMustReturnFalseIfExamIdDoesNotExist()
+        public async Task CanActivateMustReturnFalseIfExamIdDoesNotExist()
         {
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.HasAnyQuestionsAsync(Guid.NewGuid().ToString());
@@ -306,7 +282,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task CanActivateMethodMustReturnFalseIfExamDoesNotHaveQuestions()
+        public async Task CanActivateMustReturnFalseIfExamDoesNotHaveQuestions()
         {
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.HasAnyQuestionsAsync(ExamId_Math);
@@ -315,7 +291,7 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public async Task CanActivateMethodMustReturnTrueIfExamHasQuestions()
+        public async Task CanActivateMustReturnTrueIfExamHasQuestions()
         {
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.HasAnyQuestionsAsync(ExamId_Bg);

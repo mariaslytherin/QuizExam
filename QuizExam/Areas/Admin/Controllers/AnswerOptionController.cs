@@ -19,119 +19,163 @@ namespace QuizExam.Areas.Admin.Controllers
             this.questionService = questionService;
         }
 
-        public async Task<IActionResult> NewOption(string id, string examId)
+        public async Task<IActionResult> New(string questionId, string examId)
         {
-            var options = this.answerService.GetOptions(id).ToList();
-
-            if (options == Enumerable.Empty<AnswerOptionVM>())
+            try
             {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMessage;
-                return RedirectToAction("Edit", "Question", new { id = id, examId = examId });
+                var options = await this.answerService.GetOptionsAsync(questionId);
+
+                if (options == Enumerable.Empty<AnswerOptionVM>())
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                    return RedirectToAction("Edit", "Question", new { id = questionId, examId });
+                }
+                else if (options.ToList().Count == 6)
+                {
+                    TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningCannotAddOptionMessage;
+                    return RedirectToAction("Edit", "Question", new { id = questionId, examId });
+                }
+                else
+                {
+                    TempData["ExamId"] = examId;
+                    TempData["QuestionId"] = questionId;
+
+                    return View("QuestionAnswerOption");
+                }
             }
-            else if (options.Count == 6)
+            catch
             {
-                TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningCannotAddOptionMessage;
-                return RedirectToAction("Edit", "Question", new { id = id, examId = examId });
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("ViewExam", "Exam", new { id = examId });
             }
-
-            TempData["ExamId"] = examId;
-
-            return View("QuestionAnswerOption");
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewOption(AddAnswerOptionVM model, string examId)
+        public async Task<IActionResult> New(NewAnswerOptionVM model, string examId)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfullAddOptionMessage;
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfullAddMessage;
                     return View("QuestionAnswerOption");
                 }
 
-                if (await this.answerService.Create(model))
+                if (await this.answerService.CreateAsync(model))
                 {
-                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedOptionMessage;
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulAddMessage;
                 }
                 else
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfullAddOptionMessage;
-                    return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = examId });
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfullAddMessage;
                 }
 
-                return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = examId });
+                return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId });
             }
             catch
             {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
-                return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = examId });
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfullAddMessage;
+                return RedirectToAction("ViewExam", "Exam", new { id = examId });
             }
         }
 
         public async Task<IActionResult> SetCorrectAnswer(string id, string examId)
         {
-            var options = this.answerService.GetOptions(id);
-            var question = await this.questionService.GetQuestionById(id);
-
-            if (options != Enumerable.Empty<AnswerOptionVM>() || question != null)
+            try
             {
-                TempData["ExamId"] = examId;
-                TempData["QuestionContent"] = question.Content;
+                var options = await this.answerService.GetOptionsAsync(id);
+                var question = await this.questionService.GetQuestionByIdAsync(id);
 
-                var model = new SetCorrectAnswerVM
+                if (options.Count() < 2)
                 {
-                    QuestionId = question.Id.ToString(),
-                    Options = options.ToList()
-                };
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorNotEnoughAnswerOptionsMessage;
+                    return RedirectToAction("Edit", "Question", new { id, examId });
+                }
 
-                return View("SetCorrectAnswerOptions", model);
+                if (options != Enumerable.Empty<AnswerOptionVM>() || question != null)
+                {
+                    TempData["ExamId"] = examId;
+                    TempData["QuestionContent"] = question.Content;
+
+                    var model = new SetCorrectAnswerVM
+                    {
+                        QuestionId = question.Id.ToString(),
+                        Options = options.ToList(),
+                    };
+
+                    return View("SetCorrectAnswerOptions", model);
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                    return RedirectToAction("Edit", "Question", new { id, examId });
+                }
             }
-            else
+            catch
             {
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
-                return RedirectToAction("Edit", "Question", new { id = id, examId = examId });
+                return RedirectToAction("Edit", "Question", new { id, examId });
             }
         }
 
         [HttpPost]
         public async Task<IActionResult> SetCorrectAnswer(SetCorrectAnswerVM model, string examId)
         {
-            var answerId = model.CorrectAnswerId;
-
-            if (answerId == null)
+            try
             {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
-                return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId = examId });
-            }
+                if (!ModelState.IsValid)
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
+                    return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId });
+                }
 
-            if (await this.answerService.SetCorrectAnswer(model))
+                if (model.CorrectAnswerId == null)
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
+                    return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId });
+                }
+
+                if (await this.answerService.SetCorrectAnswerAsync(model))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulRecordMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                }
+
+                TempData["ExamId"] = examId;
+
+                return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId });
+            }
+            catch
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedCorrectAnswerMessage;
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("ViewExam", "Exam", new { id = examId });
             }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
-
-            TempData["ExamId"] = examId;
-
-            return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = examId });
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(string id, string questionId, string examId)
         {
-            if (await this.answerService.Delete(id))
+            try
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyDeletedOptionMessage;
-            }
-            else
-            {
-                throw new Exception("An error appeard!");
-            }
+                if (await this.answerService.DeleteAsync(id))
+                {
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeleteMessage;
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeleteMessage;
+                }
 
-            return RedirectToAction("Edit", "Question", new { id = questionId, examId = examId });
+                return RedirectToAction("Edit", "Question", new { id = questionId, examId });
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulDeleteMessage;
+                return RedirectToAction("ViewExam", "Exam", new { id = examId });
+            }
         }
     }
 }

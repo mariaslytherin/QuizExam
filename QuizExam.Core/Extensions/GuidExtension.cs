@@ -9,7 +9,14 @@
         /// <returns>A new System.Guid structure that contains the value that was parsed.</returns>
         public static Guid ToGuid(this string guid)
         {
-            return String.IsNullOrEmpty(guid) ? Guid.Empty : Guid.Parse(guid.ToLower());
+            try
+            {
+                return String.IsNullOrEmpty(guid) ? Guid.Empty : Guid.Parse(guid.ToLower());
+            }
+            catch
+            {
+                return Guid.Empty;
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ namespace QuizExam.Controllers
 
             if (await this.takeAnswerService.AddAnswer(model, examId))
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedCorrectAnswerMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulRecordMessage;
             }
             else
             {

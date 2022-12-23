@@ -10,25 +10,15 @@
 
         public const string SuccessfulDeactivationMessage = "Успешно деактивиране!";
 
-        public const string SuccessfulDeletionMessage = "Успешно изтриване!";
+        public const string SuccessfulAddMessage = "Успешно добавяне!";
+
+        public const string SuccessfulCreateMessage = "Успешно създаване!";
+
+        public const string SuccessfulDeleteMessage = "Успешно изтриване!";
+
+        public const string SuccessfulRecordMessage = "Успешен запис!";
 
         public const string SuccessfulAddedRoleMessage = "Успешно добавихте потребителя към роля!";
-
-        public const string SuccessfullyAddedSubjectMessage = "Успешно добавихте предмет!";
-
-        public const string SuccessfullyDeletedSubjectMessage = "Успешно изтрихте предмет!";
-
-        public const string SuccessfullyAddedExamMessage = "Успешно създадохте изпит!";
-
-        public const string SuccessfullyAddedQuestionMessage = "Успешно създадохте въпрос!";
-
-        public const string SuccessfullyAddedOptionMessage = "Успешно добавихте опция!";
-
-        public const string SuccessfullyDeletedQuestionMessage = "Успешно изтрихте въпрос!";
-
-        public const string SuccessfullyDeletedOptionMessage = "Успешно изтрихте опция за отговор!";
-
-        public const string SuccessfullyAddedCorrectAnswerMessage = "Успешно записахте верен отговор!";
     }
     public static class ErrorMessageConstants
     {
@@ -38,29 +28,23 @@
 
         public const string UnsuccessfulEditMessage = "Неуспешна редакция!";
 
-        public const string UnsuccessfulCreationMessage = "Неуспешно създаване!";
+        public const string UnsuccessfulCreateMessage = "Неуспешно създаване!";
 
-        public const string UnsuccessfulDeletionMessage = "Неуспешно изтриване!";
+        public const string UnsuccessfulDeleteMessage = "Неуспешно изтриване!";
 
-        public const string UnsuccessfulExamCreationMessage = "Не успяхме да създадем този изпит!";
+        public const string UnsuccessfullAddMessage = "Неуспешно добавяне!";
 
-        public const string UnsuccessfulAddQuestionMessage = "Неуспешно създаване на въпрос!";
+        public const string UnsuccessfulActivationMessage = "Неуспешно активиране!";
 
-        public const string UnsuccessfullAddOptionMessage = "Неуспешно добавяне на опция!";
+        public const string UnsuccessfulDeactivationMessage = "Неуспешно активиране!";
 
         public const string ErrorMustCheckAnswerMessage = "Отбележете 1 верен отговор на въпроса!";
-
-        public const string ErrorMustCheckOnlyOneMessage = "Въпросът може да има само 1 верен отговор!";
 
         public const string ErrorExamNotFoundMessage = "Не успяхме да намерим този изпит!";
 
         public const string ErrorExamNotActiveAnymoreMessage = "Изпитът вече не е активен!";
 
         public const string ErrorNotEnoughAnswerOptionsMessage = "Добавете поне 2 възможни опции за отговор!";
-
-        public const string UnsuccessfulActivationMessage = "Неуспешно активиране!";
-
-        public const string UnsuccessfulDeactivationMessage = "Неуспешно активиране!";
     }
 
     public static class WarningMessageConstants

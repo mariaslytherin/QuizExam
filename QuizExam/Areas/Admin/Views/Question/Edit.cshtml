@@ -31,8 +31,8 @@
                         <span asp-validation-for="Points" class="text-danger"></span>
                     </div>
                     <div class="row col-sm-4">
-                        <a asp-action="newOption" asp-controller="answerOption" asp-route-id="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Добави</a>
-                        <a asp-action="SetCorrectAnswer" asp-controller="answerOption" asp-route-id="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Марк</a>
+                        <a asp-action="new" asp-controller="answerOption" asp-route-questionId="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Добави</a>
+                        <a asp-action="setCorrectAnswer" asp-controller="answerOption" asp-route-id="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Марк</a>
                     </div>
                     <div class="card-body table-responsive p-0" style="overflow: inherit !important">
                         <table class="table table-hover text-wrap">

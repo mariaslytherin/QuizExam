@@ -26,13 +26,13 @@ namespace QuizExam.Areas.Admin.Controllers
             try
             {
                 await this.subjectService.CreateAsync(model);
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfullyAddedSubjectMessage;
+                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulAddMessage;
                 
                 return RedirectToAction(nameof(GetSubjectsList));
             }
             catch
             {
-                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulCreationMessage;
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulCreateMessage;
                 return RedirectToAction(nameof(GetSubjectsList));
             }
         }
