@@ -45,6 +45,8 @@
         public const string ErrorExamNotActiveAnymoreMessage = "Изпитът вече не е активен!";
 
         public const string ErrorNotEnoughAnswerOptionsMessage = "Добавете поне 2 възможни опции за отговор!";
+
+        public const string ErrorExamAlreadyStartedMessage = "Вече сте започнали да решавате този изпит!";
     }
 
     public static class WarningMessageConstants

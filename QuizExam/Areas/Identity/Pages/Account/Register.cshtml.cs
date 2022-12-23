@@ -155,6 +155,10 @@ namespace QuizExam.Areas.Identity.Pages.Account
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
+                    else if (!_userManager.Options.SignIn.RequireConfirmedAccount)
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);

@@ -6,16 +6,12 @@ using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Services;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Repositories;
+using QuizExam.Test.Constants;
 
 namespace QuizExam.Test.ExamServiceTests
 {
     public class ExamServiceTests
     {
-        private const string ExamId_Math = "93b3c9bb-93f9-4755-827a-b0bf9964270d";
-        private const string ExamId_Bg = "95297ee9-743a-4a1a-a641-2c0bd33e3254";
-        private const string SubjectId_Math = "b09225a6-6ff5-4aff-b073-492be59c4ff6";
-        private const string SubjectId_Bg = "dd13f3d1-d5d3-4d2e-9f20-7524485f7e3b";
-
         private ServiceProvider serviceProvider;
         private InMemoryDbContext dbContext;
 
@@ -48,7 +44,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task ActivateExistingExamMustReturnTrue()
         {
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.ActivateAsync(ExamId_Math);
+            bool result = await service.ActivateAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
             Assert.IsTrue(result);
         }
@@ -60,7 +56,7 @@ namespace QuizExam.Test.ExamServiceTests
             {
                 Description = "Some Description",
                 MaxScore = 0,
-                SubjectId = SubjectId_Math
+                SubjectId = UniqueIdentifiersTestConstants.SubjectId_Math
             };
 
             var service = serviceProvider.GetService<IExamService>();
@@ -95,7 +91,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task DeactivationOfExistingExamMustReturnTrue()
         {
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.DeactivateAsync(ExamId_Math);
+            bool result = await service.DeactivateAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
             Assert.IsTrue(result);
         }
@@ -113,7 +109,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task DeletionOfExistingExamMustReturnTrue()
         {
             var service = serviceProvider.GetService<IExamService>();
-            bool result = await service.DeleteAsync(ExamId_Math);
+            bool result = await service.DeleteAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
             Assert.IsTrue(result);
         }
@@ -123,7 +119,7 @@ namespace QuizExam.Test.ExamServiceTests
         {
             var model = new EditExamVM()
             {
-                Id = ExamId_Math,
+                Id = UniqueIdentifiersTestConstants.ExamId_Math,
                 Description = "Some Description",
                 MaxScore = 100,
                 SubjectName = "Subject Name",
@@ -156,7 +152,7 @@ namespace QuizExam.Test.ExamServiceTests
         {
             var model = new EditExamVM()
             {
-                Id = ExamId_Math,
+                Id = UniqueIdentifiersTestConstants.ExamId_Math,
                 Title = "Some Title Here",
                 Description = "Some Description Here",
                 MaxScore = 50,
@@ -204,7 +200,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamForEditMustReturnModelWhenExamExists()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamForEditAsync(ExamId_Math);
+            var result = await service.GetExamForEditAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
             Assert.That(result, Is.TypeOf<EditExamVM>());
             Assert.IsNotNull(result.Id);
@@ -224,7 +220,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamForViewMustReturnEmptyQuestionsListWhenExamDoesNotHaveQuestions()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamForViewAsync(ExamId_Math);
+            var result = await service.GetExamForViewAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
             Assert.That(result, Is.TypeOf<ViewExamVM>());
             Assert.That(result.Questions.Count(), Is.EqualTo(0));
@@ -234,7 +230,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamForViewMustReturnFilledModelIfExamHasQuestions()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamForViewAsync(ExamId_Bg);
+            var result = await service.GetExamForViewAsync(UniqueIdentifiersTestConstants.ExamId_Bg);
 
             Assert.That(result, Is.TypeOf<ViewExamVM>());
             Assert.That(result.Questions.Count(), Is.EqualTo(1));
@@ -254,7 +250,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamInfoMustReturnFilledModelWithZeroQuestionsCount()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamInfoAsync(ExamId_Math);
+            var result = await service.GetExamInfoAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
             Assert.That(result, Is.TypeOf<ExamVM>());
             Assert.IsNotNull(result.Id);
@@ -265,7 +261,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamInfoMustReturnFilledModelWithQuestionsMoreThanZero()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamInfoAsync(ExamId_Bg);
+            var result = await service.GetExamInfoAsync(UniqueIdentifiersTestConstants.ExamId_Bg);
 
             Assert.That(result, Is.TypeOf<ExamVM>());
             Assert.IsNotNull(result.Id);
@@ -285,7 +281,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task CanActivateMustReturnFalseIfExamDoesNotHaveQuestions()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.HasAnyQuestionsAsync(ExamId_Math);
+            var result = await service.HasAnyQuestionsAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
             Assert.IsFalse(result);
         }
@@ -294,7 +290,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task CanActivateMustReturnTrueIfExamHasQuestions()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.HasAnyQuestionsAsync(ExamId_Bg);
+            var result = await service.HasAnyQuestionsAsync(UniqueIdentifiersTestConstants.ExamId_Bg);
 
             Assert.IsTrue(result);
         }
@@ -312,7 +308,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task QuestionsPointsSumEqualsMaxScoreMustReturnTrueIfPointsAreEqual()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.QuestionsPointsSumEqualsMaxScoreAsync(ExamId_Bg);
+            var result = await service.QuestionsPointsSumEqualsMaxScoreAsync(UniqueIdentifiersTestConstants.ExamId_Bg);
 
             Assert.True(result);
         }
@@ -329,12 +325,12 @@ namespace QuizExam.Test.ExamServiceTests
             {
                 new Subject()
                 {
-                    Id = SubjectId_Math.ToGuid(),
+                    Id = UniqueIdentifiersTestConstants.SubjectId_Math.ToGuid(),
                     Name = "Математика",
                 },
                 new Subject()
                 {
-                    Id = SubjectId_Bg.ToGuid(),
+                    Id = UniqueIdentifiersTestConstants.SubjectId_Bg.ToGuid(),
                     Name = "Български език и литература"
                 }
             };
@@ -343,31 +339,29 @@ namespace QuizExam.Test.ExamServiceTests
             {
                 new Exam()
                 {
-                    Id = ExamId_Math.ToGuid(),
+                    Id = UniqueIdentifiersTestConstants.ExamId_Math.ToGuid(),
                     Title = "Математика (12 клас)",
                     Description = "Тест по математика за ученици в 12 клас.",
                     MaxScore = 100,
-                    SubjectId = SubjectId_Math.ToGuid(),
+                    SubjectId = UniqueIdentifiersTestConstants.SubjectId_Math.ToGuid(),
                 },
                 new Exam()
                 {
-                    Id = ExamId_Bg.ToGuid(),
+                    Id = UniqueIdentifiersTestConstants.ExamId_Bg.ToGuid(),
                     Title = "Български език и литература (12 клас)",
                     Description = "Тест по БЕЛ за ученици в 12 клас.",
                     MaxScore = 2,
-                    SubjectId = SubjectId_Bg.ToGuid(),
+                    SubjectId = UniqueIdentifiersTestConstants.SubjectId_Bg.ToGuid(),
                     IsActive = true,
                 }
             };
 
-            var questionId = "32515538-e217-4ae6-ab3b-61a44617588d";
-
             var question = new Question()
             {
-                Id = questionId.ToGuid(),
+                Id = UniqueIdentifiersTestConstants.QuestionId.ToGuid(),
                 Content = "А, Б, В...?",
                 Points = 2,
-                ExamId = ExamId_Bg.ToGuid(),
+                ExamId = UniqueIdentifiersTestConstants.ExamId_Bg.ToGuid(),
             };
 
             await repo.AddRangeAsync(subjects);

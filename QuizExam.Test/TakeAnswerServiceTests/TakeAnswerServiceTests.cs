@@ -4,25 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.TakeQuestion;
-using QuizExam.Core.Models.User;
 using QuizExam.Core.Services;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Identity;
 using QuizExam.Infrastructure.Data.Repositories;
+using QuizExam.Test.Constants;
 
 namespace QuizExam.Test.TakeAnswerServiceTests
 {
     public class TakeAnswerServiceTests
     {
-        private const string ExamId = "95297ee9-743a-4a1a-a641-2c0bd33e3254";
-        private const string SubjectId = "dd13f3d1-d5d3-4d2e-9f20-7524485f7e3b";
-        private const string QuestionId = "32515538-e217-4ae6-ab3b-61a44617588d";
-        private const string TakeId = "423967e0-d04b-4f7c-a324-e94972d46abc";
-        private const string AOptionId = "66bc1977-1758-43d2-a32f-1397777775f2";
-        private const string BOptionId = "b650ef7a-3146-4893-a634-4de3e75fa668";
-        private const string UserId = "851d1908-0d26-4b4c-9465-584e3aa56aed";
-        private const string RoleId = "984528b8-c0dd-4a09-884e-b65d3c97fcef";
-
         private ServiceProvider serviceProvider;
         private InMemoryDbContext dbContext;
 
@@ -48,15 +39,15 @@ namespace QuizExam.Test.TakeAnswerServiceTests
             var model = new TakeQuestionVM()
             {
                 QuestionId = Guid.NewGuid().ToString(),
-                TakeExamId = TakeId,
-                CheckedOptionId = AOptionId,
-                ExamId = ExamId,
+                TakeExamId = UniqueIdentifiersTestConstants.TakeId,
+                CheckedOptionId = UniqueIdentifiersTestConstants.AOptionId,
+                ExamId = UniqueIdentifiersTestConstants.ExamId_Bg,
                 Content = "Some Content"
             };
 
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
 
-            Assert.CatchAsync<DbUpdateException>(async () => await service.AddAnswer(model, ExamId));
+            Assert.CatchAsync<DbUpdateException>(async () => await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg));
         }
 
         [Test]
@@ -64,15 +55,15 @@ namespace QuizExam.Test.TakeAnswerServiceTests
         {
             var model = new TakeQuestionVM()
             {
-                QuestionId = QuestionId,
+                QuestionId = UniqueIdentifiersTestConstants.QuestionId,
                 TakeExamId = Guid.NewGuid().ToString(),
-                CheckedOptionId = AOptionId,
-                ExamId = ExamId,
+                CheckedOptionId = UniqueIdentifiersTestConstants.AOptionId,
+                ExamId = UniqueIdentifiersTestConstants.ExamId_Bg,
                 Content = "Some Content"
             };
 
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
-            var result = await service.AddAnswer(model, ExamId);
+            var result = await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg);
 
             Assert.IsFalse(result);
         }
@@ -82,15 +73,15 @@ namespace QuizExam.Test.TakeAnswerServiceTests
         {
             var model = new TakeQuestionVM()
             {
-                QuestionId = QuestionId,
-                TakeExamId = TakeId,
-                CheckedOptionId = AOptionId,
-                ExamId = ExamId,
+                QuestionId = UniqueIdentifiersTestConstants.QuestionId,
+                TakeExamId = UniqueIdentifiersTestConstants.TakeId,
+                CheckedOptionId = UniqueIdentifiersTestConstants.AOptionId,
+                ExamId = UniqueIdentifiersTestConstants.ExamId_Bg,
                 Content = "Some Content"
             };
 
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
-            var result = await service.AddAnswer(model, ExamId);
+            var result = await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg);
 
             Assert.IsTrue(result);
         }
@@ -100,15 +91,15 @@ namespace QuizExam.Test.TakeAnswerServiceTests
         {
             var model = new TakeQuestionVM()
             {
-                QuestionId = QuestionId,
-                TakeExamId = TakeId,
-                CheckedOptionId = BOptionId,
-                ExamId = ExamId,
+                QuestionId = UniqueIdentifiersTestConstants.QuestionId,
+                TakeExamId = UniqueIdentifiersTestConstants.TakeId,
+                CheckedOptionId = UniqueIdentifiersTestConstants.BOptionId,
+                ExamId = UniqueIdentifiersTestConstants.ExamId_Bg,
                 Content = "Some Content"
             };
 
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
-            var result = await service.AddAnswer(model, ExamId);
+            var result = await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg);
 
             Assert.IsTrue(result);
         }
@@ -118,15 +109,15 @@ namespace QuizExam.Test.TakeAnswerServiceTests
         {
             var model = new TakeQuestionVM()
             {
-                QuestionId = QuestionId,
-                TakeExamId = TakeId,
-                CheckedOptionId = BOptionId,
-                ExamId = ExamId,
+                QuestionId = UniqueIdentifiersTestConstants.QuestionId,
+                TakeExamId = UniqueIdentifiersTestConstants.TakeId,
+                CheckedOptionId = UniqueIdentifiersTestConstants.BOptionId,
+                ExamId = UniqueIdentifiersTestConstants.ExamId_Bg,
                 Content = "Some Content"
             };
 
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
-            var result = await service.AddAnswer(model, ExamId);
+            var result = await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg);
 
             Assert.IsTrue(result);
         }
@@ -136,14 +127,14 @@ namespace QuizExam.Test.TakeAnswerServiceTests
         {
             var model = new TakeQuestionVM()
             {
-                QuestionId = QuestionId,
+                QuestionId = UniqueIdentifiersTestConstants.QuestionId,
                 TakeExamId = Guid.NewGuid().ToString(),
-                ExamId = ExamId,
+                ExamId = UniqueIdentifiersTestConstants.ExamId_Bg,
                 Content = "Some Content"
             };
 
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
-            var result = await service.AddAnswer(model, ExamId);
+            var result = await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg);
 
             Assert.IsFalse(result);
         }
@@ -158,38 +149,38 @@ namespace QuizExam.Test.TakeAnswerServiceTests
         {
             var subject = new Subject()
             {
-                Id = SubjectId.ToGuid(),
+                Id = UniqueIdentifiersTestConstants.SubjectId_Bg.ToGuid(),
                 Name = "Български език и литература"
             };
 
             var exam = new Exam()
             {
-                Id = ExamId.ToGuid(),
+                Id = UniqueIdentifiersTestConstants.ExamId_Bg.ToGuid(),
                 Title = "Български език и литература (12 клас)",
                 Description = "Тест по БЕЛ за ученици в 12 клас.",
                 MaxScore = 2,
-                SubjectId = SubjectId.ToGuid(),
+                SubjectId = UniqueIdentifiersTestConstants.SubjectId_Bg.ToGuid(),
                 IsActive = true,
             };
 
             var question = new Question()
             {
-                Id = QuestionId.ToGuid(),
+                Id = UniqueIdentifiersTestConstants.QuestionId.ToGuid(),
                 Content = "А, Б, В...?",
                 Points = 2,
-                ExamId = ExamId.ToGuid(),
+                ExamId = UniqueIdentifiersTestConstants.ExamId_Bg.ToGuid(),
                 Answers = new List<AnswerOption>()
                 {
                     new AnswerOption()
                     {
-                        Id = AOptionId.ToGuid(),
-                        QuestionId = QuestionId.ToGuid(),
+                        Id = UniqueIdentifiersTestConstants.AOptionId.ToGuid(),
+                        QuestionId = UniqueIdentifiersTestConstants.QuestionId.ToGuid(),
                         Content = "Some Option"
                     },
                     new AnswerOption()
                     {
-                        Id = BOptionId.ToGuid(),
-                        QuestionId = QuestionId.ToGuid(),
+                        Id = UniqueIdentifiersTestConstants.BOptionId.ToGuid(),
+                        QuestionId = UniqueIdentifiersTestConstants.QuestionId.ToGuid(),
                         Content = "Some Option"
                     }
                 },
@@ -198,13 +189,13 @@ namespace QuizExam.Test.TakeAnswerServiceTests
             var role = new IdentityRole
             {
                 Name = "Admin",
-                Id = RoleId,
-                ConcurrencyStamp = RoleId
+                Id = UniqueIdentifiersTestConstants.RoleId,
+                ConcurrencyStamp = UniqueIdentifiersTestConstants.RoleId
             };
 
             var user = new ApplicationUser
             {
-                Id = UserId,
+                Id = UniqueIdentifiersTestConstants.UserId,
                 Email = "user@user.com",
                 NormalizedEmail = "USER@USER.COM",
                 EmailConfirmed = true,
@@ -215,16 +206,16 @@ namespace QuizExam.Test.TakeAnswerServiceTests
 
             var take = new TakeExam()
             {
-                Id = TakeId.ToGuid(),
-                UserId = UserId,
-                ExamId = ExamId.ToGuid(),
+                Id = UniqueIdentifiersTestConstants.TakeId.ToGuid(),
+                UserId = UniqueIdentifiersTestConstants.UserId,
+                ExamId = UniqueIdentifiersTestConstants.ExamId_Bg.ToGuid(),
                 TakeAnswers = new List<TakeAnswer>()
                 {
                     new TakeAnswer()
                     {
-                        TakeExamId = TakeId.ToGuid(),
-                        QuestionId = QuestionId.ToGuid(),
-                        AnswerOptionId = AOptionId.ToGuid()
+                        TakeExamId = UniqueIdentifiersTestConstants.TakeId.ToGuid(),
+                        QuestionId = UniqueIdentifiersTestConstants.QuestionId.ToGuid(),
+                        AnswerOptionId = UniqueIdentifiersTestConstants.AOptionId.ToGuid()
                     }
                 }
             };

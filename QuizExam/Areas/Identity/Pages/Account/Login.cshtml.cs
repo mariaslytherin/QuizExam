@@ -128,7 +128,7 @@ namespace QuizExam.Areas.Identity.Pages.Account
 
                     if (await _signInManager.UserManager.IsInRoleAsync(user, "Administrator"))
                     {
-                        return RedirectToAction("Index", "Home", new { area = "Admin" });
+                        return RedirectToAction("GetExamsList", "Exam", new { area = "Admin" });
                     }
 
                     return Redirect(returnUrl);

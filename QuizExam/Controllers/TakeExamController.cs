@@ -39,44 +39,55 @@ namespace QuizExam.Controllers
             catch
             {
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
-                return Ok();
+                return RedirectToAction(nameof(GetTakenExams));
             }
         }
 
         public async Task<IActionResult> GetTakenExams(int p = 1, int s = 10)
         {
-            var user = await this.userManager.GetUserAsync(User);
-            var takes = await this.takeExamService.TakenExams(user.Id, p, s);
+            try
+            {
+                var user = await this.userManager.GetUserAsync(User);
+                var takes = await this.takeExamService.TakenExams(user.Id, p, s);
 
-            return View("Taken", takes);
+                return View("Taken", takes);
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public async Task<IActionResult> GetUncompletedExams(int p = 1, int s = 10)
         {
-            var user = await this.userManager.GetUserAsync(User);
-            var exams = await this.takeExamService.UncompletedExams(user.Id, p, s);
+            try
+            {
+                var user = await this.userManager.GetUserAsync(User);
+                var exams = await this.takeExamService.UncompletedExams(user.Id, p, s);
 
-            return View("Uncompleted", exams);
-        }
-
-        public IActionResult Confirm()
-        {
-            return PartialView("_ConfirmPartial");
+                return View("Uncompleted", exams);
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public async Task<IActionResult> Start(string examId)
         {
-            var user = await this.userManager.GetUserAsync(User);
-            var takeExists = await this.takeExamService.TakeExists(user.Id, examId);
-
-            if (takeExists)
-            {
-                TempData[ErrorMessageConstants.ErrorMessage] = "Вече сте започнали да решавате този изпит!";
-                return RedirectToAction("Index", "Home");
-            }
-
             try
             {
+                var user = await this.userManager.GetUserAsync(User);
+                var takeExists = await this.takeExamService.TakeExists(user.Id, examId);
+
+                if (takeExists)
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamAlreadyStartedMessage;
+                    return RedirectToAction("Index", "Home");
+                }
+
                 var exam = await this.examService.GetExamInfoAsync(examId);
 
                 if (exam != null)
@@ -89,7 +100,7 @@ namespace QuizExam.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
-            catch (Exception)
+            catch
             {
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
                 return RedirectToAction("Index", "Home");
@@ -113,7 +124,7 @@ namespace QuizExam.Controllers
             catch
             {
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
-                return RedirectToAction(nameof(GetTakenExams));
+                return RedirectToAction(nameof(GetUncompletedExams));
             }
         }
 
@@ -133,13 +144,14 @@ namespace QuizExam.Controllers
                         return RedirectToAction("GetNextQuestion", "Question", new { takeId = takeId, examId = examId, order = questionOrder });
                     }
                 }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
 
-            return View();
+                return View();
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
+                return RedirectToAction(nameof(GetTakenExams));
+            }
         }
 
         public async Task<IActionResult> Finish(string takeExamId)

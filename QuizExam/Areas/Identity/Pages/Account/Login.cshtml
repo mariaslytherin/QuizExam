@@ -13,13 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewData["Title"]</title>
 
-    <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
-    <!-- icheck bootstrap -->
     <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-    <!-- Theme style -->
     <link rel="stylesheet" href="~/css/adminlte.min.css">
 </head>
 <body class="hold-transition login-page">
@@ -27,7 +23,6 @@
         <div class="login-logo">
             <a href="/">QuizExam</a>
         </div>
-        <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Влезте в профила си, за да започнете да се упражнявате</p>
@@ -53,25 +48,11 @@
                                 </label>
                             </div>
                         </div>
-                        <!-- /.col -->
                         <div class="col-4">
                             <button id="login-submit" type="submit" class="btn btn-primary btn-block">Вход</button>
                         </div>
-                        <!-- /.col -->
                     </div>
                 </form>
-
-                @*<div class="social-auth-links text-center mb-3">
-                    <p>- OR -</p>
-                    <a href="#" class="btn btn-block btn-primary">
-                        <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-                    </a>
-                    <a href="#" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-                    </a>
-                </div>*@
-                <!-- /.social-auth-links -->
-
                 <p class="mb-1">
                     <a id="forgot-password" asp-page="./ForgotPassword">Забравена парола?</a>
                 </p>
@@ -79,49 +60,11 @@
                     <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Регистриране на потребител</a>
                 </p>
             </div>
-            <!-- /.login-card-body -->
         </div>
     </div>
-    <!-- /.login-box -->
-    <!-- jQuery -->
     <script src="~/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
     <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
     <script src="~/js/adminlte.min.js"></script>
     <partial name="_ValidationScriptsPartial" />
 </body>
 </html>
-
-    @*<div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                                article
-                                about setting up this ASP.NET application to support logging in via external services
-                            </a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>*@

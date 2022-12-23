@@ -143,10 +143,10 @@ namespace QuizExam.Areas.Admin.Controllers
 
         public async Task<IActionResult> CreateRole()
         {
-            // await roleManager.CreateAsync(new IdentityRole()
-            // {
-            //     Name = "Student"
-            // });
+            await roleManager.CreateAsync(new IdentityRole()
+            {
+                Name = "Administrator"
+            });
 
             return Ok();
         }

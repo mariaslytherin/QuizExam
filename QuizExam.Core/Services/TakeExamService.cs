@@ -26,33 +26,26 @@ namespace QuizExam.Core.Services
 
         public async Task<Guid> CreateTake(string userId, string examId)
         {
-            try
-            {
-                var isUser = await this.repository.GetByIdAsync<ApplicationUser>(userId);
-                var isExam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(examId));
+            var isUser = await this.repository.GetByIdAsync<ApplicationUser>(userId);
+            var isExam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(examId));
 
-                if (isUser != null && isExam != null)
+            if (isUser != null && isExam != null)
+            {
+                TakeExam newTake = new TakeExam()
                 {
-                    TakeExam newTake = new TakeExam()
-                    {
-                        UserId = userId,
-                        ExamId = examId.ToGuid(),
-                        Status = TakeExamStatusEnum.Started,
-                        ModifyDate = DateTime.Now,
-                    };
+                    UserId = userId,
+                    ExamId = examId.ToGuid(),
+                    Status = TakeExamStatusEnum.Started,
+                    ModifyDate = DateTime.Now,
+                };
 
-                    await this.repository.AddAsync(newTake);
-                    await this.repository.SaveChangesAsync();
+                await this.repository.AddAsync(newTake);
+                await this.repository.SaveChangesAsync();
 
-                    return newTake.Id;
-                }
-
-                return Guid.Empty;
+                return newTake.Id;
             }
-            catch
-            {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(TakeExam)}'. ");
-            }
+
+            return Guid.Empty;
         }
 
         public async Task<TakeExam> GetTakeExamById(string takeId)
@@ -139,7 +132,7 @@ namespace QuizExam.Core.Services
 
             model.TotalRecords = exams.Count();
 
-            if(size.HasValue && page.HasValue)
+            if (size.HasValue && page.HasValue)
             {
                 exams = exams
                     .OrderBy(e => e.Title)
@@ -154,67 +147,60 @@ namespace QuizExam.Core.Services
 
         public async Task<TakeExamVM> GetTakeForView(string takeExamId)
         {
-            try
+            var take = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(takeExamId));
+            var exam = await this.repository.GetByIdAsync<Exam>(take.ExamId);
+            var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
+
+            if (take != null)
             {
-                var take = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(takeExamId));
-                var exam = await this.repository.GetByIdAsync<Exam>(take.ExamId);
-                var subject = await this.repository.GetByIdAsync<Subject>(exam.SubjectId);
-
-                if (take != null)
-                {
-                    var questions = await this.repository.All<Question>().Where(q => q.ExamId == exam.Id && !q.IsDeleted)
-                        .OrderBy(q => q.CreateDate)
-                        .Select(q => new QuestionExamVM
-                        {
-                            Content = q.Content,
-                            Points = q.Points,
-                            Rule = q.Rule,
-                            AnswerOptions = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
-                                .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == take.Id),
-                                    option => option.Id,
-                                    answer => answer.AnswerOptionId,
-                                    (option, answer) => new
-                                    {
-                                        option,
-                                        answer,
-                                    })
-                                .SelectMany(
-                                    x => x.answer.DefaultIfEmpty(),
-                                    (option, answer) => new AnswerOptionVM
-                                    {
-                                        Id = answer.Id.ToString(),
-                                        Content = option.option.Content,
-                                        IsCorrect = option.option.IsCorrect,
-                                    }).ToList(),
-                        }).ToListAsync();
-
-                    var resultScore = questions.Where(q => q.AnswerOptions.Any(a => a.IsCorrect && a.Id is not null)).Select(q => q.Points).Sum();
-
-                    return new TakeExamVM
+                var questions = await this.repository.All<Question>().Where(q => q.ExamId == exam.Id && !q.IsDeleted)
+                    .OrderBy(q => q.CreateDate)
+                    .Select(q => new QuestionExamVM
                     {
-                        Id = take.Id.ToString(),
-                        Title = exam.Title,
-                        SubjectName = subject.Name,
-                        MaxScore = exam.MaxScore,
-                        ResultScore = resultScore,
-                        Questions = questions,
-                    };
-                }
-                else
+                        Content = q.Content,
+                        Points = q.Points,
+                        Rule = q.Rule,
+                        AnswerOptions = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
+                            .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == take.Id),
+                                option => option.Id,
+                                answer => answer.AnswerOptionId,
+                                (option, answer) => new
+                                {
+                                    option,
+                                    answer,
+                                })
+                            .SelectMany(
+                                x => x.answer.DefaultIfEmpty(),
+                                (option, answer) => new AnswerOptionVM
+                                {
+                                    Id = answer.Id.ToString(),
+                                    Content = option.option.Content,
+                                    IsCorrect = option.option.IsCorrect,
+                                }).ToList(),
+                    }).ToListAsync();
+
+                var resultScore = questions.Where(q => q.AnswerOptions.Any(a => a.IsCorrect && a.Id is not null)).Select(q => q.Points).Sum();
+
+                return new TakeExamVM
                 {
-                    return new TakeExamVM
-                    {
-                        Id = exam.Id.ToString(),
-                        Title = exam.Title,
-                        SubjectName = subject.Name,
-                        MaxScore = exam.MaxScore,
-                        Questions = new List<QuestionExamVM>(),
-                    };
-                }
+                    Id = take.Id.ToString(),
+                    Title = exam.Title,
+                    SubjectName = subject.Name,
+                    MaxScore = exam.MaxScore,
+                    ResultScore = resultScore,
+                    Questions = questions,
+                };
             }
-            catch
+            else
             {
-                throw new ArgumentNullException($"Object of type '{nameof(Exam)}' was not found. ");
+                return new TakeExamVM
+                {
+                    Id = exam.Id.ToString(),
+                    Title = exam.Title,
+                    SubjectName = subject.Name,
+                    MaxScore = exam.MaxScore,
+                    Questions = new List<QuestionExamVM>(),
+                };
             }
         }
 

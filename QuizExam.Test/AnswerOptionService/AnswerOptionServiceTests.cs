@@ -4,15 +4,12 @@ using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Repositories;
+using QuizExam.Test.Constants;
 
 namespace QuizExam.Test.AnswerOptionService
 {
     public class AnswerOptionServiceTests
     {
-        private const string ExamId = "95297ee9-743a-4a1a-a641-2c0bd33e3254";
-        private const string QuestionId = "32515538-e217-4ae6-ab3b-61a44617588d";
-        private const string OptionId = "8d437d85-c791-4023-90f0-88ec3b048e29";
-
         private ServiceProvider serviceProvider;
         private InMemoryDbContext dbContext;
 
@@ -51,7 +48,7 @@ namespace QuizExam.Test.AnswerOptionService
         {
             var model = new NewAnswerOptionVM()
             {
-                QuestionId = QuestionId,
+                QuestionId = UniqueIdentifiersTestConstants.QuestionId,
                 Content = "Some Content In Here",
             };
 
@@ -74,7 +71,7 @@ namespace QuizExam.Test.AnswerOptionService
         public async Task DeleteMustReturnTrueIfDeleteSucceded()
         {
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
-            var result = await service.DeleteAsync(OptionId);
+            var result = await service.DeleteAsync(UniqueIdentifiersTestConstants.AOptionId);
 
             Assert.IsTrue(result);
         }
@@ -92,7 +89,7 @@ namespace QuizExam.Test.AnswerOptionService
         public async Task GetOptionsMustReturnTrueIfDeleteSucceded()
         {
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
-            var result = await service.GetOptionsAsync(QuestionId);
+            var result = await service.GetOptionsAsync(UniqueIdentifiersTestConstants.QuestionId);
 
             Assert.IsNotEmpty(result);
         }
@@ -148,7 +145,7 @@ namespace QuizExam.Test.AnswerOptionService
                 {
                     new AnswerOptionVM()
                     {
-                        Id = OptionId,
+                        Id = UniqueIdentifiersTestConstants.AOptionId,
                         IsCorrect = true,
                     }
                 },
@@ -166,12 +163,12 @@ namespace QuizExam.Test.AnswerOptionService
         {
             var model = new SetCorrectAnswerVM()
             {
-                CorrectAnswerId = OptionId,
+                CorrectAnswerId = UniqueIdentifiersTestConstants.AOptionId,
                 Options = new List<AnswerOptionVM>()
                 {
                     new AnswerOptionVM()
                     {
-                        Id = OptionId,
+                        Id = UniqueIdentifiersTestConstants.AOptionId,
                         IsCorrect = true,
                     }
                 },
@@ -192,17 +189,15 @@ namespace QuizExam.Test.AnswerOptionService
 
         private async Task SeedDbAsync(IApplicationDbRepository repo)
         {
-            var subjectId = "dd13f3d1-d5d3-4d2e-9f20-7524485f7e3b";
-
             var subject = new Subject()
             {
-                Id = subjectId.ToGuid(),
+                Id = UniqueIdentifiersTestConstants.SubjectId_Bg.ToGuid(),
                 Name = "Български език и литература"
             };
 
             var exam = new Exam()
             {
-                Id = ExamId.ToGuid(),
+                Id = UniqueIdentifiersTestConstants.ExamId_Bg.ToGuid(),
                 Title = "Български език и литература (12 клас)",
                 Description = "Тест по БЕЛ за ученици в 12 клас.",
                 MaxScore = 2,
@@ -212,17 +207,17 @@ namespace QuizExam.Test.AnswerOptionService
                 {
                     new Question()
                     {
-                        Id = QuestionId.ToGuid(),
+                        Id = UniqueIdentifiersTestConstants.QuestionId.ToGuid(),
                         Content = "А, Б, В...?",
                         Points = 2,
-                        ExamId = ExamId.ToGuid(),
+                        ExamId = UniqueIdentifiersTestConstants.ExamId_Bg.ToGuid(),
                         Answers = new List<AnswerOption>()
                         {
                             new AnswerOption()
                             {
-                                Id = OptionId.ToGuid(),
+                                Id = UniqueIdentifiersTestConstants.AOptionId.ToGuid(),
                                 Content = "Г, Д, Е...",
-                                QuestionId = QuestionId.ToGuid()
+                                QuestionId = UniqueIdentifiersTestConstants.QuestionId.ToGuid()
                             }
                         }
                     }

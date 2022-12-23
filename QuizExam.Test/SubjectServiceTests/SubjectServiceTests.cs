@@ -6,13 +6,12 @@ using QuizExam.Core.Models.Subject;
 using QuizExam.Core.Services;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Repositories;
+using QuizExam.Test.Constants;
 
 namespace QuizExam.Test.SubjectServiceTests
 {
     public class SubjectServiceTests
     {
-        private const string SubjectId = "dd13f3d1-d5d3-4d2e-9f20-7524485f7e3b";
-
         private ServiceProvider serviceProvider;
         private InMemoryDbContext dbContext;
 
@@ -54,7 +53,7 @@ namespace QuizExam.Test.SubjectServiceTests
         public async Task ActivateExistingSubjectMustReturnTrue()
         {
             var service = serviceProvider.GetService<ISubjectService>();
-            bool result = await service.ActivateAsync(SubjectId);
+            bool result = await service.ActivateAsync(UniqueIdentifiersTestConstants.SubjectId_Bg);
 
             Assert.IsTrue(result);
         }
@@ -72,7 +71,7 @@ namespace QuizExam.Test.SubjectServiceTests
         public async Task DeactivateExistingSubjectMustReturnTrue()
         {
             var service = serviceProvider.GetService<ISubjectService>();
-            bool result = await service.DeactivateAsync(SubjectId);
+            bool result = await service.DeactivateAsync(UniqueIdentifiersTestConstants.SubjectId_Bg);
 
             Assert.IsTrue(result);
         }
@@ -97,7 +96,7 @@ namespace QuizExam.Test.SubjectServiceTests
         {
             var model = new NewSubjectVM()
             {
-                Id = SubjectId,
+                Id = UniqueIdentifiersTestConstants.SubjectId_Bg,
                 Name = "Some Name"
             };
 
@@ -121,7 +120,7 @@ namespace QuizExam.Test.SubjectServiceTests
         public async Task GetSubjectForEditMethodMustReturnModelWhenExamExists()
         {
             var service = serviceProvider.GetService<ISubjectService>();
-            var result = await service.GetSubjectForEditAsync(SubjectId);
+            var result = await service.GetSubjectForEditAsync(UniqueIdentifiersTestConstants.SubjectId_Bg);
 
             Assert.That(result, Is.TypeOf<NewSubjectVM>());
             Assert.IsNotNull(result.Id);
@@ -159,7 +158,7 @@ namespace QuizExam.Test.SubjectServiceTests
         {
             var subject = new Subject()
             {
-                Id = SubjectId.ToGuid(),
+                Id = UniqueIdentifiersTestConstants.SubjectId_Bg.ToGuid(),
                 Name = "Български език и литература"
             };
 
