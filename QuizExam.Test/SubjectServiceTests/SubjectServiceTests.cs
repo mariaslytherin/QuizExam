@@ -46,7 +46,7 @@ namespace QuizExam.Test.SubjectServiceTests
             var service = serviceProvider.GetService<ISubjectService>();
             bool result = await service.ActivateAsync(Guid.NewGuid().ToString());
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace QuizExam.Test.SubjectServiceTests
             var service = serviceProvider.GetService<ISubjectService>();
             bool result = await service.ActivateAsync(UniqueIdentifiersTestConstants.SubjectId_Bg);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace QuizExam.Test.SubjectServiceTests
             var service = serviceProvider.GetService<ISubjectService>();
             bool result = await service.DeactivateAsync(Guid.NewGuid().ToString());
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace QuizExam.Test.SubjectServiceTests
             var service = serviceProvider.GetService<ISubjectService>();
             bool result = await service.DeactivateAsync(UniqueIdentifiersTestConstants.SubjectId_Bg);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace QuizExam.Test.SubjectServiceTests
             var service = serviceProvider.GetService<ISubjectService>();
             bool result = await service.EditAsync(model);
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace QuizExam.Test.SubjectServiceTests
             var service = serviceProvider.GetService<ISubjectService>();
             bool result = await service.EditAsync(model);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -113,7 +113,7 @@ namespace QuizExam.Test.SubjectServiceTests
             var result = await service.GetSubjectForEditAsync(Guid.NewGuid().ToString());
 
             Assert.That(result, Is.TypeOf<NewSubjectVM>());
-            Assert.IsNull(result.Id);
+            Assert.That(result.Id, Is.Null);
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace QuizExam.Test.SubjectServiceTests
             var result = await service.GetSubjectForEditAsync(UniqueIdentifiersTestConstants.SubjectId_Bg);
 
             Assert.That(result, Is.TypeOf<NewSubjectVM>());
-            Assert.IsNotNull(result.Id);
+            Assert.That(result.Id, Is.Not.Null);
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace QuizExam.Test.SubjectServiceTests
             var service = serviceProvider.GetService<ISubjectService>();
             var result = await service.GetAllSubjectsAsync();
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<List<SubjectVM>>());
             Assert.That(result.Count(), Is.EqualTo(5));
         }
@@ -143,7 +143,7 @@ namespace QuizExam.Test.SubjectServiceTests
             var service = serviceProvider.GetService<ISubjectService>();
             var result = await service.GetActiveSubjectsAsync();
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<List<SubjectVM>>());
             Assert.That(result.Count(), Is.EqualTo(5));
         }

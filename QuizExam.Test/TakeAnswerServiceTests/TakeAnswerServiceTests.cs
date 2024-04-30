@@ -65,7 +65,7 @@ namespace QuizExam.Test.TakeAnswerServiceTests
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
             var result = await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg);
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace QuizExam.Test.TakeAnswerServiceTests
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
             var result = await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace QuizExam.Test.TakeAnswerServiceTests
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
             var result = await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace QuizExam.Test.TakeAnswerServiceTests
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
             var result = await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace QuizExam.Test.TakeAnswerServiceTests
             var service = this.serviceProvider.GetService<ITakeAnswerService>();
             var result = await service.AddAnswer(model, UniqueIdentifiersTestConstants.ExamId_Bg);
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [TearDown]

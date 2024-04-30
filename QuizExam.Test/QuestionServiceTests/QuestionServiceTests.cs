@@ -65,7 +65,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var service = this.serviceProvider.GetService<IQuestionService>();
             var questionId = await service.CreateAsync(model);
 
-            Assert.IsNotNull(questionId);
+            //Assert.That(questionId, Is.Not.Null);
             Assert.That(questionId, Is.TypeOf<Guid>());
         }
 
@@ -75,7 +75,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var service = serviceProvider.GetService<IQuestionService>();
             bool result = await service.DeleteAsync(Guid.NewGuid().ToString());
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var service = serviceProvider.GetService<IQuestionService>();
             bool result = await service.DeleteAsync(UniqueIdentifiersTestConstants.QuestionId);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var service = serviceProvider.GetService<IQuestionService>();
             var result = await service.EditAsync(model);
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var service = serviceProvider.GetService<IQuestionService>();
             var result = await service.EditAsync(model);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -141,7 +141,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var service = serviceProvider.GetService<IQuestionService>();
             var result = await service.GetQuestionByIdAsync(Guid.NewGuid().ToString());
 
-            Assert.IsNull(result);
+            Assert.That(result, Is.Null);
         }
 
         [Test]
@@ -160,7 +160,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var result = await service.GetQuestionForEditAsync(Guid.NewGuid().ToString());
 
             Assert.That(result, Is.TypeOf<EditQuestionVM>());
-            Assert.IsNull(result.Id);
+            Assert.That(result.Id, Is.Null);
         }
 
         [Test]
@@ -170,7 +170,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var result = await service.GetQuestionForEditAsync(UniqueIdentifiersTestConstants.QuestionId);
 
             Assert.That(result, Is.TypeOf<EditQuestionVM>());
-            Assert.IsNotNull(result.Id);
+            Assert.That(result.Id, Is.Not.Null);
         }
 
         [Test]
@@ -180,7 +180,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var result = await service.GetNextQuestionAsync(Guid.NewGuid().ToString(), UniqueIdentifiersTestConstants.TakeId, 0);
 
             Assert.That(result, Is.TypeOf<TakeQuestionVM>());
-            Assert.IsNull(result.QuestionId);
+            Assert.That(result.QuestionId, Is.Null);
         }
 
         [Test]
@@ -199,7 +199,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var result = await service.GetNextQuestionAsync(UniqueIdentifiersTestConstants.ExamId_Bg, UniqueIdentifiersTestConstants.TakeId, 0);
 
             Assert.That(result, Is.TypeOf<TakeQuestionVM>());
-            Assert.IsNotNull(result.QuestionId);
+            Assert.That(result.QuestionId, Is.Not.Null);
         }
 
         [Test]
@@ -209,7 +209,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var result = await service.GetPreviousQuestionAsync(Guid.NewGuid().ToString(), UniqueIdentifiersTestConstants.TakeId, 0);
 
             Assert.That(result, Is.TypeOf<TakeQuestionVM>());
-            Assert.IsNull(result.QuestionId);
+            Assert.That(result.QuestionId, Is.Null);
         }
 
         [Test]
@@ -228,7 +228,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var result = await service.GetPreviousQuestionAsync(UniqueIdentifiersTestConstants.ExamId_Bg, UniqueIdentifiersTestConstants.TakeId, 0);
 
             Assert.That(result, Is.TypeOf<TakeQuestionVM>());
-            Assert.IsNotNull(result.QuestionId);
+            Assert.That(result.QuestionId, Is.Not.Null);
         }
 
 
@@ -256,7 +256,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var service = serviceProvider.GetService<IQuestionService>();
             var result = await service.HasEnoughAnswerOptionsAsync(UniqueIdentifiersTestConstants.QuestionId);
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -265,7 +265,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var service = serviceProvider.GetService<IQuestionService>();
             var result = await service.HasEnoughAnswerOptionsAsync(Guid.NewGuid().ToString());
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [TearDown]

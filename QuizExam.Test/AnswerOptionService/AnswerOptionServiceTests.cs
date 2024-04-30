@@ -40,7 +40,7 @@ namespace QuizExam.Test.AnswerOptionService
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
             var result = await service.CreateAsync(model);
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace QuizExam.Test.AnswerOptionService
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
             var result = await service.CreateAsync(model);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace QuizExam.Test.AnswerOptionService
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
             var result = await service.DeleteAsync(Guid.NewGuid().ToString());
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace QuizExam.Test.AnswerOptionService
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
             var result = await service.DeleteAsync(UniqueIdentifiersTestConstants.AOptionId);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace QuizExam.Test.AnswerOptionService
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
             var result = await service.GetOptionsAsync(Guid.NewGuid().ToString());
 
-            Assert.IsEmpty(result);
+            Assert.That(result, Is.Empty);
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace QuizExam.Test.AnswerOptionService
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
             var result = await service.GetOptionsAsync(UniqueIdentifiersTestConstants.QuestionId);
 
-            Assert.IsNotEmpty(result);
+            Assert.That(result, Is.Not.Empty);
         }
 
         [Test]
@@ -155,7 +155,7 @@ namespace QuizExam.Test.AnswerOptionService
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
             var result = await service.SetCorrectAnswerAsync(model);
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -178,7 +178,7 @@ namespace QuizExam.Test.AnswerOptionService
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
             var result = await service.SetCorrectAnswerAsync(model);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [TearDown]

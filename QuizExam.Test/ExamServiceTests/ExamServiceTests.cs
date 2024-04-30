@@ -37,7 +37,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             bool result = await service.ActivateAsync(Guid.NewGuid().ToString());
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             bool result = await service.ActivateAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             bool result = await service.DeactivateAsync(Guid.NewGuid().ToString());
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             bool result = await service.DeactivateAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             bool result = await service.DeleteAsync(Guid.NewGuid().ToString());
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             bool result = await service.DeleteAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -144,7 +144,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             bool result = await service.EditAsync(model);
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -161,7 +161,7 @@ namespace QuizExam.Test.ExamServiceTests
 
             var service = serviceProvider.GetService<IExamService>();
             bool result = await service.EditAsync(model);
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -170,7 +170,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.GetAllExamsAsync(1, 10);
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ExamListVM>());
             Assert.That(result.Exams.Count(), Is.EqualTo(2));
         }
@@ -181,7 +181,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.GetExamsForUserAsync();
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<List<ViewExamVM>>());
             Assert.That(result.Count(), Is.EqualTo(1));
         }
@@ -193,7 +193,7 @@ namespace QuizExam.Test.ExamServiceTests
             var result = await service.GetExamForEditAsync(Guid.NewGuid().ToString());
 
             Assert.That(result, Is.TypeOf<EditExamVM>());
-            Assert.IsNull(result.Id);
+            Assert.That(result.Id, Is.Null);
         }
 
         [Test]
@@ -203,7 +203,7 @@ namespace QuizExam.Test.ExamServiceTests
             var result = await service.GetExamForEditAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
             Assert.That(result, Is.TypeOf<EditExamVM>());
-            Assert.IsNotNull(result.Id);
+            Assert.That(result.Id, Is.Not.Null);
         }
 
         [Test]
@@ -213,7 +213,7 @@ namespace QuizExam.Test.ExamServiceTests
             var result = await service.GetExamForViewAsync(Guid.NewGuid().ToString());
 
             Assert.That(result, Is.TypeOf<ViewExamVM>());
-            Assert.IsNull(result.Id);
+            Assert.That(result.Id, Is.Null);
         }
 
         [Test]
@@ -243,7 +243,7 @@ namespace QuizExam.Test.ExamServiceTests
             var result = await service.GetExamInfoAsync(Guid.NewGuid().ToString());
 
             Assert.That(result, Is.TypeOf<ExamVM>());
-            Assert.IsNull(result.Id);
+            Assert.That(result.Id, Is.Null);
         }
 
         [Test]
@@ -253,7 +253,7 @@ namespace QuizExam.Test.ExamServiceTests
             var result = await service.GetExamInfoAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
             Assert.That(result, Is.TypeOf<ExamVM>());
-            Assert.IsNotNull(result.Id);
+            Assert.That(result.Id, Is.Not.Null);
             Assert.That(result.QuestionsCount, Is.EqualTo(0));
         }
 
@@ -264,7 +264,7 @@ namespace QuizExam.Test.ExamServiceTests
             var result = await service.GetExamInfoAsync(UniqueIdentifiersTestConstants.ExamId_Bg);
 
             Assert.That(result, Is.TypeOf<ExamVM>());
-            Assert.IsNotNull(result.Id);
+            Assert.That(result.Id, Is.Not.Null);
             Assert.That(result.QuestionsCount, Is.EqualTo(1));
         }
 
@@ -274,7 +274,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.HasAnyQuestionsAsync(Guid.NewGuid().ToString());
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -283,7 +283,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.HasAnyQuestionsAsync(UniqueIdentifiersTestConstants.ExamId_Math);
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -292,7 +292,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.HasAnyQuestionsAsync(UniqueIdentifiersTestConstants.ExamId_Bg);
 
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -301,7 +301,7 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.QuestionsPointsSumEqualsMaxScoreAsync(Guid.NewGuid().ToString());
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -310,7 +310,8 @@ namespace QuizExam.Test.ExamServiceTests
             var service = serviceProvider.GetService<IExamService>();
             var result = await service.QuestionsPointsSumEqualsMaxScoreAsync(UniqueIdentifiersTestConstants.ExamId_Bg);
 
-            Assert.True(result);
+            // TODO
+            Assert.That(result, Is.True);
         }
 
         [TearDown]
