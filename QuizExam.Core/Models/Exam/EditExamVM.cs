@@ -1,4 +1,5 @@
 ﻿using QuizExam.Core.Constants;
+using QuizExam.Core.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace QuizExam.Core.Models.Exam
@@ -18,6 +19,11 @@ namespace QuizExam.Core.Models.Exam
 
         [Display(Name = "Максимален брой точки")]
         public double? MaxScore { get; set; }
+
+        [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+        [TimeFormat]
+        [Display(Name = "Времетраене")]
+        public string Duration { get; set; }
 
         [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
         [Display(Name = "Предмет")]

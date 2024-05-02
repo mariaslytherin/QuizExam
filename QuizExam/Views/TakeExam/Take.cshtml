@@ -1,22 +1,43 @@
-﻿@using QuizExam.Core.Models.TakeQuestion
+﻿@using QuizExam.Core.Constants
+@using QuizExam.Core.Models.TakeQuestion
 @model TakeQuestionVM
 
 @{
     var order = Model.Order + 1;
 }
 
-<div class="row d-flex justify-content-center">
+<div class="row d-flex justify-content-left">
+    <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-success"><i class="far fa-clock"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Изминало време:</span>
+                <p class="info-box-number" id="timer">00:00:00</p>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.TimePassed))
+            {
+                <a class="btn btn-app" style="min-width: 60px;">
+                    <i class="fas fa-pause"></i>
+                    Пауза
+                </a>
+            }
+        </div>
+    </div>
     <div class="col-lg-6">
         <div class="card">
-            <div class="card-header">
-                <p class="font-weight-bold">@order. @Model.Content</p>
-            </div>
-            <form method="post">
+            <form method="post" id="questionForm">
+                <div class="card-header">
+                    <p class="font-weight-bold" id="questionContent">@order. @Model.Content</p>
+                </div>
                 <div class="card-body" style="display: block;">
-                    <input type="hidden" asp-for="@Model.QuestionId" name="QuestionId" />
-                    <input type="hidden" asp-for="@Model.TakeExamId" name="TakeExamId" />
-                    <input type="hidden" asp-for="@Model.Order" name="Order" />
-                    <input type="hidden" asp-for="@Model.IsLast" name="IsLast" value="@Model.IsLast"/>
+                    <input type="hidden" asp-for="@Model.QuestionId" name="QuestionId" value="@Model.QuestionId" id="questionId" />
+                    <input type="hidden" asp-for="@Model.TakeExamId" name="TakeExamId" value="@Model.TakeExamId" id="takeExamId" />
+                    <input type="hidden" asp-for="@Model.ExamId" name="ExamId" value="@Model.ExamId" id="examId" />
+                    <input type="hidden" asp-for="@Model.Order" name="Order" value="@Model.Order" id="order" />
+                    <input type="hidden" asp-for="@Model.IsLast" name="IsLast" value="@Model.IsLast" value="@Model.IsLast" id="isLast" />
+                    <input type="hidden" asp-for="@Model.Duration" name="Duration" value="@Model.Duration" id="duration" />
+                    <input type="hidden" asp-for="@Model.TimePassed" name="TimePassed" value="@Model.TimePassed" id="timePassed" />
+                    <input type="hidden" asp-for="@Model.Mode" name="Mode" value="@Model.Mode" id="mode" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     @for (int i = 0; i < Model.TakeAnswers.Count; i++)
                     {
@@ -25,7 +46,7 @@
                             <input type="hidden" asp-for="@Model.TakeAnswers[i].AnswerId" />
                             <input type="hidden" asp-for="@Model.TakeAnswers[i].OptionId" />
                             <input type="hidden" asp-for="@Model.TakeAnswers[i].Content" />
-                            <input asp-for="@Model.CheckedOptionId" value="@Model.TakeAnswers[i].OptionId" checked="@checkedOption" type="radio" class="form-check-input" /> @Model.TakeAnswers[i].Content
+                            <input asp-for="@Model.CheckedOptionId" value="@Model.TakeAnswers[i].OptionId" name="CheckedOptionId" checked="@checkedOption" type="radio" class="form-check-input" /> @Model.TakeAnswers[i].Content
                         </div>
                     }
                 </div>
@@ -33,15 +54,15 @@
                     <div class="row">
                         @if (Model.Order - 1 >= 0)
                         {
-                            <a asp-action="getPreviousQuestion" asp-controller="question" asp-route-examId="@Model.ExamId" asp-route-takeId="@Model.TakeExamId" asp-route-order="@(Model.Order - 1)" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: auto; height: fit-content;">Назад</a>  
+                            <button id="previousButton" type="button" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: auto; height: fit-content;">Назад</button>
                         }
                         @if (Model.IsLast)
                         {
-                            <button type="submit" asp-action="add" asp-controller="takeAnswer" asp-route-examId="@Model.ExamId" class="btn btn-outline-primary btn-sm" style="width: 100px; margin-left: auto; height: fit-content;">Предай</button>
+                            <button id="nextButton" type="button" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-left: auto; height: fit-content;">Предай</button>
                         }
                         else
                         {
-                            <button type="submit" asp-action="add" asp-controller="takeAnswer" asp-route-examId="@Model.ExamId" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-left: auto; height: fit-content;">Следващ</button>
+                            <button id="nextButton" type="button" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-left: auto; height: fit-content;">Следващ</button>
                         }
                     </div>
                 </div>
@@ -50,42 +71,59 @@
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var checkTime = [];
+            var timePassed = $("#timePassed").val();
+            var duration = $("#duration").val();
+            var mode = $("#mode").val();
 
-@*@model Guid[]
+            if (mode === 'Exercise') {
+                StartTimer(checkTime, timePassed);
+            } else  {
+                StartCountDownTimer(checkTime, duration);
+            }
 
-@{
-    Guid currentId = Guid.Empty;
+            window.addEventListener('beforeunload', (event) => {
+                if (mode === 'Train' && !isFinishRequested) {
+                    event.preventDefault();
+                    event.returnValue = 'Сигурни ли сте, че искате да напуснете страницата? Всички последващи въпроси ще бъдат зачетени като грешни.';
+                }
+            });
+
+            window.addEventListener('unload', (event) => {
+                var takeId = $("#takeExamId").val();
+                var time = document.getElementById("timer").innerHTML;
+
+                if (mode === 'Exercise' && !isFinishRequested) {
+                    var url = new URL('/TakeExam/Pause', window.location.origin);
+                    var params = { takeId: takeId, timePassed: time };
+                    url.search = new URLSearchParams(params).toString();
+
+                    if (!navigator.sendBeacon(url)) {
+                        console.error('sendBeacon failed');
+                    } else {
+                        clearInterval(checkTime[0]); // Stop the timer
+                        checkTime = [];
+                        sessionStorage.removeItem('startTime');
+                    }
+                }
+                if (mode === 'Train' && !isFinishRequested) {
+                    var url = new URL('/TakeExam/Finish', window.location.origin);
+                    var params = { takeId: takeId, timePassed: time };
+                    url.search = new URLSearchParams(params).toString();
+
+                    if (!navigator.sendBeacon(url)) {
+                        console.error('sendBeacon failed');
+                    } else {
+                        clearInterval(checkTime[0]); // Stop the timer
+                        checkTime = [];
+                        sessionStorage.removeItem('endTime');
+                    }
+                }
+                
+            });
+        });
+    </script>
 }
-
-<div class="content" style="margin-top: 20px;">
-    <div class="container-fluid" style="width:100%; height:auto; display:flex; flex-wrap: wrap;">
-        @for (int i = 0; i < Model.Count(); i++)
-        {
-            currentId = Model[i];
-            <a name="@Model[i]" id="question" class="btn btn-info question" style="margin-right: 2px; margin-bottom: 3px;">@i</a>
-        }
-    </div>
-</div>
-<div id="dvPartialView">
-</div>
-
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-         $('[id*=question]').on('click', function () {
-             $.ajax({
-                 url: '@Url.Action("GetQuestion", "Question")',
-                 dataType: "html",
-                 data: { "id": $(this).attr('name') },
-                 type: "GET",
-                 contentType: "application/json",
-                 success: function (response) {
-                     $('#dvPartialView').html(response);
-                 },
-                 error: function (err) {
-                     alert(err.responseText);
-                 }
-             });
-         });
-     });
-</script>*@

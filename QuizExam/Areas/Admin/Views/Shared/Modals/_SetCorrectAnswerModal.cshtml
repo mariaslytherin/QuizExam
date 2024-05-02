@@ -1,0 +1,39 @@
+﻿@using QuizExam.Core.Models.AnswerOption
+@model SetCorrectAnswerVM
+
+<div class="modal fade" id="setCorrectAnswerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добави опция за отговор</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="QuestionId" value="@Model.QuestionId" />
+                    <input type="hidden" name="ExamId" value="@Model.ExamId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @for (int i = 0; i < Model.Options.Count; i++)
+                    {
+                        var currentOption = Model.Options[i];
+                        <div class="form-check" style="margin-left: 50px;">
+                            <input type="hidden" asp-for="@Model.Options[i].Id" />
+                            <input type="hidden" asp-for="@Model.Options[i].Content" />
+                            <input asp-for="@Model.CorrectAnswerId" value="@currentOption.Id" class="form-check-input" type="radio" /> @currentOption.Content
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Затвори</button>
+                    <button type="submit" asp-action="setCorrectAnswer" asp-controller="answerOption" class="btn btn-success">Редактирай</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

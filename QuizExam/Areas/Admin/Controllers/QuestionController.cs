@@ -3,6 +3,7 @@ using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Core.Models.Question;
+using QuizExam.Infrastructure.Data;
 
 namespace QuizExam.Areas.Admin.Controllers
 {
@@ -11,14 +12,22 @@ namespace QuizExam.Areas.Admin.Controllers
         private readonly IQuestionService questionService;
         private readonly IAnswerOptionService answerOptionService;
 
-        public QuestionController(IQuestionService questionService, IAnswerOptionService answerOptionService)
+        public QuestionController(
+            IQuestionService questionService,
+            IAnswerOptionService answerOptionService)
         {
             this.questionService = questionService;
             this.answerOptionService = answerOptionService;
         }
 
-        public IActionResult New()
+        public IActionResult New(string id, string isActive)
         {
+            if (bool.Parse(isActive))
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamMustNotBeActive;
+                return RedirectToAction("ViewExam", "Exam", new { id = id });
+            }
+
             return View("New");
         }
 
@@ -64,8 +73,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
                 if (!string.IsNullOrEmpty(question.Id) && options != Enumerable.Empty<AnswerOptionVM>())
                 {
-                    TempData["ExamId"] = examId;
-                    
+                    question.ExamId = examId;
                     if (options.Count() != 0)
                     {
                         ViewBag.Options = options;

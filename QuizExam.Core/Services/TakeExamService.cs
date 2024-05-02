@@ -24,21 +24,41 @@ namespace QuizExam.Core.Services
             this.repository = repository;
         }
 
-        public async Task<Guid> CreateTake(string userId, string examId)
+        public async Task<Guid> CreateTake(string userId, string examId, TakeExamModeEnum mode)
         {
-            var isUser = await this.repository.GetByIdAsync<ApplicationUser>(userId);
-            var isExam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(examId));
+            var user = await this.repository.GetByIdAsync<ApplicationUser>(userId);
+            var exam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(examId));
 
-            if (isUser != null && isExam != null)
+            if (user != null && exam != null)
             {
-                TakeExam newTake = new TakeExam()
-                {
-                    UserId = userId,
-                    ExamId = examId.ToGuid(),
-                    Status = TakeExamStatusEnum.Started,
-                    ModifyDate = DateTime.Now,
-                };
+                TakeExam newTake = new TakeExam();
 
+                if (mode == TakeExamModeEnum.Exercise)
+                {
+                    newTake = new TakeExam()
+                    {
+                        UserId = userId,
+                        ExamId = examId.ToGuid(),
+                        Status = TakeExamStatusEnum.Started,
+                        TimePassed = new TimeSpan(0, 0, 0),
+                        Mode = mode,
+                        ModifyDate = DateTime.Now,
+                    };
+                }
+                else
+                {
+                    newTake = new TakeExam()
+                    {
+                        UserId = userId,
+                        ExamId = examId.ToGuid(),
+                        Status = TakeExamStatusEnum.Started,
+                        TimePassed = new TimeSpan(0, 0, 0),
+                        Duration = exam.Duration,
+                        Mode = mode,
+                        ModifyDate = DateTime.Now,
+                    };
+                }
+                
                 await this.repository.AddAsync(newTake);
                 await this.repository.SaveChangesAsync();
 
@@ -75,6 +95,7 @@ namespace QuizExam.Core.Services
                                         .Where(s => s.Id == e.SubjectId)
                                         .Select(s => s.Name)
                                         .FirstOrDefault(),
+                         Mode = t.Mode,
                          CreateDate = t.CreateDate.ToDateOnlyString(),
                          ResultScore = t.Score,
                          MaxScore = e.MaxScore,
@@ -103,6 +124,7 @@ namespace QuizExam.Core.Services
 
         public async Task<UncompletedExamsVM> UncompletedExams(string id, int? page, int? size)
         {
+            // TODO  && t.Mode == TakeExamModeEnum.Exercise
             var exams = await this.repository.All<Exam>()
                 .GroupJoin(this.repository.All<TakeExam>().Where(t => t.UserId == id && t.Status != TakeExamStatusEnum.Finished),
                     exam => exam.Id,
@@ -219,7 +241,24 @@ namespace QuizExam.Core.Services
             }
         }
 
-        public async Task<bool> FinishExam(string takeExamId)
+        public async Task<bool> PuaseExam(string takeExamId, string timePassed)
+        {
+            var take = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(takeExamId));
+            bool result = false;
+
+            if (take != null)
+            {
+                take.TimePassed = TimeSpan.Parse(timePassed);
+                take.Status = TakeExamStatusEnum.Paused;
+                take.ModifyDate = DateTime.Now;
+                await this.repository.SaveChangesAsync();
+                result = true;
+            }
+
+            return result;
+        }
+
+        public async Task<bool> FinishExam(string takeExamId, string timePassed = null)
         {
             var take = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(takeExamId));
             bool result = false;
@@ -252,6 +291,7 @@ namespace QuizExam.Core.Services
 
                 take.Score = resultScore;
                 take.Status = TakeExamStatusEnum.Finished;
+                take.TimePassed = TimeSpan.Parse(timePassed);
                 take.ModifyDate = DateTime.Now;
                 await this.repository.SaveChangesAsync();
                 result = true;

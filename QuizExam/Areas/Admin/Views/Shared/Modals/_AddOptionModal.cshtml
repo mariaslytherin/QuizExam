@@ -1,0 +1,35 @@
+﻿@using QuizExam.Core.Models.AnswerOption
+@model NewAnswerOptionVM
+
+<div class="modal fade" id="optionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добави опция за отговор</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="QuestionId" value="@Model.QuestionId" />
+                    <input type="hidden" name="ExamId" value="@Model.ExamId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="OptionContent" class="form-label"></label>
+                        <textarea asp-for="OptionContent" type="text" class="form-control" placeholder="Въведи опция..." aria-required="true"></textarea>
+                        <span asp-validation-for="OptionContent" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Затвори</button>
+                    <button type="submit" asp-action="new" asp-controller="answerOption" class="btn btn-success">Добави</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

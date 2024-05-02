@@ -47,6 +47,8 @@
         public const string ErrorNotEnoughAnswerOptionsMessage = "Добавете поне 2 възможни опции за отговор!";
 
         public const string ErrorExamAlreadyStartedMessage = "Вече сте започнали да решавате този изпит!";
+
+        public const string ErrorExamMustNotBeActive = "Не можете да добавяте въпроси, когато изпитът е активиран!";
     }
 
     public static class WarningMessageConstants

@@ -1,4 +1,5 @@
 ﻿using QuizExam.Core.Models.Question;
+using QuizExam.Infrastructure.Data.Enums;
 
 namespace QuizExam.Core.Models.TakeExam
 {
@@ -13,6 +14,8 @@ namespace QuizExam.Core.Models.TakeExam
         public string SubjectName { get; set; }
 
         public string CreateDate { get; set; }
+
+        public TakeExamModeEnum Mode { get; set; }
 
         public double ResultScore { get; set; }
 

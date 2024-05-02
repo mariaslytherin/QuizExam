@@ -73,7 +73,7 @@ namespace QuizExam.Core.Services
 
             if (question != null)
             {
-                question.Content = model.Content;
+                question.Content = model.QuestionContent;
                 question.Rule = model.Rule;
                 question.Points = model.Points;
                 question.ModifyDate = DateTime.Today;
@@ -100,7 +100,7 @@ namespace QuizExam.Core.Services
                 var model = new EditQuestionVM
                 {
                     Id = question.Id.ToString(),
-                    Content = question.Content,
+                    QuestionContent = question.Content,
                     Rule = question.Rule,
                     Points = question.Points,
                 };
@@ -118,6 +118,18 @@ namespace QuizExam.Core.Services
             if (allQuestions.Count() != 0)
             {
                 var question = allQuestions[order];
+                var takeExam = await this.repository.GetByIdAsync<TakeExam>(takeId.ToGuid());
+                question.Mode = takeExam.Mode;
+
+                if (takeExam.Mode == TakeExamModeEnum.Exercise)
+                {
+                    question.TimePassed = takeExam.TimePassed.ToString();
+                }
+                else
+                {
+                    var exam = await this.repository.GetByIdAsync<Exam>(examId.ToGuid());
+                    question.Duration = exam.Duration.ToString();
+                }
 
                 if (allQuestions.Count() == order + 1)
                 {
@@ -149,6 +161,7 @@ namespace QuizExam.Core.Services
         {
             return await this.repository.All<Question>()
                 .Where(q => q.ExamId == examId.ToGuid() && !q.IsDeleted)
+                .OrderBy(q => q.CreateDate)
                 .Select(q => new TakeQuestionVM
                 {
                     QuestionId = q.Id.ToString(),
@@ -157,6 +170,7 @@ namespace QuizExam.Core.Services
                     Content = q.Content,
                     Order = order,
                     TakeAnswers = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
+                            .OrderBy(t => t.CreateDate)
                             .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == takeId.ToGuid() && !t.IsDeleted),
                                 option => option.Id,
                                 answer => answer.AnswerOptionId,

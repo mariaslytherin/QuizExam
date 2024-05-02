@@ -34,7 +34,7 @@ namespace QuizExam.Test.AnswerOptionService
         {
             var model = new NewAnswerOptionVM()
             {
-                Content = "Some Content In Here",
+                OptionContent = "Some Content In Here",
             };
 
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
@@ -49,7 +49,7 @@ namespace QuizExam.Test.AnswerOptionService
             var model = new NewAnswerOptionVM()
             {
                 QuestionId = UniqueIdentifiersTestConstants.QuestionId,
-                Content = "Some Content In Here",
+                OptionContent = "Some Content In Here",
             };
 
             var service = this.serviceProvider.GetService<IAnswerOptionService>();
@@ -185,6 +185,7 @@ namespace QuizExam.Test.AnswerOptionService
         public void TearDown()
         {
             dbContext.Dispose();
+            serviceProvider.Dispose();
         }
 
         private async Task SeedDbAsync(IApplicationDbRepository repo)

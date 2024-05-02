@@ -1,24 +1,25 @@
 ﻿@using QuizExam.Core.Models.Question
+@using QuizExam.Core.Models.AnswerOption
 @model EditQuestionVM
 
 @{
     ViewData["Title"] = "Редакция";
-    var examId = TempData["ExamId"];
 }
 
 <div class="row d-flex justify-content-center">
     <div class="col-8">
-        <div class="card card-primary">
+        <div class="card card-info">
             <div class="card-header">
                 <h3 class="card-title">Редактирай въпрос</h3>
             </div>
             <form id="edit" method="post">
                 <div class="card-body">
+                    <input type="hidden" name="ExamId" value="@Model.ExamId" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="Content" class="form-label"></label>
-                        <textarea asp-for="Content" type="text" class="form-control" placeholder="Въведи въпрос..." aria-required="true"></textarea>
-                        <span asp-validation-for="Content" class="text-danger"></span>
+                        <label asp-for="QuestionContent" class="form-label"></label>
+                        <textarea asp-for="QuestionContent" type="text" class="form-control" placeholder="Въведи въпрос..." aria-required="true"></textarea>
+                        <span asp-validation-for="QuestionContent" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Rule" class="form-label"></label>
@@ -30,9 +31,9 @@
                         <input asp-for="Points" type="number" min="0.0" step=".1" style="width: 25%;" class="form-control" aria-required="true">
                         <span asp-validation-for="Points" class="text-danger"></span>
                     </div>
-                    <div class="row col-sm-4">
-                        <a asp-action="new" asp-controller="answerOption" asp-route-questionId="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Добави</a>
-                        <a asp-action="setCorrectAnswer" asp-controller="answerOption" asp-route-id="@Model.Id" asp-route-examId="@examId" class="btn btn-outline-info btn-sm" style="margin-right: 5px; height: fit-content; width: 70px;">Марк</a>
+                    <div class="row col-sm-6">
+                        <a class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#optionModal" style="margin-right: 5px; height: fit-content; width: 70px;">Добави</a>
+                        <a class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#setCorrectAnswerModal" style="margin-right: 5px; height: fit-content; width: fit-content;">Избери верен отговор</a>
                     </div>
                     <div class="card-body table-responsive p-0" style="overflow: inherit !important">
                         <table class="table table-hover text-wrap">
@@ -51,12 +52,8 @@
                                         <tr>
                                             <td class="text-center py-0 align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    <button type="submit" class="btn btn-danger"
-                                                    asp-action="delete"
-                                                    asp-controller="answerOption"
-                                                    asp-route-id="@option.Id"
-                                                    asp-route-questionId="@Model.Id"
-                                                    asp-route-examId="@examId">
+                                                    <button type="button" class="btn btn-danger delete-button"
+                                                            data-url="@Url.Action("Delete", "AnswerOption", new { id = option.Id, questionId = Model.Id, examId = Model.ExamId })">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
@@ -71,10 +68,13 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button asp-route-examId="@examId" type="submit" class="btn btn-primary">Редактирай</button>
-                    <a asp-action="viewExam" asp-controller="exam" asp-route-id="@examId" class="btn btn-outline-primary" style="width:auto">Назад</a>
+                    <button asp-route-examId="@Model.ExamId" type="submit" class="btn btn-info">Редактирай</button>
+                    <a asp-action="viewExam" asp-controller="exam" asp-route-id="@Model.ExamId" class="btn btn-outline-secondary" style="width:auto">Назад</a>
                 </div>
             </form>
+            <partial name="Modals/_AddOptionModal" model='new NewAnswerOptionVM(Model.Id, Model.ExamId)'></partial>
+            <partial name="Modals/_SetCorrectAnswerModal" model='new SetCorrectAnswerVM(Model.Id, Model.ExamId, ViewBag.Options != null ? ViewBag.Options : new List<AnswerOptionVM>())'></partial>
+            <partial name="Modals/_ConfirmDeleteModal"></partial>
         </div>
     </div>
 </div>

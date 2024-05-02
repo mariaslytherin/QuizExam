@@ -18,8 +18,8 @@ namespace QuizExam.Infrastructure.Data
         [Column(TypeName = "datetime")]
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
-        [Column(TypeName = "date")]
-        public DateTime ModifyDate { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime ModifyDate { get; set; } = DateTime.Now;
 
         public bool IsDeleted { get; set; } = false;
 

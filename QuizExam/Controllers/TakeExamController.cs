@@ -4,6 +4,7 @@ using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Models.Exam;
 using QuizExam.Infrastructure.Data;
+using QuizExam.Infrastructure.Data.Enums;
 using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Controllers
@@ -114,11 +115,11 @@ namespace QuizExam.Controllers
                 var takeExam = await this.takeExamService.GetTakeExamById(takeId);
                 var questionOrder = this.questionService.GetLastNotTakenQuestionOrder(takeId);
 
-                return RedirectToAction("GetNextQuestion", "Question", new
+                return RedirectToAction("GetQuestion", "Question", new
                 {
-                    takeId = takeId,
+                    takeId,
                     examId = takeExam.ExamId.ToString(),
-                    order = questionOrder
+                    order = questionOrder,
                 });
             }
             catch
@@ -128,7 +129,8 @@ namespace QuizExam.Controllers
             }
         }
 
-        public async Task<IActionResult> Take(string examId)
+        [HttpPost]
+        public async Task<IActionResult> Take(string examId, TakeExamModeEnum mode)
         {
             try
             {
@@ -136,31 +138,60 @@ namespace QuizExam.Controllers
 
                 if (examId != null && user != null)
                 {
-                    var takeId = await this.takeExamService.CreateTake(user.Id, examId);
+                    var takeId = await this.takeExamService.CreateTake(user.Id, examId, mode);
 
                     if (takeId != Guid.Empty)
                     {
                         int questionOrder = 0;
-                        return RedirectToAction("GetNextQuestion", "Question", new { takeId = takeId, examId = examId, order = questionOrder });
+                        return RedirectToAction("GetQuestion", "Question", new
+                        {
+                            takeId,
+                            examId,
+                            order = questionOrder,
+                        });
                     }
                 }
 
-                return View();
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("Start", "TakeExam", new { examId });
             }
             catch
             {
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
-                return RedirectToAction(nameof(GetTakenExams));
+                return RedirectToAction("Index", "Home");
             }
         }
 
-        public async Task<IActionResult> Finish(string takeExamId)
+        public async Task<IActionResult> Pause(string takeId, string timePassed)
         {
             try
             {
-                if (await this.takeExamService.FinishExam(takeExamId))
+                var user = await this.userManager.GetUserAsync(User);
+
+                if (await this.takeExamService.PuaseExam(takeId, timePassed))
                 {
-                    var take = await this.takeExamService.GetTakeForView(takeExamId);
+                    var exams = await this.takeExamService.UncompletedExams(user.Id, page: 1, size: 10);
+
+                    return View("Uncompleted", exams);
+                }
+
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("Index", "Home");
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamNotFoundMessage;
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        public async Task<IActionResult> Finish(string takeId, string? timePassed = null)
+        {
+            try
+            {
+                if (await this.takeExamService.FinishExam(takeId, timePassed))
+                {
+                    var take = await this.takeExamService.GetTakeForView(takeId);
                     return View("View", take);
                 }
                 else

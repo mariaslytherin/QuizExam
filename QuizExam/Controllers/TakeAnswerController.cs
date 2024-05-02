@@ -16,35 +16,34 @@ namespace QuizExam.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(TakeQuestionVM model, string examId)
+        public async Task<IActionResult> Add([FromBody] TakeQuestionVM model)
         {
             try
             {
                 if (model.CheckedOptionId == null)
                 {
                     TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
-                    return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId = examId, order = model.Order });
+                    return Ok(new { errorMessage = ErrorMessageConstants.ErrorMustCheckAnswerMessage });
                 }
 
-                if (await this.takeAnswerService.AddAnswer(model, examId))
+                if (await this.takeAnswerService.AddAnswer(model, model.ExamId))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulRecordMessage;
                 }
                 else
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
-                    return RedirectToAction("Index", "Home");
+                    return Ok(new { errorMessage = ErrorMessageConstants.ErrorAppeardMessage });
                 }
 
-                TempData["ExamId"] = examId;
+                TempData["ExamId"] = model.ExamId;
 
                 if (model.IsLast)
                 {
-                    return RedirectToAction("Finish", "TakeExam", new { takeExamId = model.TakeExamId });
+                    return Ok(new { isFinished = true, takeExamId = model.TakeExamId });
                 }
                 else
                 {
-                    return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, examId, order = model.Order + 1 });
+                    return RedirectToAction("GetNextQuestion", "Question", new { takeId = model.TakeExamId, model.ExamId, order = model.Order + 1 });
                 }
             }
             catch

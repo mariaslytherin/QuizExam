@@ -107,7 +107,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var model = new EditQuestionVM()
             {
                 Id = Guid.NewGuid().ToString(),
-                Content = "Some Content",
+                QuestionContent = "Some Content",
                 Rule = "Some Rule",
                 Points = 2
             };
@@ -124,7 +124,7 @@ namespace QuizExam.Test.QuestionServiceTests
             var model = new EditQuestionVM()
             {
                 Id = UniqueIdentifiersTestConstants.QuestionId,
-                Content = "Some Content",
+                QuestionContent = "Some Content",
                 Rule = "Some Rule",
                 Points = 2
             };
@@ -272,6 +272,7 @@ namespace QuizExam.Test.QuestionServiceTests
         public void TearDown()
         {
             dbContext.Dispose();
+            serviceProvider.Dispose();
         }
 
         private async Task SeedDbAsync(IApplicationDbRepository repo)

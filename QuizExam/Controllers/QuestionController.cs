@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
+using QuizExam.Infrastructure.Data.Enums;
 
 namespace QuizExam.Controllers
 {
@@ -17,7 +18,7 @@ namespace QuizExam.Controllers
             this.answerService = answerService;
         }
 
-        public async Task<IActionResult> GetNextQuestion(string examId, string takeId, int order)
+        public async Task<IActionResult> GetQuestion(string examId, string takeId, int order)
         {
             try
             {
@@ -30,7 +31,30 @@ namespace QuizExam.Controllers
                 else
                 {
                     TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
-                    return RedirectToAction("Index", "Home");
+                    return Ok(new { errorMessage = ErrorMessageConstants.ErrorAppeardMessage });
+                }
+            }
+            catch
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        public async Task<IActionResult> GetNextQuestion(string examId, string takeId, int order)
+        {
+            try
+            {
+                var question = await this.questionService.GetNextQuestionAsync(examId, takeId, order);
+
+                if (!String.IsNullOrEmpty(question.QuestionId))
+                {
+                    return PartialView("/Views/Shared/_TakePartial.cshtml", question);
+                }
+                else
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                    return Ok(new { errorMessage = ErrorMessageConstants.ErrorAppeardMessage });
                 }
             }
             catch
@@ -48,7 +72,7 @@ namespace QuizExam.Controllers
 
                 if (question != null)
                 {
-                    return View("/Views/TakeExam/Take.cshtml", question);
+                    return PartialView("/Views/Shared/_TakePartial.cshtml", question);
                 }
                 else
                 {
