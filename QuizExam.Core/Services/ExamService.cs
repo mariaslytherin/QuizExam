@@ -41,6 +41,7 @@ namespace QuizExam.Core.Services
                 Description = model.Description,
                 MaxScore = model.MaxScore,
                 SubjectId = model.SubjectId.ToGuid(),
+                Duration = TimeSpan.Parse(model.Duration),
             };
 
             await this.repository.AddAsync(exam);

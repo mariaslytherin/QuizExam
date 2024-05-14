@@ -90,7 +90,7 @@ namespace QuizExam.Areas.Admin.Controllers
             }
             catch
             {
-                TempData[SuccessMessageConstants.SuccessMessage] = ErrorMessageConstants.UnsuccessfulCreateMessage;
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulCreateMessage;
                 return RedirectToAction(nameof(GetExamsList));
             }
         }

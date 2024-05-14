@@ -1,4 +1,5 @@
 ﻿using QuizExam.Infrastructure.Data.Constants;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -30,6 +31,10 @@ namespace QuizExam.Infrastructure.Data
         public int? QuestionsCount { get; set; }
 
         public double? MaxScore { get; set; }
+
+        [Column(TypeName = "time")]
+        [DefaultValue("01:00:00")]
+        public TimeSpan Duration { get; set; }
 
         [Required]
         public Guid SubjectId { get; set; }
