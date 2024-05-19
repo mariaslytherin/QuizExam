@@ -185,7 +185,7 @@ namespace QuizExam.Controllers
             }
         }
 
-        public async Task<IActionResult> Finish(string takeId, string? timePassed = null)
+        public async Task<IActionResult> Finish(string takeId, string timePassed = null)
         {
             try
             {

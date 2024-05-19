@@ -183,6 +183,7 @@ namespace QuizExam.Core.Services
                         Points = q.Points,
                         Rule = q.Rule,
                         AnswerOptions = this.repository.All<AnswerOption>().Where(t => t.QuestionId == q.Id && !t.IsDeleted)
+                            .OrderBy(t => t.CreateDate)
                             .GroupJoin(this.repository.All<TakeAnswer>().Where(t => t.TakeExamId == take.Id),
                                 option => option.Id,
                                 answer => answer.AnswerOptionId,

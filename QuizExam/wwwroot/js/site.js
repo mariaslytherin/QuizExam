@@ -114,8 +114,12 @@ function StartCountDownTimer(checkTime, timeRemaining) {
             if (hours != '00' || minutes != '00' || seconds != '00') {
                 document.getElementById("timer").innerHTML = hours + ":" + minutes + ":" + seconds;
             } else {
-                clearInterval(x);
+                clearInterval(checkTime[0]);
+                checkTime = [];
+                sessionStorage.removeItem('endTime');
                 document.getElementById("timer").innerHTML = "TIME'S UP";
+                isFinishRequested = true;
+                window.location.href = '/TakeExam/Finish?takeId=' + $("#takeExamId").val() + '&timePassed=00:00:00';
             }
         }, 1000);
         checkTime.push(x);

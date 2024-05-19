@@ -40,7 +40,7 @@
                                 <td style="text-align: center;">@exam.Title</td>
                                 <td style="text-align: center;">@exam.SubjectName</td>
                                 <td style="text-align: center;">@exam.CreateDate</td>
-                                <td style="text-align: center;">@(exam.Mode == TakeExamModeEnum.Exercise ? "Упражнение" : "Тренировка")</td>
+                                <td style="text-align: center;">@(exam.Mode == TakeExamModeEnum.Exercise ? "Упражнение" : "Подготовка")</td>
                                 <td style="text-align: center;">@exam.ResultScore / @exam.MaxScore</td>
                             </tr>
                         }
