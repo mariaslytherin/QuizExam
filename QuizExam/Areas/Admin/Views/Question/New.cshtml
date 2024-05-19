@@ -7,7 +7,7 @@
 
 <div class="row d-flex justify-content-center">
     <div class="col-6">
-        <div class="card card-primary">
+        <div class="card card-info">
             <div class="card-header">
                 <h3 class="card-title">Добави въпрос</h3>
             </div>
@@ -32,8 +32,8 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button asp-route-examId="@Url.ActionContext.RouteData.Values["id"]" type="submit" class="btn btn-primary">Добави</button>
-                    <a asp-action="viewExam" asp-controller="exam" asp-route-id="@Url.ActionContext.RouteData.Values["id"]" class="btn btn-outline-primary" style="width:auto">Назад</a>
+                    <button asp-route-examId="@Url.ActionContext.RouteData.Values["id"]" type="submit" class="btn btn-info">Добави</button>
+                    <a asp-action="viewExam" asp-controller="exam" asp-route-id="@Url.ActionContext.RouteData.Values["id"]" class="btn btn-outline-secondary" style="width:auto">Назад</a>
                 </div>
             </form>
         </div>

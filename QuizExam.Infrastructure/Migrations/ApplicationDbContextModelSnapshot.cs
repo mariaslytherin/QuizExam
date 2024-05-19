@@ -194,7 +194,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(300)");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
@@ -203,7 +203,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
@@ -222,7 +222,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -241,7 +241,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         .HasColumnType("float");
 
                     b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<int?>("QuestionsCount")
                         .HasColumnType("int");
@@ -338,7 +338,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a6cd17b1-bac8-4fbc-83c0-b36a71338bbd",
+                            ConcurrencyStamp = "44544bee-06e9-4eac-a5f4-b45a8bcdcf1f",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -346,9 +346,9 @@ namespace QuizExam.Infrastructure.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEP+CqDOsFVyQDCQMGxeX+mNG15vGDvB9qMOEmKRKXMxdqKV4MtfiCJuZJzauKS0POA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOtkRKjDk66xGu6vnVmAZpucWP12XZ/eDasxEig72D3G1s+ufnrni+iNI+31It0BmQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9ae282e8-da26-4670-acd0-63c9d5db9b5a",
+                            SecurityStamp = "07d0312b-019d-498f-a28f-5444712586df",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
                         });
@@ -375,7 +375,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<double>("Points")
                         .HasColumnType("float");
@@ -452,7 +452,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
@@ -480,17 +480,26 @@ namespace QuizExam.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime");
 
+                    b.Property<TimeSpan?>("Duration")
+                        .HasColumnType("time");
+
                     b.Property<Guid>("ExamId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Mode")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<double>("Score")
                         .HasColumnType("float");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<TimeSpan?>("TimePassed")
+                        .HasColumnType("time");
 
                     b.Property<string>("UserId")
                         .IsRequired()

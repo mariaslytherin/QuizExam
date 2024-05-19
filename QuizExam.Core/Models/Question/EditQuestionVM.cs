@@ -8,10 +8,12 @@ namespace QuizExam.Core.Models.Question
     {
         public string Id { get; set; }
 
+        public string ExamId { get; set; }
+
         [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
         [StringLength(300, ErrorMessage = QuestionErrorMessages.QuestionContentLength, MinimumLength = 15)]
         [Display(Name = "Въпрос")]
-        public string Content { get; set; }
+        public string QuestionContent { get; set; }
 
         [StringLength(400, ErrorMessage = QuestionErrorMessages.QuestionRuleLength, MinimumLength = 15)]
         [Display(Name = "Правило")]

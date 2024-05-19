@@ -18,11 +18,11 @@ namespace QuizExam.Infrastructure.Data
         public string Description { get; set; }
 
         [Required]
-        [Column(TypeName = "date")]
-        public DateTime CreateDate { get; set; } = DateTime.Today;
+        [Column(TypeName = "datetime")]
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
-        [Column(TypeName = "date")]
-        public DateTime ModifyDate { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime ModifyDate { get; set; } = DateTime.Now;
 
         public bool IsActive { get; set; } = false;
 

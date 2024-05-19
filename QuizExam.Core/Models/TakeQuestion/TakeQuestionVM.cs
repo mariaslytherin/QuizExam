@@ -1,4 +1,5 @@
 ﻿using QuizExam.Core.Models.TakeAnswer;
+using QuizExam.Infrastructure.Data.Enums;
 
 namespace QuizExam.Core.Models.TakeQuestion
 {
@@ -17,6 +18,12 @@ namespace QuizExam.Core.Models.TakeQuestion
         public string CheckedOptionId { get; set; }
 
         public bool IsLast { get; set; }
+
+        public string Duration { get; set; }
+
+        public string TimePassed { get; set; }
+
+        public TakeExamModeEnum Mode { get; set; }
 
         public List<TakeAnswerVM> TakeAnswers { get; set; }
     }

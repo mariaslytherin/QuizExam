@@ -143,6 +143,7 @@ namespace QuizExam.Test.TakeAnswerServiceTests
         public void TearDown()
         {
             dbContext.Dispose();
+            serviceProvider.Dispose();
         }
 
         private async Task SeedDbAsync(IApplicationDbRepository repo)

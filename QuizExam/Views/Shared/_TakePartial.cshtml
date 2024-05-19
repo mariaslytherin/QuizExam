@@ -1,0 +1,47 @@
+﻿@using QuizExam.Core.Models.TakeQuestion
+@model TakeQuestionVM
+
+@{
+    var order = Model.Order + 1;
+}
+
+<form method="post" id="questionForm">
+    <div class="card-header">
+        <p class="font-weight-bold" id="questionContent">@order. @Model.Content</p>
+    </div>
+    <div class="card-body" style="display: block;">
+        <input type="hidden" asp-for="@Model.QuestionId" name="QuestionId" value="@Model.QuestionId" id="questionId" />
+        <input type="hidden" asp-for="@Model.TakeExamId" name="TakeExamId" value="@Model.TakeExamId" id="takeExamId" />
+        <input type="hidden" asp-for="@Model.ExamId" name="ExamId" value="@Model.ExamId" id="examId" />
+        <input type="hidden" asp-for="@Model.Order" name="Order" value="@Model.Order" id="order" />
+        <input type="hidden" asp-for="@Model.IsLast" name="IsLast" value="@Model.IsLast" value="@Model.IsLast" id="isLast" />
+        <input type="hidden" asp-for="@Model.TimePassed" name="TimePassed" value="@Model.TimePassed" id="timePassed" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @for (int i = 0; i < Model.TakeAnswers.Count; i++)
+        {
+            string checkedOption = Model.TakeAnswers[i].IsChecked ? "checked" : null;
+            <div class="form-check" style="margin-left: 50px;">
+                <input type="hidden" asp-for="@Model.TakeAnswers[i].AnswerId" />
+                <input type="hidden" asp-for="@Model.TakeAnswers[i].OptionId" />
+                <input type="hidden" asp-for="@Model.TakeAnswers[i].Content" />
+                <input asp-for="@Model.CheckedOptionId" value="@Model.TakeAnswers[i].OptionId" name="CheckedOptionId" checked="@checkedOption" type="radio" class="form-check-input" /> @Model.TakeAnswers[i].Content
+            </div>
+        }
+    </div>
+    <div class="card-footer" style="display: block;">
+        <div class="row">
+            @if (Model.Order - 1 >= 0)
+            {
+                <button id="previousButton" type="button" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-right: auto; height: fit-content;">Назад</button>
+            }
+            @if (Model.IsLast)
+            {
+                <button id="nextButton" type="button" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-left: auto; height: fit-content;">Предай</button>
+            }
+            else
+            {
+                <button id="nextButton" type="button" class="btn btn-outline-secondary btn-sm" style="width: 100px; margin-left: auto; height: fit-content;">Следващ</button>
+            }
+        </div>
+    </div>
+</form>

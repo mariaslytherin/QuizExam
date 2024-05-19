@@ -1,4 +1,5 @@
 ﻿@using QuizExam.Core.Models.TakeExam
+@using QuizExam.Infrastructure.Data.Enums
 @model TakenExamsListVM
 @{
     ViewData["Title"] = "Архив";
@@ -19,6 +20,7 @@
                             <th style="text-align: center;">Заглавие</th>
                             <th style="text-align: center;">Предмет</th>
                             <th style="text-align: center;">Дата на полагане</th>
+                            <th style="text-align: center;">Режим</th>
                             <th style="text-align: center;">Точки</th>
                         </tr>
                     </thead>
@@ -38,6 +40,7 @@
                                 <td style="text-align: center;">@exam.Title</td>
                                 <td style="text-align: center;">@exam.SubjectName</td>
                                 <td style="text-align: center;">@exam.CreateDate</td>
+                                <td style="text-align: center;">@(exam.Mode == TakeExamModeEnum.Exercise ? "Упражнение" : "Тренировка")</td>
                                 <td style="text-align: center;">@exam.ResultScore / @exam.MaxScore</td>
                             </tr>
                         }

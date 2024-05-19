@@ -1,6 +1,7 @@
 ﻿using QuizExam.Core.Models.Question;
 using QuizExam.Core.Models.TakeQuestion;
 using QuizExam.Infrastructure.Data;
+using QuizExam.Infrastructure.Data.Enums;
 
 namespace QuizExam.Core.Contracts
 {

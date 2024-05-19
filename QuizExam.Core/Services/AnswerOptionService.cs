@@ -25,7 +25,7 @@ namespace QuizExam.Core.Services
                 var answerOption = new AnswerOption
                 {
                     QuestionId = question.Id,
-                    Content = model.Content,
+                    Content = model.OptionContent,
                 };
 
                 await this.repository.AddAsync(answerOption);
@@ -60,6 +60,7 @@ namespace QuizExam.Core.Services
             {
                 var answerOptions = await this.repository.All<AnswerOption>()
                     .Where(a => a.QuestionId == questionId.ToGuid() && !a.IsDeleted)
+                    .OrderBy(x => x.CreateDate)
                     .Select(a => new AnswerOptionVM
                     {
                         Id = a.Id.ToString(),

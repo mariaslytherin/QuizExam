@@ -11,7 +11,7 @@
         <p class="lead" style="word-wrap: break-word;">@Model.Description</p>
     </div>
     <div class="row d-flex justify-content-center">
-        <a asp-action="new" asp-controller="question" asp-route-id="@Model.Id" class="btn btn-success" style="width:auto; margin-bottom: 10px;">Добави въпрос</a>
+        <a asp-action="new" asp-controller="question" asp-route-id="@Model.Id" asp-route-isActive="@Model.IsActive" class="btn btn-info" style="width:auto; margin-bottom: 10px;">Добави въпрос</a>
     </div>
 </header>
 @for (int i = 0; i < Model.Questions.Count; i++)
@@ -41,9 +41,9 @@
                 </div>
                 <div class="card-footer" style="display: block;">
                     <div class="row">
-                        <form method="post" class="col-sm-4">
-                            <a asp-action="edit" asp-controller="question" asp-route-id="@question.Id" asp-route-examId="@Model.Id" class="btn btn-outline-secondary btn-sm" style="width: 70px; margin-right: 5px; height: fit-content;">Edit</a>
-                            <button asp-action="Delete" asp-controller="Question" asp-route-id="@question.Id" asp-route-examId="@Model.Id" type="submit" class="btn btn-outline-dark btn-sm" style="width: 70px; height: fit-content;">Delete</button>
+                        <form method="post" class="col-sm-5">
+                            <a asp-action="edit" asp-controller="question" asp-route-id="@question.Id" asp-route-examId="@Model.Id" class="btn btn-outline-info btn-sm" style="width: fit-content; margin-right: 5px; height: fit-content;">Редактирай</a>
+                            <button asp-action="Delete" asp-controller="Question" asp-route-id="@question.Id" asp-route-examId="@Model.Id" type="submit" class="btn btn-outline-danger btn-sm" style="width: fit-content; height: fit-content;">Изтрий</button>
                         </form>
                     </div>
                 </div>

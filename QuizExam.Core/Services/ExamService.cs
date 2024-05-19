@@ -88,6 +88,7 @@ namespace QuizExam.Core.Services
                 exam.Title = model.Title;
                 exam.Description = model.Description;
                 exam.MaxScore = model.MaxScore;
+                exam.Duration = TimeSpan.Parse(model.Duration);
                 exam.ModifyDate = DateTime.Today;
                 await this.repository.SaveChangesAsync();
                 result = true;
@@ -169,6 +170,7 @@ namespace QuizExam.Core.Services
                         Title = exam.Title,
                         Description = exam.Description,
                         MaxScore = exam.MaxScore,
+                        Duration = exam.Duration.ToString(@"hh\:mm"),
                         SubjectName = subject.Name,
                     };
                 }
@@ -189,9 +191,7 @@ namespace QuizExam.Core.Services
 
                 if (hasQuestions)
                 {
-                    var test = id.ToGuid();
-
-                    var questions = this.repository.All<Question>().Where(q => q.ExamId == test && !q.IsDeleted)
+                    var questions = this.repository.All<Question>().Where(q => q.ExamId == id.ToGuid() && !q.IsDeleted)
                         .OrderBy(q => q.CreateDate)
                         .Select(q => new QuestionExamVM
                         {
@@ -201,6 +201,7 @@ namespace QuizExam.Core.Services
                             AnswerOptions = this.repository
                                 .All<AnswerOption>()
                                 .Where(a => a.QuestionId == q.Id && !a.IsDeleted)
+                                .OrderBy(a => a.CreateDate)
                                 .Select(a => new AnswerOptionVM
                                 {
                                     Content = a.Content,
@@ -215,6 +216,7 @@ namespace QuizExam.Core.Services
                         Id = exam.Id.ToString(),
                         Title = exam.Title,
                         Description = exam.Description,
+                        IsActive = exam.IsActive.ToString(),
                         SubjectName = subject.Name,
                         Questions = questions,
                     };
@@ -226,6 +228,7 @@ namespace QuizExam.Core.Services
                         Id = exam.Id.ToString(),
                         Title = exam.Title,
                         Description = exam.Description,
+                        IsActive = exam.IsActive.ToString(),
                         SubjectName = subject.Name,
                         Questions = new List<QuestionExamVM>(),
                     };
@@ -274,7 +277,7 @@ namespace QuizExam.Core.Services
 
             if (exam != null)
             {
-                var questionsPointsSum = this.repository.All<Question>().Where(q => !q.IsDeleted).Sum(q => q.Points);
+                var questionsPointsSum = this.repository.All<Question>().Where(q => !q.IsDeleted && q.ExamId == exam.Id).Sum(q => q.Points);
 
                 return exam.MaxScore == questionsPointsSum;
             }

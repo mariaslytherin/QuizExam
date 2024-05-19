@@ -1,0 +1,22 @@
+﻿<div class="modal fade" id="takeExamModal" tabindex="-1" role="dialog" aria-labelledby="takeExamModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="/TakeExam/Take">
+                <div class="modal-body">
+                    <input type="hidden" id="hiddenMode" name="mode" />
+                    <input type="hidden" name="ExamId" value="@Model.Id" />
+                    <p class="text-black"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Отказ</button>
+                    <button type="submit" class="btn btn-info" id="btnStart">Започни</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

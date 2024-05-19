@@ -1,7 +1,8 @@
 ﻿@using QuizExam.Core.Models.Exam
+@using QuizExam.Infrastructure.Data.Enums
 @model ExamVM
 
-<header class="bg-dark bg-gradient text-white" style="margin-bottom: 15px;">
+<header class="bg-dark bg-gradient" style="margin-bottom: 15px;">
     <div class="container px-4 text-center">
         <p class="lead">Изпит по @Model.SubjectName</p>
         <h1 class="fw-bolder">@Model.Title</h1>
@@ -10,6 +11,8 @@
         <p class="lead">Искате ли да започнете?</p>
     </div>
     <div class="row d-flex justify-content-center">
-        <a asp-action="take" asp-controller="takeExam" asp-route-examId="@Model.Id" class="btn btn-success" style="width:auto; margin-bottom: 10px;">Започни</a>
+        <a class="btn btn-info start-button" data-mode="@TakeExamModeEnum.Exercise" data-text='Започвайки този изпит в режим "Упражнение", ще бъде стартиран таймер, който ще ви помага да следите прогреса си.' style="width:auto; margin-bottom: 10px; margin-right: 5px;">Започни упражнение</a>
+        <a class="btn btn-info start-button" data-mode="@TakeExamModeEnum.Train" data-text='Започвайки този изпит в режим "Подготовка", ще бъде стартиран таймер с обратно броене. Когато времето за решаване свърши, въпросите, на които не сте посочили отговор ще се зачетат като грешни.' style="width:auto; margin-bottom: 10px; margin-right: 5px;">Започни подготовка</a>
+        <partial name="Modals/_TakeExamModal"></partial>
     </div>
 </header>
