@@ -29,12 +29,12 @@ namespace QuizExam.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTakeResult(string takeId)
+        public async Task<IActionResult> GetTakeResult(string takeId, string? filter = null)
         {
             try
             {
-                var take = await this.takeExamService.GetTakeForView(takeId);
-
+                var take = await this.takeExamService.GetTakeForView(takeId, filter);
+                ViewBag.Filter = filter;
                 return View("View", take);
             }
             catch

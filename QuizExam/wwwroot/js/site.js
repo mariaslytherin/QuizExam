@@ -31,6 +31,23 @@ $(document).ready(function () {
         $('#takeExamModal .modal-body p').text(text);
         $('#takeExamModal').modal('show');
     });
+
+    // Filter questions in view exam
+    $('input[type=radio][name=filter]').change(function () {
+        var selectedValue = this.value;
+        var params = new URLSearchParams(window.location.search);
+        var id = params.get('takeId');
+        
+        $.ajax({
+            url: '/TakeExam/GetTakeResult',
+            type: 'GET',
+            data: { filter: selectedValue, takeId: id },
+            success: function(response) {
+                $('body').html(response);
+            }
+        });
+        
+    });
 });
 
 var isFinishRequested = false;

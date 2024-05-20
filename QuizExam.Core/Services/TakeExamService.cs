@@ -84,6 +84,7 @@ namespace QuizExam.Core.Services
         {
             var takes = await this.repository.All<TakeExam>()
                 .Where(t => t.UserId == id && t.Status == TakeExamStatusEnum.Finished)
+                .OrderByDescending(t => t.CreateDate)
                 .Join(this.repository.All<Exam>(),
                       t => t.ExamId,
                       e => e.Id,
@@ -167,7 +168,7 @@ namespace QuizExam.Core.Services
             return model;
         }
 
-        public async Task<TakeExamVM> GetTakeForView(string takeExamId)
+        public async Task<TakeExamVM> GetTakeForView(string takeExamId, string? filter = null)
         {
             var take = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(takeExamId));
             var exam = await this.repository.GetByIdAsync<Exam>(take.ExamId);
@@ -203,6 +204,18 @@ namespace QuizExam.Core.Services
                     }).ToListAsync();
 
                 var resultScore = questions.Where(q => q.AnswerOptions.Any(a => a.IsCorrect && a.Id is not null)).Select(q => q.Points).Sum();
+
+                if (filter is not null)
+                {
+                    if (filter == "correct")
+                    {
+                        questions = questions.Where(q => q.AnswerOptions.Any(a => a.IsCorrect && a.Id is not null)).ToList();
+                    }
+                    else if (filter == "incorrect")
+                    {
+                        questions = questions.Where(q => q.AnswerOptions.Any(a => (!a.IsCorrect && a.Id is not null) || (a.IsCorrect && a.Id is null))).ToList();
+                    }
+                }
 
                 return new TakeExamVM
                 {
