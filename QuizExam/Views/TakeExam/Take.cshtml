@@ -16,10 +16,11 @@
             </div>
             @if (!string.IsNullOrEmpty(Model.TimePassed))
             {
-                <a class="btn btn-app" style="min-width: 60px;">
+                <a class="btn btn-app" data-toggle="modal" data-target="#pauseExamModal" style="min-width: 60px;">
                     <i class="fas fa-pause"></i>
                     Пауза
                 </a>
+                <partial name="Modals/_PauseExamModal"></partial>
             }
         </div>
     </div>

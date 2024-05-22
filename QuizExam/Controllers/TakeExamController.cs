@@ -170,9 +170,7 @@ namespace QuizExam.Controllers
 
                 if (await this.takeExamService.PuaseExam(takeId, timePassed))
                 {
-                    var exams = await this.takeExamService.UncompletedExams(user.Id, page: 1, size: 10);
-
-                    return View("Uncompleted", exams);
+                    return RedirectToAction("GetUncompletedExams");
                 }
 
                 TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;

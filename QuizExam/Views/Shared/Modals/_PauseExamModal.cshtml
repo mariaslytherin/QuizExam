@@ -1,0 +1,19 @@
+﻿<div class="modal fade" id="pauseExamModal" tabindex="-1" role="dialog" aria-labelledby="pauseExamModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Сигурни ли сте, че искате да поставите изпита в статус "Незавършен"?</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-black">Избирайки бутон "Продължи" ще бъдете пренасочени към страницата "Незавършени", където ще можете да намерите изпита, за да продължите по-късно.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Отказ</button>
+                <a asp-controller="TakeExam" asp-action="GetUncompletedExams" class="btn btn-info">Продължи</a>
+            </div>
+        </div>
+    </div>
+</div>

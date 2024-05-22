@@ -70,7 +70,7 @@ $(document).on('click', '#nextButton', function () {
         data: JSON.stringify(model),
         success: function (response) {
             if (response.errorMessage) {
-                toastr.error('@TempData[ErrorMessageConstants.ErrorMessage]?.ToString()');
+                toastr.error(response.errorMessage);
             } else if (response.isFinished) {
                 sessionStorage.removeItem('startTime');
                 isFinishRequested = true;
