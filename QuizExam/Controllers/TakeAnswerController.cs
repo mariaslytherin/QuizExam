@@ -5,7 +5,7 @@ using QuizExam.Core.Models.TakeQuestion;
 
 namespace QuizExam.Controllers
 {
-    public class TakeAnswerController : Controller
+    public class TakeAnswerController : BaseController
     {
         private readonly ITakeAnswerService takeAnswerService;
 

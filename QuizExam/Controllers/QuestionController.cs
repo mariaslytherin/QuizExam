@@ -5,7 +5,7 @@ using QuizExam.Infrastructure.Data.Enums;
 
 namespace QuizExam.Controllers
 {
-    public class QuestionController : Controller
+    public class QuestionController : BaseController
     {
         private readonly IQuestionService questionService;
         private readonly IAnswerOptionService answerService;
