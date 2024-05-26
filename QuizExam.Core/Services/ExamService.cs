@@ -284,5 +284,46 @@ namespace QuizExam.Core.Services
 
             return false;
         }
+
+        public List<HardestQuestionVM> GetExamTopHardestQuestionsAsync(string id, int topN)
+        {
+            var hardestQuestions = repository.AllReadonly<TakeAnswer>()
+                .Include(ta => ta.AnswerOption)
+                .ThenInclude(q => q.Question)
+                .Where(ta => ta.AnswerOption.IsCorrect == false)
+                .GroupBy(ta => new { ta.QuestionId, ta.Question.Content, ta.Question.Rule })
+                .Select(g => new
+                {
+                    QuestionId = g.Key.QuestionId,
+                    Content = g.Key.Content,
+                    Rule = g.Key.Rule,
+                    DifficultyRatio = g.Count() * 1.0 / repository.AllReadonly<TakeAnswer>().Count(ta => ta.QuestionId == g.Key.QuestionId)
+                })
+                .OrderByDescending(x => x.DifficultyRatio)
+                .Take(5)
+                .ToList();
+
+            var incorrectPercentages = new List<HardestQuestionVM>();
+            foreach (var question in hardestQuestions)
+            {
+                var incorrectPercentage = repository.AllReadonly<TakeExam>()
+                    .Include(te => te.TakeAnswers)
+                    .ThenInclude(ta => ta.AnswerOption)
+                    .Where(te => te.TakeAnswers.Any(ta => ta.QuestionId == question.QuestionId && ta.AnswerOption.IsCorrect == false))
+                    .Select(te => te.UserId)
+                    .Distinct()
+                    .Count() * 100 / repository.AllReadonly<TakeExam>().Select(te => te.UserId).Distinct().Count();
+
+                incorrectPercentages.Add(new HardestQuestionVM
+                {
+                    QuestionId = question.QuestionId.ToString(),
+                    Content = question.Content,
+                    Rule = question.Rule,
+                    MistakePercentage = incorrectPercentage
+                });
+            }
+
+            return incorrectPercentages;
+        }
     }
 }

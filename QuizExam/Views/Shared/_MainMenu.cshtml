@@ -19,8 +19,8 @@
         </li>
         <li class="nav-item menu-open">
             <a href="/" class="nav-link">
+                <i class="nav-icon fa-solid fa-file-lines"></i>
                 <p>
-                    <i class="nav-icon fas fa-table"></i>
                     Моите изпити
                     <i class="fas fa-angle-left right"></i>
                 </p>
@@ -28,17 +28,23 @@
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a asp-controller="TakeExam" asp-action="GetUncompletedExams" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="far fa-circle nav-icon text-info"></i>
                         <p> Незавършени </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a asp-controller="TakeExam" asp-action="GetTakenExams" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="far fa-circle nav-icon text-info"></i>
                         <p> Архив </p>
                     </a>
                 </li>
             </ul>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Statistics" asp-action="GetTopHardestQuestions" class="nav-link">
+                <i class="nav-icon fa-solid fa-chart-pie"></i>
+                <p> Статистика </p>
+            </a>
         </li>
     </ul>
 </nav>

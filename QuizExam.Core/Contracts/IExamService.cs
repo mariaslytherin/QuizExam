@@ -1,4 +1,5 @@
 ﻿using QuizExam.Core.Models.Exam;
+using QuizExam.Core.Models.Question;
 using QuizExam.Infrastructure.Data;
 
 namespace QuizExam.Core.Contracts
@@ -16,6 +17,8 @@ namespace QuizExam.Core.Contracts
         Task<EditExamVM> GetExamForEditAsync(string id);
 
         Task<ViewExamVM> GetExamForViewAsync(string id);
+
+        List<HardestQuestionVM> GetExamTopHardestQuestionsAsync(string id, int topN);
 
         Task<bool> EditAsync(EditExamVM model);
 

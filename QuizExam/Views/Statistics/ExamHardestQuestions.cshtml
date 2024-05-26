@@ -1,0 +1,112 @@
+﻿@using QuizExam.Core.Models.Question
+@model List<HardestQuestionVM>
+
+<form>
+    <div class="row">
+        <div class="col-5">
+            <div class="form-group">
+                <label>Sort Order:</label>
+                <select class="js-example-placeholder-single js-states" style="width: 200px">
+                    <option></option>
+                    <option value="AL">Alabama</option>
+                    <option value="WY">Wyoming</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-info" style="width: 100px">Зареди</button>
+        </div>
+    </div>
+</form>
+
+<div class="card" style="position: relative; left: 0px; top: 0px;">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-chart-pie mr-1"></i>
+            Топ 5 най-често грешени въпроси
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="chart-container col" style="position: relative; height:400px; width:600px;">
+                <canvas id="myChart"></canvas>
+            </div>
+            <div class="col">
+                <h3>Пояснения на бар-диаграмата:</h3>
+                <ul>
+                    <li>Всяка лента на диаграмата представлява един въпрос.</li>
+                    <li>Височината на лентата показва процента на потребителите, които са дали грешен отговор на този въпрос.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            ctx.canvas.width = 600;
+            ctx.canvas.height = 400;
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(Model.Select(q => q.Content))),
+                    datasets: [{
+                        label: '% потребители посочили грешен отговор',
+                        data: @Html.Raw(Json.Serialize(Model.Select(q => q.MistakePercentage.ToString()))),
+                        backgroundColor: [
+                            // Add colors for each question
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 215, 0, 0.2)',
+                            'rgba(50, 205, 50, 0.2)',
+                            'rgba(65, 105, 225, 0.2)',
+                            'rgba(255, 127, 80, 0.2)',
+                        ],
+                        borderColor: [
+                            // Add border colors for each question
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 215, 0, 1)',
+                            'rgba(50, 205, 50, 1)',
+                            'rgba(65, 105, 225, 1)',
+                            'rgba(255, 127, 80, 1)',
+                        ],
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            display: false,
+                        },
+                        y: {
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Топ 5 най-често грешени въпроси'
+                    }
+                }
+            });
+
+            document.getElementById('myChart').onclick = function (evt) {
+                const activePoints = myChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+                if (activePoints.length > 0) {
+                    const firstPoint = activePoints[0];
+                    const label = myChart.data.labels[firstPoint.index];
+                    const value = myChart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+                    // Handle the click action (e.g., navigate to a link)
+                    console.log(`Clicked on ${label} with value ${value}`);
+                }
+            };
+
+            $('.js-example-placeholder-single').select2();
+        });
+    </script>
+}
