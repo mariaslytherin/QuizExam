@@ -1,23 +1,59 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using QuizExam.Core.Contracts;
-using QuizExam.Infrastructure.Data;
+using QuizExam.Core.Models.Question;
 
 namespace QuizExam.Controllers
 {
     public class StatisticsController : BaseController
     {
         private readonly IExamService examService;
+        private readonly ISubjectService subjectService;
 
-        public StatisticsController(IExamService examService)
+        public StatisticsController(IExamService examService, ISubjectService subjectService)
         {
             this.examService = examService;
+            this.subjectService = subjectService;
         }
 
-        public IActionResult GetTopHardestQuestions(string? examId = null, int? topN = null)
+        [HttpGet]
+        public async Task<IActionResult> GetTopHardestQuestions(string? subjectId = null, string? examId = null)
         {
-            var hardestQuestions = this.examService.GetExamTopHardestQuestionsAsync("D18715F0-CE0B-4C2E-AF72-999CDBA54EC5", 5);
+            var subjects = await this.subjectService.GetActiveSubjectsAsync();
+            var exams = await this.examService.GetActiveExamsBySubjectAsync(subjectId);
 
-            return View("ExamHardestQuestions", hardestQuestions);
+            ViewBag.Subjects = subjects
+                .Select(s => new SelectListItem()
+                {
+                    Text = s.Name,
+                    Value = s.Id.ToString(),
+                })
+                .ToList();
+
+            ViewBag.Exams = exams
+                .Select(s => new SelectListItem()
+                {
+                    Text = s.Title,
+                    Value = s.Id.ToString(),
+                })
+                .ToList();
+
+            var hardestQuestions = this.examService.GetExamTop5HardestQuestionsAsync(examId);
+            var model = new HardestQuestionVM
+            {
+                SubjectId = subjectId,
+                ExamId = examId,
+                HardestQuestionsInfo = hardestQuestions,
+            };
+
+            return View("ExamHardestQuestions", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetExamsForSubject(string subjectId)
+        {
+            var exams = await this.examService.GetActiveExamsBySubjectAsync(subjectId);
+            return Json(exams);
         }
     }
 }

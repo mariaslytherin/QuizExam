@@ -285,12 +285,25 @@ namespace QuizExam.Core.Services
             return false;
         }
 
-        public List<HardestQuestionVM> GetExamTopHardestQuestionsAsync(string id, int topN)
+        public async Task<IEnumerable<Exam>> GetActiveExamsBySubjectAsync(string subjectId)
         {
+            return await this.repository.AllReadonly<Exam>()
+                .Where(e => e.SubjectId == subjectId.ToGuid() && e.IsActive)
+                .ToListAsync();
+        }
+
+        public List<HardestQuestionInfoVM> GetExamTop5HardestQuestionsAsync(string examId)
+        {
+            if (examId.ToGuid() == Guid.Empty)
+            {
+                return new List<HardestQuestionInfoVM>();
+            }
+
             var hardestQuestions = repository.AllReadonly<TakeAnswer>()
+                .Include(ta => ta.TakeExam)
                 .Include(ta => ta.AnswerOption)
                 .ThenInclude(q => q.Question)
-                .Where(ta => ta.AnswerOption.IsCorrect == false)
+                .Where(ta => ta.TakeExam.ExamId == examId.ToGuid() && ta.AnswerOption.IsCorrect == false)
                 .GroupBy(ta => new { ta.QuestionId, ta.Question.Content, ta.Question.Rule })
                 .Select(g => new
                 {
@@ -303,7 +316,7 @@ namespace QuizExam.Core.Services
                 .Take(5)
                 .ToList();
 
-            var incorrectPercentages = new List<HardestQuestionVM>();
+            var incorrectPercentages = new List<HardestQuestionInfoVM>();
             foreach (var question in hardestQuestions)
             {
                 var incorrectPercentage = repository.AllReadonly<TakeExam>()
@@ -314,7 +327,7 @@ namespace QuizExam.Core.Services
                     .Distinct()
                     .Count() * 100 / repository.AllReadonly<TakeExam>().Select(te => te.UserId).Distinct().Count();
 
-                incorrectPercentages.Add(new HardestQuestionVM
+                incorrectPercentages.Add(new HardestQuestionInfoVM
                 {
                     QuestionId = question.QuestionId.ToString(),
                     Content = question.Content,

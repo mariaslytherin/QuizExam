@@ -18,7 +18,9 @@ namespace QuizExam.Core.Contracts
 
         Task<ViewExamVM> GetExamForViewAsync(string id);
 
-        List<HardestQuestionVM> GetExamTopHardestQuestionsAsync(string id, int topN);
+        List<HardestQuestionInfoVM> GetExamTop5HardestQuestionsAsync(string examId);
+
+        Task<IEnumerable<Exam>> GetActiveExamsBySubjectAsync(string subjectId);
 
         Task<bool> EditAsync(EditExamVM model);
 

@@ -1,21 +1,30 @@
 ﻿@using QuizExam.Core.Models.Question
-@model List<HardestQuestionVM>
+@model HardestQuestionVM
 
-<form>
-    <div class="row">
-        <div class="col-5">
-            <div class="form-group">
-                <label>Sort Order:</label>
-                <select class="js-example-placeholder-single js-states" style="width: 200px">
-                    <option></option>
-                    <option value="AL">Alabama</option>
-                    <option value="WY">Wyoming</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-info" style="width: 100px">Зареди</button>
-        </div>
+@{
+    var subjects = (List<SelectListItem>)ViewBag.Subjects;
+    var exams = (List<SelectListItem>)ViewBag.Exams;
+}
+
+<div class="row justify-content-left form-group">
+    <div class="col-md-auto">
+        <label asp-for="SubjectId"></label>
+        <select asp-for="SubjectId" asp-items="@subjects" name="SubjectId" id="subjectSelect" data-placeholder="Избери предмет" style="width: 280px">
+            <option></option>
+        </select>
+        <span asp-validation-for="SubjectId" class="text-danger"></span>
     </div>
-</form>
+    <div class="col-md-auto">
+        <label asp-for="ExamId"></label>
+        <select asp-for="ExamId" name="ExamId" asp-items="@exams" id="examSelect" data-placeholder="Избери изпит" style="width: 280px">
+            <option></option>
+        </select>
+        <span asp-validation-for="ExamId" class="text-danger"></span>
+    </div>
+    <div class="col">
+        <a type="button" class="btn btn-info load-button" style="margin-top: 32px">Зареди</a>
+    </div>
+</div>
 
 <div class="card" style="position: relative; left: 0px; top: 0px;">
     <div class="card-header">
@@ -37,7 +46,6 @@
                 </ul>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -50,10 +58,10 @@
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: @Html.Raw(Json.Serialize(Model.Select(q => q.Content))),
+                    labels: @Html.Raw(Json.Serialize(Model.HardestQuestionsInfo.Select(q => q.Content))),
                     datasets: [{
                         label: '% потребители посочили грешен отговор',
-                        data: @Html.Raw(Json.Serialize(Model.Select(q => q.MistakePercentage.ToString()))),
+                        data: @Html.Raw(Json.Serialize(Model.HardestQuestionsInfo.Select(q => q.MistakePercentage.ToString()))),
                         backgroundColor: [
                             // Add colors for each question
                             'rgba(255, 99, 132, 0.2)',
@@ -106,7 +114,51 @@
                 }
             };
 
-            $('.js-example-placeholder-single').select2();
+            $('#subjectSelect').select2({
+                allowClear: true
+            });
+            $('#examSelect').select2({
+                allowClear: true
+            });
+
+            $('#subjectSelect').on('change', function () {
+                var selectedSubjectId = $(this).val();
+
+                // Make an AJAX request to fetch exams for the selected subject
+                $.ajax({
+                    url: '/Statistics/GetExamsForSubject',
+                    type: 'GET',
+                    data: { subjectId: selectedSubjectId },
+                    success: function (data) {
+                        // Clear existing options in examSelect
+                        $('#examSelect').empty();
+
+                        // Add new options based on the response
+                        $.each(data, function (index, exam) {
+                            $('#examSelect').append($('<option>', {
+                                value: exam.id,
+                                text: exam.title
+                            }));
+                        });
+                    }
+                });
+            });
+
+            $('.load-button').click(function () {
+                var subjectSelect = document.getElementById('subjectSelect');
+                var subjectId = subjectSelect.value;
+                var examSelect = document.getElementById('examSelect');
+                var examId = examSelect.value;
+
+                $.ajax({
+                    url: "/Statistics/GetTopHardestQuestions",
+                    type: "GET",
+                    data: { 'subjectId': subjectId, 'examId': examId },
+                    success: function (response) {
+                        $('body').html(response);
+                    }
+                });
+            });
         });
     </script>
 }

@@ -1,15 +1,16 @@
-﻿namespace QuizExam.Core.Models.Question
+﻿using QuizExam.Core.Constants;
+using System.ComponentModel.DataAnnotations;
+
+namespace QuizExam.Core.Models.Question
 {
     public class HardestQuestionVM
     {
-        public string QuestionId { get; set; }
+        [Display(Name = "Предмет")]
+        public string SubjectId { get; set; }
 
-        public string Content { get; set; }
+        [Display(Name = "Изпит")]
+        public string ExamId { get; set; }
 
-        public string Rule { get; set; }
-
-        public int MistakesCount { get; set; }
-
-        public double MistakePercentage { get; set; }
+        public List<HardestQuestionInfoVM> HardestQuestionsInfo { get; set; }
     }
 }

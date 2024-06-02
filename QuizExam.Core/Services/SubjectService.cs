@@ -74,7 +74,7 @@ namespace QuizExam.Core.Services
 
         public async Task<IEnumerable<SubjectVM>> GetActiveSubjectsAsync()
         {
-            return await this.repository.All<Subject>()
+            return await this.repository.AllReadonly<Subject>()
                 .Where(s => s.IsActive)
                 .Select(s => new SubjectVM()
                 {
