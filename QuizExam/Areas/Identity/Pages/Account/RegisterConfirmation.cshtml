@@ -1,0 +1,21 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Потвърждение на регистрация";
+}
+
+<h1>@ViewData["Title"]</h1>
+@{
+    if (@Model.DisplayConfirmAccountLink)
+    {
+        <p>Понастоящем това приложение не поддържа истински имейл подател.</p>
+        <a class="btn btn-outline-info" href="@Model.EmailConfirmationUrl">Кликнете тук, за да потвърдите имейла си.</a>
+    }
+    else
+    {
+        <p>
+            Please check your email to confirm your account.
+        </p>
+    }
+}
+

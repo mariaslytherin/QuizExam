@@ -49,10 +49,39 @@
                             </div>
                         </div>
                         <div class="col-4">
-                            <button id="login-submit" type="submit" class="btn btn-primary btn-block">Вход</button>
+                            <button id="login-submit" type="submit" class="btn btn-info btn-block">Вход</button>
                         </div>
                     </div>
                 </form>
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) != 0)
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                <p class="text-center">- ИЛИ -</p>
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        <div class="social-auth-links text-center mb-3">
+                                            @if (provider.Name == "Facebook")
+                                            {
+                                                <button href="#" class="btn btn-block btn-primary" name="provider" value="@provider.Name">
+                                                    <i class="fab fa-facebook mr-2"></i> Вход с Facebook
+                                                </button>
+                                            }
+                                            @if (provider.Name == "Google")
+                                            {
+                                                <button href="#" class="btn btn-block btn-outline-secondary" name="provider" value="@provider.Name">
+                                                <img src="/img/search.png" style="margin-right: 8px; margin-bottom: 4px"></img> Вход с Google
+                                                </button>
+                                            }
+                                        </div>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
                 <p class="mb-1">
                     <a id="forgot-password" asp-page="./ForgotPassword">Забравена парола?</a>
                 </p>
