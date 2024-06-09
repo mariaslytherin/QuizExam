@@ -144,7 +144,7 @@ namespace QuizExam.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Възникна грешка при опит за вход в системата.");
                     return Page();
                 }
             }

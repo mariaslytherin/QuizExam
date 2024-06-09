@@ -157,6 +157,7 @@ namespace QuizExam.Areas.Identity.Pages.Account
                     }
                     else if (!_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
+                        TempData[SuccessMessageConstants.SuccessMessage] = "Успешна регистрация. Моля влезте в системата, за да продължите.";
                         return LocalRedirect(returnUrl);
                     }
                     else

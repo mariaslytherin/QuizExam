@@ -40,6 +40,7 @@ namespace QuizExam.Core.Services
                     Points = model.Points,
                 };
 
+                exam.ModifyDate = DateTime.Now;
                 await this.repository.AddAsync(question);
                 await this.repository.SaveChangesAsync();
 
@@ -55,10 +56,12 @@ namespace QuizExam.Core.Services
         {
             bool result = false;
             var question = await this.repository.GetByIdAsync<Question>(id.ToGuid());
+            var exam = await this.repository.GetByIdAsync<Exam>(question.ExamId);
 
             if (question != null)
             {
                 question.IsDeleted = true;
+                exam.ModifyDate = DateTime.Now;
                 await this.repository.SaveChangesAsync();
                 result = true;
             }
@@ -70,13 +73,15 @@ namespace QuizExam.Core.Services
         {
             bool result = false;
             var question = await this.repository.GetByIdAsync<Question>(model.Id.ToGuid());
+            var exam = await this.repository.GetByIdAsync<Exam>(question.ExamId);
 
             if (question != null)
             {
                 question.Content = model.QuestionContent;
                 question.Rule = model.Rule;
                 question.Points = model.Points;
-                question.ModifyDate = DateTime.Today;
+                question.ModifyDate = DateTime.Now;
+                exam.ModifyDate = DateTime.Now;
                 await this.repository.SaveChangesAsync();
                 result = true;
             }

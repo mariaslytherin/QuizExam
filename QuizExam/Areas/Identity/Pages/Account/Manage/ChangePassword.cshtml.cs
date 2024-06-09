@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using QuizExam.Core.Constants;
 using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Areas.Identity.Pages.Account.Manage
@@ -53,19 +54,19 @@ namespace QuizExam.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Полето {0} е задължително.")]
             [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
+            [Display(Name = "Текуща парола")]
             public string OldPassword { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Полето {0} е задължително.")]
+            [StringLength(100, ErrorMessage = "Полето {0} трябва да съдържа най-малко {2} и най-много {1} символа.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Display(Name = "Нова парола")]
             public string NewPassword { get; set; }
 
             /// <summary>
@@ -73,8 +74,8 @@ namespace QuizExam.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Display(Name = "Повтори нова парола")]
+            [Compare("NewPassword", ErrorMessage = "Новата паролата и повторно въведената парола не съвпадат.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -120,7 +121,7 @@ namespace QuizExam.Areas.Identity.Pages.Account.Manage
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            TempData[SuccessMessageConstants.SuccessMessage] = "Вашата парола беше променена успешно.";
 
             return RedirectToPage();
         }

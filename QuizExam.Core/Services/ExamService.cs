@@ -26,6 +26,7 @@ namespace QuizExam.Core.Services
             if (exam != null)
             {
                 exam.IsActive = true;
+                exam.ModifyDate = DateTime.Now;
                 await this.repository.SaveChangesAsync();
                 result = true;
             }
@@ -56,6 +57,7 @@ namespace QuizExam.Core.Services
             if (exam != null)
             {
                 exam.IsActive = false;
+                exam.ModifyDate = DateTime.Now;
                 await this.repository.SaveChangesAsync();
                 result = true;
             }

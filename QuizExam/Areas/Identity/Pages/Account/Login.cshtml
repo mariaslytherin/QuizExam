@@ -1,4 +1,5 @@
 ﻿@page
+@using QuizExam.Core.Constants
 @model LoginModel
 
 @{
@@ -16,6 +17,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="~/plugins/toastr/toastr.min.css" />
     <link rel="stylesheet" href="~/css/adminlte.min.css">
 </head>
 <body class="hold-transition login-page">
@@ -82,9 +84,6 @@
                         </form>
                     }
                 }
-                <p class="mb-1">
-                    <a id="forgot-password" asp-page="./ForgotPassword">Забравена парола?</a>
-                </p>
                 <p class="mb-0">
                     <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Регистриране на потребител</a>
                 </p>
@@ -94,6 +93,15 @@
     <script src="~/plugins/jquery/jquery.min.js"></script>
     <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/adminlte.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
     <partial name="_ValidationScriptsPartial" />
+    @if (TempData[SuccessMessageConstants.SuccessMessage] != null)
+    {
+        <script>
+            $(function () {
+                toastr.success('@TempData[SuccessMessageConstants.SuccessMessage]?.ToString()');
+            });
+        </script>
+    }
 </body>
 </html>

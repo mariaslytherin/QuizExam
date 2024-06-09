@@ -12,6 +12,6 @@
         <img src="~/img/avatar5.png" class="img-circle elevation-2" alt="User Image">
     </div>
     <div class="info">
-        <a href="#" class="d-block">@user?.FirstName @user?.LastName</a>
+        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="d-block">@user?.FirstName @user?.LastName</a>
     </div>
 </div>

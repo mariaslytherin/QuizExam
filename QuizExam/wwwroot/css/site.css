@@ -53,3 +53,7 @@ html {
 .select2-selection__arrow {
     height: 38px !important;
 }
+
+.nav-pills .nav-link.active {
+    background-color: #138496;
+}

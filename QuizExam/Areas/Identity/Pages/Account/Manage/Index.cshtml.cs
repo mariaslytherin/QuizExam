@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using QuizExam.Core.Constants;
 using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Areas.Identity.Pages.Account.Manage
@@ -52,25 +53,25 @@ namespace QuizExam.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
+            [Required(ErrorMessage = "Полето {0} е задължително.")]
+            [StringLength(50, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
+            [Display(Name = "Име")]
+            public string FirstName { get; set; }
+
+            [Required(ErrorMessage = "Полето {0} е задължително.")]
+            [StringLength(50, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
+            [Display(Name = "Фамилия")]
+            public string LastName { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
-            Username = userName;
+            var userInfo = await _userManager.GetUserAsync(User);
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                FirstName = userInfo.FirstName,
+                LastName = userInfo.LastName,
             };
         }
 
@@ -100,19 +101,26 @@ namespace QuizExam.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            bool isUserUpdated = false;
+            if (user.FirstName != Input.FirstName || user.LastName != Input.LastName)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                isUserUpdated = true;
+            }
+
+            if (isUserUpdated)
+            {
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    TempData[ErrorMessageConstants.ErrorMessage] = "Възникна грешка при опит за редактиране на данните.";
                     return RedirectToPage();
                 }
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            TempData[SuccessMessageConstants.SuccessMessage] = "Вашите данни бяха редактирани успешно.";
             return RedirectToPage();
         }
     }
