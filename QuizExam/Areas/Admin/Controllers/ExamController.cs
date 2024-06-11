@@ -1,21 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.Exam;
+using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Areas.Admin.Controllers
 {
     public class ExamController : BaseController
     {
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IExamService examService;
         private readonly ISubjectService subjectService;
 
         public ExamController(
+            UserManager<ApplicationUser> userManager,
             IExamService examService,
             ISubjectService subjectService)
         {
+            this.userManager = userManager;
             this.examService = examService;
             this.subjectService = subjectService;
         }
@@ -84,8 +89,15 @@ namespace QuizExam.Areas.Admin.Controllers
 
             try
             {
-                await this.examService.CreateAsync(model);
-                TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulCreateMessage;
+                var user = await this.userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    await this.examService.CreateAsync(user.Id, model);
+                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulCreateMessage;
+                    return RedirectToAction(nameof(GetExamsList));
+                }
+
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulCreateMessage;
                 return RedirectToAction(nameof(GetExamsList));
             }
             catch
@@ -160,6 +172,12 @@ namespace QuizExam.Areas.Admin.Controllers
                 if (!await this.examService.QuestionsPointsSumEqualsMaxScoreAsync(id))
                 {
                     TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningExamNotEqualPointsMessage;
+                    return RedirectToAction(nameof(GetExamsList));
+                }
+
+                if (await this.examService.HasQuestionsWithoutSetCorrectAnswerAsync(id))
+                {
+                    TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningExamHasQuestionsWithoutCorrectAnswerMessage;
                     return RedirectToAction(nameof(GetExamsList));
                 }
 

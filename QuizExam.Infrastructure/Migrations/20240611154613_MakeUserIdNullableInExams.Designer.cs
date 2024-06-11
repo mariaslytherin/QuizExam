@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizExam.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using QuizExam.Infrastructure.Data;
 namespace QuizExam.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240611154613_MakeUserIdNullableInExams")]
+    partial class MakeUserIdNullableInExams
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,7 +353,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e8ef1f00-2a32-4c15-bc89-76db89cb0df4",
+                            ConcurrencyStamp = "fd2caa91-a491-4f9f-94b4-8bd7e340c9f7",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -358,9 +361,9 @@ namespace QuizExam.Infrastructure.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMJqEBigUpChYpk96Oqe/xAMUyxh/YROOC8mkYxN6/m7fbKx8XYkQEsLpBRXGyQyBQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECtyhn0gbKWUPeevEvJfcWsyOA/Y/+E1ZcMMtSILur7xx4AWWBvca59EAOkptFLyxg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3a1db7a4-e689-4b5b-84b4-8e1faa3225f1",
+                            SecurityStamp = "4772e371-ba58-4cdf-9b35-ba8291cbe7bc",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
                         });
@@ -599,7 +602,7 @@ namespace QuizExam.Infrastructure.Data.Migrations
                     b.HasOne("QuizExam.Infrastructure.Data.Identity.ApplicationUser", "User")
                         .WithMany("Exams")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Subject");
 

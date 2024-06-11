@@ -15,6 +15,12 @@ namespace QuizExam.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Exam>()
+                .HasOne(e => e.User)
+                .WithMany(u => u.Exams)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             builder.Entity<TakeAnswer>()
                 .HasOne(t => t.TakeExam)
                 .WithMany(t => t.TakeAnswers)

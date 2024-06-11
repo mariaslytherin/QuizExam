@@ -15,5 +15,7 @@ namespace QuizExam.Infrastructure.Data.Identity
         public string LastName { get; set; }
 
         public ICollection<TakeExam> Takes { get; set; } = new List<TakeExam>();
+
+        public ICollection<Exam> Exams { get; set; } = new List<Exam>();
     }
 }

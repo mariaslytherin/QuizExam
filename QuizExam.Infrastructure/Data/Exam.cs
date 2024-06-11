@@ -1,4 +1,5 @@
 ﻿using QuizExam.Infrastructure.Data.Constants;
+using QuizExam.Infrastructure.Data.Identity;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -41,6 +42,11 @@ namespace QuizExam.Infrastructure.Data
 
         [ForeignKey(nameof(SubjectId))]
         public Subject Subject { get; set; }
+
+        public string UserId { get; set; }
+
+        [ForeignKey(nameof(UserId))]
+        public ApplicationUser User { get; set; }
 
         public ICollection<Question> Questions { get; set; } = new List<Question>();
 

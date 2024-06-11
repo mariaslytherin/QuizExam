@@ -6,7 +6,7 @@ namespace QuizExam.Core.Contracts
 {
     public interface IExamService
     {
-        Task CreateAsync(NewExamVM model);
+        Task CreateAsync(string userId, NewExamVM model);
 
         Task<ExamListVM> GetAllExamsAsync(int? page, int? size);
 
@@ -33,5 +33,7 @@ namespace QuizExam.Core.Contracts
         Task<bool> HasAnyQuestionsAsync(string id);
 
         Task<bool> QuestionsPointsSumEqualsMaxScoreAsync(string id);
+
+        Task<bool> HasQuestionsWithoutSetCorrectAnswerAsync(string id);
     }
 }

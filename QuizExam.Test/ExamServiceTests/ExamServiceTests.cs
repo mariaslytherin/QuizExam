@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Services;
 using QuizExam.Infrastructure.Data;
+using QuizExam.Infrastructure.Data.Identity;
 using QuizExam.Infrastructure.Data.Repositories;
 using QuizExam.Test.Constants;
 
@@ -25,6 +27,7 @@ namespace QuizExam.Test.ExamServiceTests
                 .AddSingleton(sp => dbContext.CreateContext())
                 .AddSingleton<IApplicationDbRepository, ApplicationDbRepository>()
                 .AddSingleton<IExamService, ExamService>()
+                .AddSingleton<IUserService, UserService>()
                 .BuildServiceProvider();
 
             var repo = serviceProvider.GetService<IApplicationDbRepository>();
@@ -50,32 +53,40 @@ namespace QuizExam.Test.ExamServiceTests
         }
 
         [Test]
-        public void CreationOfExamMustThrowExceptionWhenTitleIsNull()
+        public async Task CreationOfExamMustThrowExceptionWhenTitleIsNull()
         {
             var model = new NewExamVM()
             {
                 Description = "Some Description",
                 MaxScore = 0,
-                SubjectId = UniqueIdentifiersTestConstants.SubjectId_Math
+                SubjectId = UniqueIdentifiersTestConstants.SubjectId_Math,
+                Duration = "01:30"
             };
 
+            var userService = serviceProvider.GetService<IUserService>();
+            var user = await userService.GetUserById(UniqueIdentifiersTestConstants.UserId);
+
             var service = serviceProvider.GetService<IExamService>();
-            Assert.CatchAsync<DbUpdateException>(async () => await service.CreateAsync(model), "NOT NULL constraint failed: Exams.Title");
+            Assert.CatchAsync<DbUpdateException>(async () => await service.CreateAsync(user.Id, model), "NOT NULL constraint failed: Exams.Title");
         }
 
         [Test]
-        public void CreationOfExamMustThrowExceptionWhenSubjectDoesNotExist()
+        public async Task CreationOfExamMustThrowExceptionWhenSubjectDoesNotExist()
         {
             var model = new NewExamVM()
             {
                 Title = "Some Title",
                 Description = "Some Description",
                 MaxScore = 0,
-                SubjectId = "93b3c9bb-93f9-4755-827a-b0bf9964270d"
+                SubjectId = "93b3c9bb-93f9-4755-827a-b0bf9964270d",
+                Duration = "00:30"
             };
 
+            var userService = serviceProvider.GetService<IUserService>();
+            var user = await userService.GetUserById(UniqueIdentifiersTestConstants.UserId);
+
             var service = serviceProvider.GetService<IExamService>();
-            Assert.CatchAsync<DbUpdateException>(async () => await service.CreateAsync(model));
+            Assert.CatchAsync<DbUpdateException>(async () => await service.CreateAsync(user.Id, model));
         }
 
         [Test]
@@ -123,6 +134,7 @@ namespace QuizExam.Test.ExamServiceTests
                 Description = "Some Description",
                 MaxScore = 100,
                 SubjectName = "Subject Name",
+                Duration = "00:30"
             };
 
             var service = serviceProvider.GetService<IExamService>();
@@ -157,6 +169,7 @@ namespace QuizExam.Test.ExamServiceTests
                 Description = "Some Description Here",
                 MaxScore = 50,
                 SubjectName = "Some Subject Name",
+                Duration = "00:30",
             };
 
             var service = serviceProvider.GetService<IExamService>();
@@ -323,6 +336,24 @@ namespace QuizExam.Test.ExamServiceTests
 
         private async Task SeedDbAsync(IApplicationDbRepository repo)
         {
+            var role = new IdentityRole
+            {
+                Name = "Admin",
+                Id = UniqueIdentifiersTestConstants.RoleId,
+                ConcurrencyStamp = UniqueIdentifiersTestConstants.RoleId
+            };
+
+            var user = new ApplicationUser
+            {
+                Id = UniqueIdentifiersTestConstants.UserId,
+                Email = "user@user.com",
+                NormalizedEmail = "USER@USER.COM",
+                EmailConfirmed = true,
+                FirstName = "User",
+                LastName = "User",
+                UserName = "user@user.com",
+            };
+
             var subjects = new List<Subject>()
             {
                 new Subject()
@@ -346,6 +377,8 @@ namespace QuizExam.Test.ExamServiceTests
                     Description = "Тест по математика за ученици в 12 клас.",
                     MaxScore = 100,
                     SubjectId = UniqueIdentifiersTestConstants.SubjectId_Math.ToGuid(),
+                    UserId = UniqueIdentifiersTestConstants.UserId,
+                    Duration = TimeSpan.Parse("00:30"),
                 },
                 new Exam()
                 {
@@ -355,6 +388,8 @@ namespace QuizExam.Test.ExamServiceTests
                     MaxScore = 2,
                     SubjectId = UniqueIdentifiersTestConstants.SubjectId_Bg.ToGuid(),
                     IsActive = true,
+                    UserId = UniqueIdentifiersTestConstants.UserId,
+                    Duration = TimeSpan.Parse("01:30"),
                 }
             };
 
@@ -366,6 +401,8 @@ namespace QuizExam.Test.ExamServiceTests
                 ExamId = UniqueIdentifiersTestConstants.ExamId_Bg.ToGuid(),
             };
 
+            await repo.AddAsync(role);
+            await repo.AddAsync(user);
             await repo.AddRangeAsync(subjects);
             await repo.AddRangeAsync(exams);
             await repo.AddAsync(question);

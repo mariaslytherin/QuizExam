@@ -34,7 +34,7 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task CreateAsync(NewExamVM model)
+        public async Task CreateAsync(string userId, NewExamVM model)
         {
             var exam = new Exam()
             {
@@ -43,6 +43,7 @@ namespace QuizExam.Core.Services
                 MaxScore = model.MaxScore,
                 SubjectId = model.SubjectId.ToGuid(),
                 Duration = TimeSpan.Parse(model.Duration),
+                UserId = userId,
             };
 
             await this.repository.AddAsync(exam);
@@ -282,6 +283,22 @@ namespace QuizExam.Core.Services
                 var questionsPointsSum = this.repository.All<Question>().Where(q => !q.IsDeleted && q.ExamId == exam.Id).Sum(q => q.Points);
 
                 return exam.MaxScore == questionsPointsSum;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> HasQuestionsWithoutSetCorrectAnswerAsync(string id)
+        {
+            var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
+
+            if (exam != null)
+            {
+                var hasQuestionsWithoutCorrectAnswer = this.repository.AllReadonly<Question>().Where(q => !q.IsDeleted && q.ExamId == exam.Id)
+                    .Include(q => q.Answers)
+                    .Any(q => !q.Answers.Any(a => a.IsCorrect));
+
+                return hasQuestionsWithoutCorrectAnswer;
             }
 
             return false;
