@@ -62,5 +62,7 @@
         public const string WarningExamMissingQuestionsMessage = "За да активирате изпита трябва да добавите въпроси!";
 
         public const string WarningExamNotEqualPointsMessage = "За да активирате изпита сбора от точките на въпросите трябва да е равен на максималния брой точки на изпита!";
+
+        public const string WarningExamHasQuestionsWithoutCorrectAnswerMessage = "За да активирате изпита всички добавени отговори на въпросите трябва да имат по един верен отговор!";
     }
 }

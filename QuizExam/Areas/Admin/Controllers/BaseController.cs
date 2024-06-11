@@ -4,7 +4,7 @@ using QuizExam.Core.Constants;
 
 namespace QuizExam.Areas.Admin.Controllers
 {
-    [Authorize(Roles = UserRolesConstants.Administrator)]
+    [Authorize(Roles = $"{UserRolesConstants.SuperAdmin},{UserRolesConstants.Administrator}")]
     [Area("Admin")]
     public class BaseController : Controller
     {

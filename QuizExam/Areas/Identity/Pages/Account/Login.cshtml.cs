@@ -126,7 +126,8 @@ namespace QuizExam.Areas.Identity.Pages.Account
 
                     var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
 
-                    if (await _signInManager.UserManager.IsInRoleAsync(user, "Administrator"))
+                    if (await _signInManager.UserManager.IsInRoleAsync(user, "Administrator") ||
+                        await _signInManager.UserManager.IsInRoleAsync(user, "SuperAdmin"))
                     {
                         return RedirectToAction("GetExamsList", "Exam", new { area = "Admin" });
                     }

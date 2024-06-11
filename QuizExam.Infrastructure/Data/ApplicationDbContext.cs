@@ -30,12 +30,20 @@ namespace QuizExam.Infrastructure.Data
                 .WithMany(a => a.TakeAnswers)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            string ADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
+            string SUPERADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
+            string SUPERADMIN_ROLE_ID = "fe59cdfb-998b-4b58-85b4-5a8600389721";
             string ADMIN_ROLE_ID = "341743f0-asd2–42de-afbf-59kmkkmk72cf6";
             string STUDENT_ROLE_ID = "daab2d3d-6652-4ef9-9d43-0ec02c7dc78f";
 
             //Seed user roles
             builder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Name = "SuperAdmin",
+                NormalizedName = "SUPERADMIN",
+                Id = SUPERADMIN_ROLE_ID,
+                ConcurrencyStamp = SUPERADMIN_ROLE_ID
+            },
+            new IdentityRole
             {
                 Name = "Administrator",
                 NormalizedName = "ADMINISTRATOR",
@@ -53,12 +61,12 @@ namespace QuizExam.Infrastructure.Data
             //Create Admin user
             var adminUser = new ApplicationUser
             {
-                Id = ADMIN_ID,
+                Id = SUPERADMIN_ID,
                 Email = "admin@admin.com",
                 NormalizedEmail = "ADMIN@ADMIN.COM",
                 EmailConfirmed = true,
                 FirstName = "Admin",
-                LastName = "Admin",
+                LastName = "SuperAdmin",
                 UserName = "admin@admin.com",
                 NormalizedUserName = "ADMIN@ADMIN.COM"
             };
@@ -73,8 +81,8 @@ namespace QuizExam.Infrastructure.Data
             //Set Admin role to Admin user
             builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
             {
-                RoleId = ADMIN_ROLE_ID,
-                UserId = ADMIN_ID
+                RoleId = SUPERADMIN_ROLE_ID,
+                UserId = SUPERADMIN_ID
             });
 
             builder.ApplyConfiguration(new InitialDataConfiguration<Subject>(@"InitialSeed/subjects.json"));

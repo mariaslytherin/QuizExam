@@ -11,7 +11,9 @@ using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Areas.Admin.Controllers
 {
-    public class UserController : BaseController
+    [Authorize(Roles = UserRolesConstants.SuperAdmin)]
+    [Area("Admin")]
+    public class UserController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
