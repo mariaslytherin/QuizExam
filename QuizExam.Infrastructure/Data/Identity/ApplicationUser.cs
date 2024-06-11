@@ -6,9 +6,11 @@ namespace QuizExam.Infrastructure.Data.Identity
 {
     public class ApplicationUser : IdentityUser
     {
+        [PersonalData]
         [StringLength(UserValidationConstants.FirstNameMaxLength)]
         public string FirstName { get; set; }
 
+        [PersonalData]
         [StringLength(UserValidationConstants.LastNameMaxLength)]
         public string LastName { get; set; }
 
