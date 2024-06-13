@@ -100,9 +100,16 @@ namespace QuizExam.Core.Services
             return result;
         }
 
-        public async Task<ExamListVM> GetAllExamsAsync(int? page, int? size)
+        public async Task<ExamListVM> GetAllExamsAsync(string userId, bool isSuperAdmin, int? page, int? size)
         {
-            var exams = await this.repository.All<Exam>()
+            List<Exam> allExams = await this.repository.All<Exam>().ToListAsync();
+
+            if (!isSuperAdmin)
+            {
+                allExams = allExams.Where(e => e.UserId == userId).ToList();
+            }
+
+            var exams = allExams
                 .Where(e => !e.IsDeleted)
                 .Join(this.repository.All<Subject>(),
                       e => e.SubjectId,
@@ -116,7 +123,7 @@ namespace QuizExam.Core.Services
                          CreateDate = e.CreateDate.ToDateOnlyString(),
                          IsActive = e.IsActive ? "Да" : "Не",
                      })
-                .ToListAsync();
+                .ToList();
 
             if (size.HasValue && page.HasValue)
             {
@@ -132,7 +139,7 @@ namespace QuizExam.Core.Services
                 PageSize = size
             };
 
-            model.TotalRecords = await this.repository.All<Exam>().Where(e => !e.IsDeleted).CountAsync();
+            model.TotalRecords = exams.Count();
             model.Exams = exams;
 
             return model;
@@ -265,6 +272,18 @@ namespace QuizExam.Core.Services
             }
 
             return new ExamVM();
+        }
+
+        public async Task<bool> IsExamDeactivated(string id)
+        {
+            var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
+
+            if (exam != null)
+            {
+                return !exam.IsActive;
+            }
+
+            return false;
         }
 
         public async Task<bool> HasAnyQuestionsAsync(string id)

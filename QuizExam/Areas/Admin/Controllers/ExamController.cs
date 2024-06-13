@@ -29,7 +29,9 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
-                var exams = await this.examService.GetAllExamsAsync(p, s);
+                var user = await this.userManager.GetUserAsync(User);
+                var isSuperAdmin = await this.userManager.IsInRoleAsync(user, UserRolesConstants.SuperAdmin);
+                var exams = await this.examService.GetAllExamsAsync(user.Id, isSuperAdmin, p, s);
 
                 return View("ExamsList", exams);
             }
@@ -140,6 +142,12 @@ namespace QuizExam.Areas.Admin.Controllers
 
             try
             {
+                if (!await this.examService.IsExamDeactivated(model.Id))
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamMustBeDeactivatedToEdit;
+                    return RedirectToAction(nameof(GetExamsList));
+                }
+
                 if (await this.examService.EditAsync(model))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulEditMessage;

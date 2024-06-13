@@ -69,7 +69,6 @@
                 </div>
                 <div class="card-footer">
                     <button asp-route-examId="@Model.ExamId" type="submit" class="btn btn-info">Редактирай</button>
-                    <a asp-action="viewExam" asp-controller="exam" asp-route-id="@Model.ExamId" class="btn btn-outline-secondary" style="width:auto">Назад</a>
                 </div>
             </form>
             <partial name="Modals/_AddOptionModal" model='new NewAnswerOptionVM(Model.Id, Model.ExamId)'></partial>

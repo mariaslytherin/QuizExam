@@ -8,7 +8,7 @@ namespace QuizExam.Core.Contracts
     {
         Task CreateAsync(string userId, NewExamVM model);
 
-        Task<ExamListVM> GetAllExamsAsync(int? page, int? size);
+        Task<ExamListVM> GetAllExamsAsync(string userId, bool isSuperAdmin, int? page, int? size);
 
         Task<List<ViewExamVM>> GetExamsForUserAsync();
 
@@ -29,6 +29,8 @@ namespace QuizExam.Core.Contracts
         Task<bool> ActivateAsync(string id);
 
         Task<bool> DeleteAsync(string id);
+
+        Task<bool> IsExamDeactivated(string id);
 
         Task<bool> HasAnyQuestionsAsync(string id);
 

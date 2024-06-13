@@ -19,6 +19,8 @@ namespace QuizExam.Core.Contracts
 
         Task<bool> HasEnoughAnswerOptionsAsync(string id);
 
+        Task<bool> HasCorrectAnswerAsync(string id);
+
         Task<EditQuestionVM> GetQuestionForEditAsync(string id);
 
         Task<bool> EditAsync(EditQuestionVM model);

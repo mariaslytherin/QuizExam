@@ -111,6 +111,12 @@ namespace QuizExam.Areas.Admin.Controllers
                     return RedirectToAction("Edit", new { examId, id = model.Id });
                 }
 
+                if (!await this.questionService.HasCorrectAnswerAsync(model.Id))
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorNotSelectedCorrectAnswerMessage;
+                    return RedirectToAction("Edit", new { examId, id = model.Id });
+                }
+
                 if (await this.questionService.EditAsync(model))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulEditMessage;

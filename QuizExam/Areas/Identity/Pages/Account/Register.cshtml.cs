@@ -78,7 +78,7 @@ namespace QuizExam.Areas.Identity.Pages.Account
             public string FirstName { get; set; }
 
             [Required(ErrorMessage = "Полето {0} е задължително.")]
-            [StringLength(50, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
+            [StringLength(80, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
             [Display(Name = "Фамилия")]
             public string LastName { get; set; }
 

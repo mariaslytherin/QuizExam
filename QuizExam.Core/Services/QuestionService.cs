@@ -206,10 +206,19 @@ namespace QuizExam.Core.Services
 
         public async Task<bool> HasEnoughAnswerOptionsAsync(string id)
         {
-            var hasEnoughAnswerOptions = await this.repository.All<AnswerOption>()
+            var hasEnoughAnswerOptions = await this.repository.AllReadonly<AnswerOption>()
                 .CountAsync(a => a.QuestionId == id.ToGuid() && !a.IsDeleted) >= 2;
 
             return hasEnoughAnswerOptions;
+        }
+
+        public async Task<bool> HasCorrectAnswerAsync(string id)
+        {
+            var hasCorrectAnswer = await this.repository.AllReadonly<AnswerOption>()
+                .Where(a => a.QuestionId == id.ToGuid())
+                .AnyAsync(q => q.IsCorrect);
+
+            return hasCorrectAnswer;
         }
     }
 }
