@@ -6,6 +6,8 @@ namespace QuizExam.Core.Contracts
     {
         Task<bool> CreateAsync(NewAnswerOptionVM model);
 
+        Task<bool> HasLessThenSixOptionsAsync(string questionId);
+
         Task<IEnumerable<AnswerOptionVM>> GetOptionsAsync(string questionId);
 
         Task<bool> DeleteAsync(string id);

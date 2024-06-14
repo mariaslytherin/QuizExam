@@ -43,10 +43,11 @@
                     <div class="row">
                         <form method="post" class="col-sm-5">
                             <a asp-action="edit" asp-controller="question" asp-route-id="@question.Id" asp-route-examId="@Model.Id" class="btn btn-outline-info btn-sm" style="width: fit-content; margin-right: 5px; height: fit-content;">Редактирай</a>
-                            <button asp-action="Delete" asp-controller="Question" asp-route-id="@question.Id" asp-route-examId="@Model.Id" type="submit" class="btn btn-outline-danger btn-sm" style="width: fit-content; height: fit-content;">Изтрий</button>
+                            <button data-url="@Url.Action("Delete", "Question", new { id = question.Id, examId = Model.Id })" type="button" class="btn btn-outline-danger btn-sm delete-button" style="width: fit-content; height: fit-content;">Изтрий</button>
                         </form>
                     </div>
                 </div>
+                <partial name="Modals/_ConfirmDeleteModal"></partial>
             </div>
         </div>
     </div>

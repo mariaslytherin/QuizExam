@@ -37,6 +37,12 @@ namespace QuizExam.Core.Services
             return false;
         }
 
+        public async Task<bool> HasLessThenSixOptionsAsync(string questionId)
+        {
+            var optionsCount = await this.repository.AllReadonly<AnswerOption>().Where(a => a.QuestionId == questionId.ToGuid()).CountAsync();
+            return optionsCount <= 6;
+        }
+
         public async Task<bool> DeleteAsync(string id)
         {
             bool result = false;

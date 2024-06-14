@@ -142,7 +142,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
             try
             {
-                if (!await this.examService.IsExamDeactivated(model.Id))
+                if (!await this.examService.IsExamDeactivatedAsync(model.Id))
                 {
                     TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamMustBeDeactivatedToEdit;
                     return RedirectToAction(nameof(GetExamsList));

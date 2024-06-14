@@ -1,15 +1,44 @@
 ﻿@using QuizExam.Core.Models.Exam
-@model List<ViewExamVM>
+@model FilterExamsVM
 
 @{
-    ViewData["Title"] = "Начало";
+    var subjects = (List<SelectListItem>)ViewBag.Subjects;
 }
 
 <div class="container-fluid">
     <h2 class="text-center display-5">Добре дошли в QuizExam!</h2>
+    <form action="enhanced-results.html" data-select2-id="10">
+        <div class="row justify-content-center" style="margin-top: 30px">
+            <div class="col-md-10 offset-md-1">
+                <div class="row">
+                    <div class="col-md-auto">
+                        <div class="form-group">
+                            <label asp-for="SubjectId"></label>
+                            <select asp-for="SubjectId" asp-items="@subjects" name="SubjectId" id="subjectSelect" data-placeholder="Избери предмет" style="width: 280px">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div class="form-group">
+                            <label>Име на изпит</label>
+                            <div class="input-group">
+                                <input type="search" class="form-control form-control-lg" id="examTitle" placeholder="Име на изпит...">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-lg btn-default search-button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
     <div class="content" style="margin-top: 50px;">
         <div class="container-fluid" style="width:100%; height:auto; display:flex; flex-wrap: wrap;">
-            @foreach (var exam in Model)
+            @foreach (var exam in Model.Exams)
             {
                 <div class="col-lg-6" style="width:50%;">
                     <div class="card card-primary card-outline">
@@ -19,7 +48,7 @@
                         <div class="card-body">
                             <h6 class="card-title">@exam.SubjectName</h6>
                             <p class="card-text">@exam.Description</p>
-                            <a asp-action="start" asp-controller="takeExam" asp-route-examId="@exam.Id" class="btn btn-primary">Решавай</a>
+                            <a asp-action="start" asp-controller="takeExam" asp-route-examId="@exam.Id" class="btn btn-info">Решавай</a>
                         </div>
                     </div>
                 </div>
@@ -27,3 +56,29 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#subjectSelect').select2({
+                allowClear: true
+            });
+
+            $('.search-button').click(function () {
+                var subjectSelect = document.getElementById('subjectSelect');
+                var subjectId = subjectSelect.value;
+                var examTitleInput = document.getElementById('examTitle');
+                var examTitle = examTitleInput.value;
+
+                $.ajax({
+                    url: "/Home/Index",
+                    type: "GET",
+                    data: { 'subjectId': subjectId, 'examTitle': examTitle },
+                    success: function (response) {
+                        $('body').html(response);
+                    }
+                });
+            });
+        });
+    </script>
+}

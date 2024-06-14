@@ -38,7 +38,7 @@
 
         public const string UnsuccessfulDeactivationMessage = "Неуспешно активиране!";
 
-        public const string ErrorMustCheckAnswerMessage = "Отбележете 1 верен отговор на въпроса!";
+        public const string ErrorMustCheckAnswerMessage = "Необходимо е да отбележите верен отговор на въпроса!";
 
         public const string ErrorExamNotFoundMessage = "Не успяхме да намерим този изпит!";
 
@@ -53,13 +53,13 @@
         public const string ErrorExamMustNotBeActive = "Не можете да добавяте въпроси, когато изпитът е активиран!";
 
         public const string ErrorExamMustBeDeactivatedToEdit = "Не можете да редактирате изпит, който е в статус \"Активен\"!";
+
+        public const string ErrorQuesitonCannotAddOptionMessage = "Един въпрос не може да има повече от 6 опции за отговор!";
     }
 
     public static class WarningMessageConstants
     {
         public const string WarningMessage = "WarningMessage";
-
-        public const string WarningCannotAddOptionMessage = "Един въпрос не може да има повече от 6 опции за отговор!";
 
         public const string WarningAddOptionsMessage = "Добавете възможни опции за отговор!";
 

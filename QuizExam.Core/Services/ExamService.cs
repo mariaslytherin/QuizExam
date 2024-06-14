@@ -145,11 +145,25 @@ namespace QuizExam.Core.Services
             return model;
         }
 
-        public async Task<List<ViewExamVM>> GetExamsForUserAsync()
+        public async Task<List<ViewExamVM>> GetExamsForUserAsync(string? subjectId = null, string? examTitle = null)
         {
-            var exams = await this.repository.All<Exam>()
+            var exams = await this.repository.AllReadonly<Exam>()
                 .Where(e => !e.IsDeleted && e.IsActive)
-                .Join(this.repository.All<Subject>(),
+                .OrderByDescending(e => e.CreateDate)
+                .ToListAsync();
+
+            if (!String.IsNullOrEmpty(subjectId))
+            {
+                exams = exams.Where(e => e.SubjectId == subjectId.ToGuid()).ToList();
+            }
+
+            if (!String.IsNullOrEmpty(examTitle))
+            {
+                exams = exams.Where(e => e.Title.ToLower().Contains(examTitle.ToLower())).ToList();
+            }
+
+            var result = exams
+                .Join(this.repository.AllReadonly<Subject>(),
                       e => e.SubjectId,
                       s => s.Id,
                       (e, s) => new ViewExamVM()
@@ -159,9 +173,9 @@ namespace QuizExam.Core.Services
                           SubjectName = s.Name,
                           Description = e.Description
                       })
-                .ToListAsync();
+                .ToList();
 
-            return exams;
+            return result;
         }
 
         public async Task<EditExamVM> GetExamForEditAsync(string id)
@@ -274,7 +288,7 @@ namespace QuizExam.Core.Services
             return new ExamVM();
         }
 
-        public async Task<bool> IsExamDeactivated(string id)
+        public async Task<bool> IsExamDeactivatedAsync(string id)
         {
             var exam = await this.repository.GetByIdAsync<Exam>(id.ToGuid());
 
@@ -315,7 +329,7 @@ namespace QuizExam.Core.Services
             {
                 var hasQuestionsWithoutCorrectAnswer = this.repository.AllReadonly<Question>().Where(q => !q.IsDeleted && q.ExamId == exam.Id)
                     .Include(q => q.Answers)
-                    .Any(q => !q.Answers.Any(a => a.IsCorrect));
+                    .Any(q => !q.Answers.Where(o => !o.IsDeleted).Any(a => a.IsCorrect));
 
                 return hasQuestionsWithoutCorrectAnswer;
             }

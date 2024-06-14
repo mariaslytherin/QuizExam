@@ -27,7 +27,13 @@ namespace QuizExam.Areas.Admin.Controllers
                 if (!ModelState.IsValid)
                 {
                     TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfullAddMessage;
-                    return View("QuestionAnswerOption");
+                    return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = model.ExamId });
+                }
+
+                if (!await this.answerService.HasLessThenSixOptionsAsync(model.QuestionId))
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorQuesitonCannotAddOptionMessage;
+                    return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = model.ExamId });
                 }
 
                 if (await this.answerService.CreateAsync(model))
@@ -56,13 +62,13 @@ namespace QuizExam.Areas.Admin.Controllers
                 if (!ModelState.IsValid)
                 {
                     TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
-                    return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId = model.ExamId });
+                    return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = model.ExamId });
                 }
 
                 if (model.CorrectAnswerId == null)
                 {
                     TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
-                    return RedirectToAction("SetCorrectAnswer", new { id = model.QuestionId, examId = model.ExamId });
+                    return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = model.ExamId });
                 }
 
                 if (await this.answerService.SetCorrectAnswerAsync(model))
