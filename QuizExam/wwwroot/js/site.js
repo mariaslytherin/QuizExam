@@ -73,6 +73,7 @@ $(document).on('click', '#nextButton', function () {
                 toastr.error(response.errorMessage);
             } else if (response.isFinished) {
                 sessionStorage.removeItem('startTime');
+                sessionStorage.removeItem('endTime');
                 isFinishRequested = true;
                 window.location.href = '/TakeExam/Finish?takeId=' + response.takeExamId + '&timePassed=' + timePassed;
             } else {

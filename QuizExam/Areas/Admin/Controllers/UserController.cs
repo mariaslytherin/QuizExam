@@ -41,7 +41,15 @@ namespace QuizExam.Areas.Admin.Controllers
             foreach (var user in users.Users)
             {
                 var currentUser = await this.userService.GetUserById(user.Id);
-                user.Roles = new List<string>(await this.userManager.GetRolesAsync(currentUser));
+                var roles = (await this.userManager.GetRolesAsync(currentUser)).Select(role =>
+                    role switch
+                    {
+                        "SuperAdmin" => "Главен администратор",
+                        "Administrator" => "Администратор",
+                        _ => "Ученик"
+                    }).ToList();
+
+                user.Roles = roles;
             }
 
             return View("UsersList", users);

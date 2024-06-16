@@ -126,7 +126,7 @@ namespace QuizExam.Core.Services
         {
             // TODO  && t.Mode == TakeExamModeEnum.Exercise
             var exams = await this.repository.All<Exam>()
-                .GroupJoin(this.repository.All<TakeExam>().Where(t => t.UserId == id && t.Status != TakeExamStatusEnum.Finished),
+                .GroupJoin(this.repository.All<TakeExam>().Where(t => t.UserId == id && t.Status != TakeExamStatusEnum.Finished && t.Mode == TakeExamModeEnum.Exercise),
                     exam => exam.Id,
                     take => take.ExamId,
                     (exam, take) => new
@@ -222,6 +222,8 @@ namespace QuizExam.Core.Services
                     Title = exam.Title,
                     SubjectName = subject.Name,
                     TimePassed = take.TimePassed.ToString(),
+                    Duration = take.Duration.ToString(),
+                    Mode = take.Mode,
                     MaxScore = exam.MaxScore,
                     ResultScore = resultScore,
                     Questions = questions,
@@ -305,7 +307,22 @@ namespace QuizExam.Core.Services
 
                 take.Score = resultScore;
                 take.Status = TakeExamStatusEnum.Finished;
-                take.TimePassed = TimeSpan.Parse(timePassed);
+                if (take.Mode == TakeExamModeEnum.Train)
+                {
+                    TimeSpan parsedTime = TimeSpan.Parse(timePassed);
+                    if (parsedTime.Hours == 0 && parsedTime.Minutes == 0 && parsedTime.Seconds == 0)
+                    {
+                        take.TimePassed = take.Duration;
+                    }
+                    else
+                    {
+                        take.TimePassed = take.Duration - parsedTime;
+                    }
+                }
+                else
+                {
+                    take.TimePassed = TimeSpan.Parse(timePassed);
+                }
                 take.ModifyDate = DateTime.Now;
                 await this.repository.SaveChangesAsync();
                 result = true;

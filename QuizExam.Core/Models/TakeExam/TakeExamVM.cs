@@ -19,6 +19,8 @@ namespace QuizExam.Core.Models.TakeExam
 
         public string TimePassed { get; set; }
 
+        public string Duration { get; set; }
+
         public double ResultScore { get; set; }
 
         public double? MaxScore { get; set; }

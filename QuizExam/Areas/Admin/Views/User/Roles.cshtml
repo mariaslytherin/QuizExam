@@ -5,9 +5,9 @@
     ViewData["Title"] = "Редакция на роли";
 }
 
-<div class="row">
+<div class="row d-flex justify-content-center">
     <div class="col-4">
-        <div class="card card-primary">
+        <div class="card card-info">
             <div class="card-header">
                 <h3 class="card-title">Редакция на роли</h3>
             </div>
@@ -34,8 +34,8 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" asp-area="Admin" asp-action="SetRoles" asp-controller="User" asp-route-id="@ViewBag.UserId" class="btn btn-primary">Запази</button>
-                    <a asp-action="GetAllUsers" class="btn btn-outline-primary" style="width:auto">Назад</a>
+                    <button type="submit" asp-area="Admin" asp-action="SetRoles" asp-controller="User" asp-route-id="@ViewBag.UserId" class="btn btn-info">Запази</button>
+                    <a asp-action="GetAllUsers" class="btn btn-outline-secondary" style="width:auto">Назад</a>
                 </div>
             </form>
         </div>

@@ -1,4 +1,5 @@
 ﻿@using QuizExam.Core.Models.TakeExam
+@using QuizExam.Infrastructure.Data.Enums
 @model TakeExamVM
 
 @{
@@ -9,7 +10,14 @@
     <div class="container">
         <div class="container px-4 text-center">
             <h1 class="fw-bolder">@Model.Title</h1>
-            <p class="lead">@Model.TimePassed</p>
+            @if (Model.Mode == TakeExamModeEnum.Train)
+            {
+                <p class="lead">@Model.TimePassed / @Model.Duration</p>
+            }
+            else
+            {
+                <p class="lead">@Model.TimePassed</p>
+            }
             <p class="lead">@Model.ResultScore / @Model.MaxScore</p>
             <div style="display: flex; justify-content: center;">
                 <div class="custom-control custom-radio">
