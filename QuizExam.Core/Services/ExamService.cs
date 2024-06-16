@@ -171,7 +171,7 @@ namespace QuizExam.Core.Services
                           Id = e.Id.ToString(),
                           Title = e.Title,
                           SubjectName = s.Name,
-                          Description = e.Description
+                          Description = !String.IsNullOrEmpty(e.Description) && e.Description.Length > 200 ? e.Description.Substring(0, 140) + "..." : e.Description
                       })
                 .ToList();
 
@@ -280,6 +280,7 @@ namespace QuizExam.Core.Services
                     Description = exam.Description,
                     SubjectName = subject.Name,
                     QuestionsCount = questionsCount,
+                    Duration = exam.Duration.ToString(),
                 };
 
                 return model;
@@ -368,7 +369,7 @@ namespace QuizExam.Core.Services
                 .Take(5)
                 .ToList();
 
-            var incorrectPercentages = new List<HardestQuestionInfoVM>();
+            var result = new List<HardestQuestionInfoVM>();
             foreach (var question in hardestQuestions)
             {
                 var incorrectPercentage = repository.AllReadonly<TakeExam>()
@@ -379,16 +380,27 @@ namespace QuizExam.Core.Services
                     .Distinct()
                     .Count() * 100 / repository.AllReadonly<TakeExam>().Select(te => te.UserId).Distinct().Count();
 
-                incorrectPercentages.Add(new HardestQuestionInfoVM
+                var options = this.repository.AllReadonly<AnswerOption>()
+                                .Where(a => a.QuestionId == question.QuestionId && !a.IsDeleted)
+                                .OrderBy(a => a.CreateDate)
+                                .Select(a => new AnswerOptionVM
+                                {
+                                    Content = a.Content,
+                                    IsCorrect = a.IsCorrect,
+                                })
+                                .ToList();
+
+                result.Add(new HardestQuestionInfoVM
                 {
                     QuestionId = question.QuestionId.ToString(),
                     Content = question.Content,
                     Rule = question.Rule,
-                    MistakePercentage = incorrectPercentage
+                    MistakePercentage = incorrectPercentage,
+                    AnswerOptions = options,
                 });
             }
 
-            return incorrectPercentages;
+            return result;
         }
     }
 }

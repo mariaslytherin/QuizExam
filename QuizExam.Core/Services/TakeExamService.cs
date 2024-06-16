@@ -26,10 +26,9 @@ namespace QuizExam.Core.Services
 
         public async Task<Guid> CreateTake(string userId, string examId, TakeExamModeEnum mode)
         {
-            var user = await this.repository.GetByIdAsync<ApplicationUser>(userId);
             var exam = await this.repository.GetByIdAsync<Exam>(Guid.Parse(examId));
 
-            if (user != null && exam != null)
+            if (exam != null)
             {
                 TakeExam newTake = new TakeExam();
 
@@ -106,7 +105,7 @@ namespace QuizExam.Core.Services
             if (size.HasValue && page.HasValue)
             {
                 takes = takes
-                    .OrderBy(e => e.Title)
+                    .OrderBy(e => e.CreateDate)
                     .Skip((int)(page * size - size))
                     .Take((int)size).ToList();
             }
@@ -117,7 +116,7 @@ namespace QuizExam.Core.Services
                 PageSize = size
             };
 
-            model.TotalRecords = await this.repository.All<Exam>().Where(e => !e.IsDeleted).CountAsync();
+            model.TotalRecords = await this.repository.All<TakeExam>().Where(e => e.Status == TakeExamStatusEnum.Finished).CountAsync();
             model.TakenExams = takes;
 
             return model;
@@ -158,7 +157,7 @@ namespace QuizExam.Core.Services
             if (size.HasValue && page.HasValue)
             {
                 exams = exams
-                    .OrderBy(e => e.Title)
+                    .OrderByDescending(e => e.StartDate)
                     .Skip((int)(page * size - size))
                     .Take((int)size).ToList();
             }
@@ -222,6 +221,7 @@ namespace QuizExam.Core.Services
                     Id = take.Id.ToString(),
                     Title = exam.Title,
                     SubjectName = subject.Name,
+                    TimePassed = take.TimePassed.ToString(),
                     MaxScore = exam.MaxScore,
                     ResultScore = resultScore,
                     Questions = questions,

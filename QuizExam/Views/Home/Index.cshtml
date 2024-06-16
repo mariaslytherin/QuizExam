@@ -43,10 +43,10 @@
                 <div class="col-lg-6" style="width:50%;">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h5 class="m-0">@exam.Title</h5>
+                            <h5 class="m-0">@exam.SubjectName</h5>
                         </div>
                         <div class="card-body">
-                            <h6 class="card-title">@exam.SubjectName</h6>
+                            <h6 class="card-title font-weight-bold" style="margin-bottom: 15px">@exam.Title</h6>
                             <p class="card-text">@exam.Description</p>
                             <a asp-action="start" asp-controller="takeExam" asp-route-examId="@exam.Id" class="btn btn-info">Решавай</a>
                         </div>

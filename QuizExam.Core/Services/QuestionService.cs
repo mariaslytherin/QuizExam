@@ -118,7 +118,7 @@ namespace QuizExam.Core.Services
 
         public async Task<TakeQuestionVM> GetNextQuestionAsync(string examId, string takeId, int order)
         {
-            var allQuestions = await this.GetQuestionWithAnswers(examId, takeId, order);
+            var allQuestions = await this.GetQuestionsWithAnswers(examId, takeId, order);
 
             if (allQuestions.Count() != 0)
             {
@@ -150,7 +150,7 @@ namespace QuizExam.Core.Services
 
         public async Task<TakeQuestionVM> GetPreviousQuestionAsync(string examId, string takeId, int order)
         {
-            var allQuestions = await this.GetQuestionWithAnswers(examId, takeId, order);
+            var allQuestions = await this.GetQuestionsWithAnswers(examId, takeId, order);
 
             if (allQuestions.Count() != 0)
             {
@@ -162,7 +162,7 @@ namespace QuizExam.Core.Services
             return new TakeQuestionVM();
         }
 
-        private async Task<List<TakeQuestionVM>> GetQuestionWithAnswers(string examId, string takeId, int order)
+        private async Task<List<TakeQuestionVM>> GetQuestionsWithAnswers(string examId, string takeId, int order)
         {
             return await this.repository.All<Question>()
                 .Where(q => q.ExamId == examId.ToGuid() && !q.IsDeleted)

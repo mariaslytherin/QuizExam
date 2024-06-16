@@ -17,6 +17,8 @@ namespace QuizExam.Core.Models.TakeExam
 
         public TakeExamModeEnum Mode { get; set; }
 
+        public string TimePassed { get; set; }
+
         public double ResultScore { get; set; }
 
         public double? MaxScore { get; set; }

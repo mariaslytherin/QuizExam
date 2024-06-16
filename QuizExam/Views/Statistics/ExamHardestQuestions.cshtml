@@ -44,6 +44,9 @@
                     <li>Всяка лента на диаграмата представлява един въпрос.</li>
                     <li>Височината на лентата показва процента на потребителите, които са дали грешен отговор на този въпрос.</li>
                 </ul>
+                <p class="font-weight-bold" id="questionContent"></p>
+                <div id="answersContainer"></div>
+                <p class="font-weight-bold" id="rule" style="margin-top: 30px; text-decoration: underline;"></p>
             </div>
         </div>
     </div>
@@ -62,6 +65,8 @@
                     datasets: [{
                         label: '% потребители посочили грешен отговор',
                         data: @Html.Raw(Json.Serialize(Model.HardestQuestionsInfo.Select(q => q.MistakePercentage.ToString()))),
+                        answerOptions: @Html.Raw(Json.Serialize(Model.HardestQuestionsInfo.Select(q => q.AnswerOptions))),
+                        rules: @Html.Raw(Json.Serialize(Model.HardestQuestionsInfo.Select(q => q.Rule))),
                         backgroundColor: [
                             // Add colors for each question
                             'rgba(255, 99, 132, 0.2)',
@@ -109,8 +114,38 @@
                     const firstPoint = activePoints[0];
                     const label = myChart.data.labels[firstPoint.index];
                     const value = myChart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
-                    // Handle the click action (e.g., navigate to a link)
-                    console.log(`Clicked on ${label} with value ${value}`);
+                    const answerOptions = myChart.data.datasets[firstPoint.datasetIndex].answerOptions[firstPoint.index];
+                    const rule = myChart.data.datasets[firstPoint.datasetIndex].rules[firstPoint.index];
+                    document.getElementById('questionContent').innerHTML = label;
+
+                    const answersContainer = document.getElementById('answersContainer');
+                    answersContainer.innerHTML = ''; // Clear previous answers
+
+                    answerOptions.forEach(option => {
+                        const div = document.createElement('div');
+                        div.className = 'form-check';
+                        div.style.marginLeft = '50px';
+
+                        const input = document.createElement('input');
+                        input.type = 'checkbox'
+                        input.value = option.isCorrect;
+                        if (option.isCorrect === true) {
+                            input.checked = 'checked'
+                        }
+                        input.className = 'form-check-input';
+                        input.disabled = true;
+
+                        const label = document.createElement('label');
+                        label.className = 'form-check-label';
+                        label.textContent = option.content;
+
+                        div.appendChild(input);
+                        div.appendChild(label);
+
+                        answersContainer.appendChild(div);
+                    });
+
+                    document.getElementById('rule').innerHTML = rule;
                 }
             };
 
@@ -161,4 +196,5 @@
             });
         });
     </script>
+    <partial name="_ValidationScriptsPartial" />
 }

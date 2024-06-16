@@ -180,8 +180,11 @@ namespace QuizExam.Test.ExamServiceTests
         [Test]
         public async Task GetAllExamsMustReturnExamListModel()
         {
+            var userService = serviceProvider.GetService<IUserService>();
+            var user = await userService.GetUserById(UniqueIdentifiersTestConstants.UserId);
+
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetAllExamsAsync(1, 10);
+            var result = await service.GetAllExamsAsync(user.Id, true, 1, 10);
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ExamListVM>());

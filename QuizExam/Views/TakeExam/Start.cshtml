@@ -6,8 +6,9 @@
     <div class="container px-4 text-center">
         <p class="lead">Изпит по @Model.SubjectName</p>
         <h1 class="fw-bolder">@Model.Title</h1>
-        <p>@Model.Description</p>
+        <p style="word-wrap: break-word;">@Model.Description</p>
         <label>Брой въпроси: @Model.QuestionsCount</label>
+        <label style="margin-left: 50px">Времетраене: @Model.Duration</label>
         <p class="lead">Искате ли да започнете?</p>
     </div>
     <div class="row d-flex justify-content-center">

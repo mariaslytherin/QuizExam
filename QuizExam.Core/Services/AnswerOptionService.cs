@@ -39,7 +39,7 @@ namespace QuizExam.Core.Services
 
         public async Task<bool> HasLessThenSixOptionsAsync(string questionId)
         {
-            var optionsCount = await this.repository.AllReadonly<AnswerOption>().Where(a => a.QuestionId == questionId.ToGuid()).CountAsync();
+            var optionsCount = await this.repository.AllReadonly<AnswerOption>().Where(a => a.QuestionId == questionId.ToGuid() && !a.IsDeleted).CountAsync();
             return optionsCount <= 6;
         }
 

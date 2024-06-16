@@ -1,4 +1,6 @@
-﻿namespace QuizExam.Core.Models.Question
+﻿using QuizExam.Core.Models.AnswerOption;
+
+namespace QuizExam.Core.Models.Question
 {
     public class HardestQuestionInfoVM
     {
@@ -8,8 +10,8 @@
 
         public string Rule { get; set; }
 
-        public int MistakesCount { get; set; }
-
         public double MistakePercentage { get; set; }
+
+        public IList<AnswerOptionVM> AnswerOptions { get; set; }
     }
 }

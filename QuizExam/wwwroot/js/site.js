@@ -134,7 +134,7 @@ function StartCountDownTimer(checkTime, timeRemaining) {
                 clearInterval(checkTime[0]);
                 checkTime = [];
                 sessionStorage.removeItem('endTime');
-                document.getElementById("timer").innerHTML = "TIME'S UP";
+                document.getElementById("timer").innerHTML = "Времето изтече!";
                 isFinishRequested = true;
                 window.location.href = '/TakeExam/Finish?takeId=' + $("#takeExamId").val() + '&timePassed=00:00:00';
             }

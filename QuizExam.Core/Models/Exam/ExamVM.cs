@@ -11,5 +11,7 @@
         public string SubjectName { get; set; }
 
         public int QuestionsCount { get; set; }
+
+        public string Duration { get; set; }
     }
 }
