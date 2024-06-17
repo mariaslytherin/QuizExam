@@ -16,47 +16,49 @@
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <link rel="stylesheet" href="~/css/adminlte.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body class="hold-transition register-page">
     <div class="register-box">
         <div class="register-logo">
-            <a href="/">QuizExam</a>
+            <img src="~/img/QuizExamLogo.png" alt="Logo" class="brand-image img-circle elevation-3 auth-logo">
         </div>
 
         <div class="card">
             <div class="card-body register-card-body">
-                <p class="login-box-msg">Създаване на акаунт</p>
+                <p class="auth-paragraph" style="font-size: 20px">QuizExam</p>
+                <p class="auth-paragraph">Създаване на акаунт</p>
 
                 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-floating">
                         <label asp-for="Input.FirstName"></label>
-                        <input asp-for="Input.FirstName" class="form-control" placeholder="Име..." autocomplete="firstName" aria-required="true">
+                        <input asp-for="Input.FirstName" class="form-control" autocomplete="firstName" aria-required="true">
                         <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
                         <label asp-for="Input.LastName"></label>
-                        <input asp-for="Input.LastName" class="form-control" placeholder="Фамилия..." autocomplete="lastName" aria-required="true">
+                        <input asp-for="Input.LastName" class="form-control" autocomplete="lastName" aria-required="true">
                         <span asp-validation-for="Input.LastName" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
                         <label asp-for="Input.Email"></label>
-                        <input asp-for="Input.Email" class="form-control" placeholder="Имейл..." autocomplete="username" aria-required="true" />
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
                         <label asp-for="Input.Password"></label>
-                        <input asp-for="Input.Password" class="form-control" placeholder="Парола..." autocomplete="new-password" aria-required="true" />
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
                         <label asp-for="Input.ConfirmPassword"></label>
-                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Повтори парола..." autocomplete="new-password" aria-required="true" />
+                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
                     <div class="row">
                         <div class="col-7" style="margin-top: 15px; margin-bottom: 10px;">
-                            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-info">Регистрация</button>
+                            <button id="registerSubmit" type="submit" class="btn btn-info btn-block">Регистрация</button>
                         </div>
                     </div>
                 </form>

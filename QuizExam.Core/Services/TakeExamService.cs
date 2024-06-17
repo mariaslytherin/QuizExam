@@ -81,7 +81,7 @@ namespace QuizExam.Core.Services
 
         public async Task<TakenExamsListVM> TakenExams(string id, int? page, int? size)
         {
-            var takes = await this.repository.All<TakeExam>()
+            var takes = await this.repository.AllReadonly<TakeExam>()
                 .Where(t => t.UserId == id && t.Status == TakeExamStatusEnum.Finished)
                 .OrderByDescending(t => t.CreateDate)
                 .Join(this.repository.All<Exam>(),
@@ -116,7 +116,7 @@ namespace QuizExam.Core.Services
                 PageSize = size
             };
 
-            model.TotalRecords = await this.repository.All<TakeExam>().Where(e => e.Status == TakeExamStatusEnum.Finished).CountAsync();
+            model.TotalRecords = takes.Count();
             model.TakenExams = takes;
 
             return model;

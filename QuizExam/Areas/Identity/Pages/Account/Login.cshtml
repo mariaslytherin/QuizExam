@@ -19,26 +19,28 @@
     <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <link rel="stylesheet" href="~/plugins/toastr/toastr.min.css" />
     <link rel="stylesheet" href="~/css/adminlte.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="/">QuizExam</a>
+            <img src="~/img/QuizExamLogo.png" class="brand-image img-circle elevation-3 auth-logo">
         </div>
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Влезте в профила си, за да започнете да се упражнявате</p>
+                <p class="auth-paragraph" style="font-size: 20px">QuizExam</p>
+                <p class="auth-paragraph">Влезте в профила си, за да започнете да се упражнявате</p>
 
                 <form id="account" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-floating" style="margin-bottom: 10px;">
                         <label asp-for="Input.Email" class="form-label"></label>
-                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="Имейл" aria-required="true" />
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
                         <label asp-for="Input.Password" class="form-label"></label>
-                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" placeholder="Парола" aria-required="true" />
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
                     <div class="row" style="margin-top: 15px; margin-bottom: 10px;">
