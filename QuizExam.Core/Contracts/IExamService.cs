@@ -8,9 +8,11 @@ namespace QuizExam.Core.Contracts
     {
         Task CreateAsync(string userId, NewExamVM model);
 
+        Task<List<Exam>> GetExamsByUserId(string userId);
+
         Task<ExamListVM> GetAllExamsAsync(string userId, bool isSuperAdmin, int? page, int? size);
 
-        Task<List<ViewExamVM>> GetExamsForUserAsync(string? subjectId = null, string? examTitle = null);
+        Task<List<ViewExamVM>> GetActiveExamsAsync(string? subjectId = null, string? examTitle = null);
 
         Task<ExamVM> GetExamInfoAsync(string id);
 

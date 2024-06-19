@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using QuizExam.Infrastructure.Data.Identity;
+using QuizExam.Core.Constants;
 
 namespace QuizExam.Areas.Identity.Pages.Account
 {
@@ -78,6 +79,16 @@ namespace QuizExam.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            [Required(ErrorMessage = "Полето {0} е задължително.")]
+            [StringLength(50, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
+            [Display(Name = "Име")]
+            public string FirstName { get; set; }
+
+            [Required(ErrorMessage = "Полето {0} е задължително.")]
+            [StringLength(80, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
+            [Display(Name = "Фамилия")]
+            public string LastName { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -129,12 +140,14 @@ namespace QuizExam.Areas.Identity.Pages.Account
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 ProviderDisplayName = info.ProviderDisplayName;
+                Input = new InputModel();
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
-                    Input = new InputModel
-                    {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                    };
+                    Input.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                }
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+                {
+                    Input.FirstName = info.Principal.FindFirstValue(ClaimTypes.Name);
                 }
                 return Page();
             }
@@ -157,7 +170,8 @@ namespace QuizExam.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -167,6 +181,7 @@ namespace QuizExam.Areas.Identity.Pages.Account
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
                         var userId = await _userManager.GetUserIdAsync(user);
+                        await _userManager.AddToRoleAsync(user, UserRolesConstants.Student);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                         var callbackUrl = Url.Page(

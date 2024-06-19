@@ -215,7 +215,7 @@ namespace QuizExam.Core.Services
         public async Task<bool> HasCorrectAnswerAsync(string id)
         {
             var hasCorrectAnswer = await this.repository.AllReadonly<AnswerOption>()
-                .Where(a => a.QuestionId == id.ToGuid())
+                .Where(a => a.QuestionId == id.ToGuid() && !a.IsDeleted)
                 .AnyAsync(q => q.IsCorrect);
 
             return hasCorrectAnswer;

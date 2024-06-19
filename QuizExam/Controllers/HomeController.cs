@@ -26,7 +26,7 @@ namespace QuizExam.Controllers
         public async Task<IActionResult> Index(string? subjectId = null, string? examTitle = null)
         {
             var subjects = await this.subjectService.GetActiveSubjectsAsync();
-            var exams = await this.examService.GetExamsForUserAsync(subjectId, examTitle);
+            var exams = await this.examService.GetActiveExamsAsync(subjectId, examTitle);
 
             ViewBag.Subjects = subjects
                 .Select(s => new SelectListItem()

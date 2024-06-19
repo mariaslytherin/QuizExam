@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using QuizExam.Core.Contracts;
 using QuizExam.Infrastructure.Data.Identity;
+using QuizExam.Infrastructure.Data.Repositories;
 
 namespace QuizExam.Areas.Identity.Pages.Account.Manage
 {
@@ -18,15 +20,21 @@ namespace QuizExam.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly IApplicationDbRepository _repository;
+        private readonly IExamService _examService;
 
         public DeletePersonalDataModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            IApplicationDbRepository repository,
+            IExamService examService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _repository = repository;
+            _examService = examService;
         }
 
         /// <summary>
@@ -93,6 +101,14 @@ namespace QuizExam.Areas.Identity.Pages.Account.Manage
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException($"Unexpected error occurred deleting user.");
+            }
+
+            var exams = await _examService.GetExamsByUserId(userId);
+            foreach (var exam in exams)
+            {
+                exam.IsActive = false;
+                exam.IsDeleted = true;
+                await _repository.SaveChangesAsync();
             }
 
             await _signInManager.SignOutAsync();

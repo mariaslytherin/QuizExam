@@ -102,14 +102,6 @@ namespace QuizExam.Core.Services
                      })
             .ToListAsync();
 
-            if (size.HasValue && page.HasValue)
-            {
-                takes = takes
-                    .OrderBy(e => e.CreateDate)
-                    .Skip((int)(page * size - size))
-                    .Take((int)size).ToList();
-            }
-
             var model = new TakenExamsListVM()
             {
                 PageNo = page,
@@ -117,6 +109,15 @@ namespace QuizExam.Core.Services
             };
 
             model.TotalRecords = takes.Count();
+            if (size.HasValue && page.HasValue)
+            {
+                takes = takes
+                    .OrderBy(e => e.CreateDate)
+                    .Skip((int)(page * size - size))
+                    .Take((int)size)
+                    .ToList();
+            }
+
             model.TakenExams = takes;
 
             return model;

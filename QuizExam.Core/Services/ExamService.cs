@@ -5,6 +5,8 @@ using QuizExam.Core.Models.AnswerOption;
 using QuizExam.Core.Models.Exam;
 using QuizExam.Core.Models.Question;
 using QuizExam.Infrastructure.Data;
+using QuizExam.Infrastructure.Data.Enums;
+using QuizExam.Infrastructure.Data.Identity;
 using QuizExam.Infrastructure.Data.Repositories;
 
 namespace QuizExam.Core.Services
@@ -100,6 +102,11 @@ namespace QuizExam.Core.Services
             return result;
         }
 
+        public async Task<List<Exam>> GetExamsByUserId(string userId)
+        {
+            return await this.repository.All<Exam>().Where(e => e.UserId == userId).ToListAsync();
+        }
+
         public async Task<ExamListVM> GetAllExamsAsync(string userId, bool isSuperAdmin, int? page, int? size)
         {
             List<Exam> allExams = await this.repository.All<Exam>().ToListAsync();
@@ -114,24 +121,21 @@ namespace QuizExam.Core.Services
                 .Join(this.repository.All<Subject>(),
                       e => e.SubjectId,
                       s => s.Id,
-                     (e, s) => new ViewExamVM()
+                     (e, s) => new { e, s })
+                .Join(this.repository.All<ApplicationUser>(),
+                      es => es.e.UserId,
+                      u => u.Id,
+                     (es, u ) => new ViewExamVM()
                      {
-                         Id = e.Id.ToString(),
-                         Title = e.Title,
-                         SubjectName = s.Name,
-                         Description = e.Description,
-                         CreateDate = e.CreateDate.ToDateOnlyString(),
-                         IsActive = e.IsActive ? "Да" : "Не",
+                         Id = es.e.Id.ToString(),
+                         Title = es.e.Title,
+                         SubjectName = es.s.Name,
+                         Description = es.e.Description,
+                         CreatedBy = u.FirstName + " " + u.LastName,
+                         CreateDate = es.e.CreateDate.ToDateOnlyString(),
+                         IsActive = es.e.IsActive ? "Да" : "Не",
                      })
                 .ToList();
-
-            if (size.HasValue && page.HasValue)
-            {
-                exams = exams
-                    .OrderBy(e => e.Title)
-                    .Skip((int)(page * size - size))
-                    .Take((int)size).ToList();
-            }
 
             var model = new ExamListVM()
             {
@@ -140,12 +144,20 @@ namespace QuizExam.Core.Services
             };
 
             model.TotalRecords = exams.Count();
+            if (size.HasValue && page.HasValue)
+            {
+                exams = exams
+                    .OrderBy(e => e.Title)
+                    .Skip((int)(page * size - size))
+                    .Take((int)size).ToList();
+            }
+
             model.Exams = exams;
 
             return model;
         }
 
-        public async Task<List<ViewExamVM>> GetExamsForUserAsync(string? subjectId = null, string? examTitle = null)
+        public async Task<List<ViewExamVM>> GetActiveExamsAsync(string? subjectId = null, string? examTitle = null)
         {
             var exams = await this.repository.AllReadonly<Exam>()
                 .Where(e => !e.IsDeleted && e.IsActive)
@@ -352,18 +364,18 @@ namespace QuizExam.Core.Services
                 return new List<HardestQuestionInfoVM>();
             }
 
-            var hardestQuestions = repository.AllReadonly<TakeAnswer>()
+            var hardestQuestions = this.repository.AllReadonly<TakeAnswer>()
                 .Include(ta => ta.TakeExam)
                 .Include(ta => ta.AnswerOption)
                 .ThenInclude(q => q.Question)
-                .Where(ta => ta.TakeExam.ExamId == examId.ToGuid() && ta.AnswerOption.IsCorrect == false)
+                .Where(ta => ta.TakeExam.ExamId == examId.ToGuid() && ta.TakeExam.Status == TakeExamStatusEnum.Finished && ta.AnswerOption.IsCorrect == false)
                 .GroupBy(ta => new { ta.QuestionId, ta.Question.Content, ta.Question.Rule })
                 .Select(g => new
                 {
                     QuestionId = g.Key.QuestionId,
                     Content = g.Key.Content,
                     Rule = g.Key.Rule,
-                    DifficultyRatio = g.Count() * 1.0 / repository.AllReadonly<TakeAnswer>().Count(ta => ta.QuestionId == g.Key.QuestionId)
+                    DifficultyRatio = g.Count() * 1.0 / this.repository.AllReadonly<TakeAnswer>().Count(ta => ta.QuestionId == g.Key.QuestionId)
                 })
                 .OrderByDescending(x => x.DifficultyRatio)
                 .Take(5)
@@ -372,13 +384,17 @@ namespace QuizExam.Core.Services
             var result = new List<HardestQuestionInfoVM>();
             foreach (var question in hardestQuestions)
             {
-                var incorrectPercentage = repository.AllReadonly<TakeExam>()
+                var usersTakenExam = this.repository.AllReadonly<TakeExam>()
                     .Include(te => te.TakeAnswers)
                     .ThenInclude(ta => ta.AnswerOption)
-                    .Where(te => te.TakeAnswers.Any(ta => ta.QuestionId == question.QuestionId && ta.AnswerOption.IsCorrect == false))
+                    .Where(te => te.TakeAnswers.Any(ta => ta.QuestionId == question.QuestionId && ta.AnswerOption.IsCorrect == false) && te.Status == TakeExamStatusEnum.Finished)
                     .Select(te => te.UserId)
                     .Distinct()
-                    .Count() * 100 / repository.AllReadonly<TakeExam>().Select(te => te.UserId).Distinct().Count();
+                    .Count() * 100;
+                
+                var incorrectPercentage = usersTakenExam / this.repository.AllReadonly<TakeExam>()
+                                            .Where(t => t.ExamId == examId.ToGuid() && t.Status == TakeExamStatusEnum.Finished)
+                                            .Select(te => te.UserId).Distinct().Count();
 
                 var options = this.repository.AllReadonly<AnswerOption>()
                                 .Where(a => a.QuestionId == question.QuestionId && !a.IsDeleted)
@@ -400,7 +416,7 @@ namespace QuizExam.Core.Services
                 });
             }
 
-            return result;
+            return result.OrderByDescending(x => x.MistakePercentage).ToList();
         }
     }
 }

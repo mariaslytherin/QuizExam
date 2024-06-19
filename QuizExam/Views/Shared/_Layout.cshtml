@@ -93,7 +93,7 @@
             <div class="float-right d-none d-sm-inline">
             </div>
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2014-@DateTime.Now.Year <a href="/">QuizExam</a>.</strong> All rights reserved.
+            <strong>&copy; @DateTime.Now.Year <a href="/">QuizExam</a>.</strong>
         </footer>
     </div>
     <!-- ./wrapper -->
@@ -109,6 +109,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/select2/js/select2.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
     <script src="~/js/site.js"></script>
     <partial name="_UserMessages" />
     @await RenderSectionAsync("Scripts", false)

@@ -195,7 +195,7 @@ namespace QuizExam.Test.ExamServiceTests
         public async Task GetExamsForUserMustReturnZeroListOfExams()
         {
             var service = serviceProvider.GetService<IExamService>();
-            var result = await service.GetExamsForUserAsync();
+            var result = await service.GetActiveExamsAsync();
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<List<ViewExamVM>>());

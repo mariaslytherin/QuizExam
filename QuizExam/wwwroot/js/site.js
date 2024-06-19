@@ -44,6 +44,7 @@ $(document).ready(function () {
             data: { filter: selectedValue, takeId: id },
             success: function(response) {
                 $('body').html(response);
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
             }
         });
         
@@ -82,6 +83,7 @@ $(document).on('click', '#nextButton', function () {
                     toastr.success('Успешен запис!');
                 });
             }
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             window.location.href = '/';
@@ -100,6 +102,7 @@ $(document).on('click', '#previousButton', function () {
         data: { 'examId': examId, 'takeId': takeId, 'order': order },
         success: function (response) {
             $("#questionForm").html(response);
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
         }
     });
 });

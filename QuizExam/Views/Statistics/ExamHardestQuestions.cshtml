@@ -107,6 +107,7 @@
                     }
                 }
             });
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 
             document.getElementById('myChart').onclick = function (evt) {
                 const activePoints = myChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
@@ -146,6 +147,7 @@
                     });
 
                     document.getElementById('rule').innerHTML = rule;
+                    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
                 }
             };
 

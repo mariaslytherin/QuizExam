@@ -19,7 +19,7 @@
                             <th style="text-align: center">Име</th>
                             <th style="text-align: center">Имейл</th>
                             <th style="text-align: center">Роли</th>
-                            <th style="text-align: center">Опции</th>
+                            <th style="text-align: center">Действия</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,7 +40,9 @@
                 <paging page-no="@Model.PageNo"
                         page-size="@Model.PageSize"
                         total-records="@Model.TotalRecords"
-                        page-size-dropdown-items="5-10-15">
+                        page-size-dropdown-items="5-10-15"
+                        class-active-page="bg-light"
+                        settings-json="custom">
                 </paging>
             </div>
         </div>
