@@ -60,11 +60,14 @@ namespace QuizExam.Areas.Identity.Pages.Account.Manage
             }
 
             personalData.Add($"Authenticator Key", await _userManager.GetAuthenticatorKeyAsync(user));
-
+            var options = new JsonSerializerOptions
+            {
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            };
             var fileName = "Лични_данни.json";
             var encodedFileName = System.Net.WebUtility.UrlEncode(fileName);
             Response.Headers.TryAdd("Content-Disposition", $"attachment; filename={encodedFileName}");
-            return new FileContentResult(JsonSerializer.SerializeToUtf8Bytes(personalData), "application/json");
+            return new FileContentResult(JsonSerializer.SerializeToUtf8Bytes(personalData, options), "application/json");
         }
     }
 }

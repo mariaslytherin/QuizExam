@@ -72,13 +72,13 @@ namespace QuizExam.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required(ErrorMessage = "Полето {0} е задължително.")]
-            [StringLength(50, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
+            [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+            [StringLength(50, ErrorMessage = UserErrorMessages.MaxStringLength)]
             [Display(Name = "Име")]
             public string FirstName { get; set; }
 
-            [Required(ErrorMessage = "Полето {0} е задължително.")]
-            [StringLength(80, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
+            [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+            [StringLength(80, ErrorMessage = UserErrorMessages.MaxStringLength)]
             [Display(Name = "Фамилия")]
             public string LastName { get; set; }
 
@@ -86,8 +86,8 @@ namespace QuizExam.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Полето {0} е задължително.")]
-            [EmailAddress(ErrorMessage = "Полето {0} не е валиден имейл адрес.")]
+            [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+            [EmailAddress(ErrorMessage = UserErrorMessages.InvalidEmail)]
             [Display(Name = "Имейл")]
             public string Email { get; set; }
 
@@ -95,7 +95,7 @@ namespace QuizExam.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Полето {0} е задължително.")]
+            [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
             [StringLength(100, ErrorMessage = "Полето {0} трябва да съдържа най-малко {2} и най-много {1} символа.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Парола")]

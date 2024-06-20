@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using QuizExam.Core.Contracts;
+using QuizExam.Core.Models.Error;
 using QuizExam.Core.Models.Exam;
-using QuizExam.Models;
 using System.Diagnostics;
 
 namespace QuizExam.Controllers
@@ -43,11 +43,6 @@ namespace QuizExam.Controllers
             };
 
             return View(model);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

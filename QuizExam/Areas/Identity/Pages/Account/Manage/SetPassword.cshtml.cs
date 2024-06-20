@@ -4,7 +4,6 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,31 +13,18 @@ using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Areas.Identity.Pages.Account.Manage
 {
-    public class IndexModel : PageModel
+    public class SetPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public IndexModel(
+        public SetPasswordModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        public string Username { get; set; }
-
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        [TempData]
-        public string StatusMessage { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -51,28 +37,33 @@ namespace QuizExam.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        [TempData]
+        public string StatusMessage { get; set; }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public class InputModel
         {
-            [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
-            [StringLength(50, ErrorMessage = UserErrorMessages.MaxStringLength)]
-            [Display(Name = "Име")]
-            public string FirstName { get; set; }
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
+            [Required(ErrorMessage = "Полето {0} е задължително.")]
+            [StringLength(100, ErrorMessage = "Полето {0} трябва да съдържа най-малко {2} и най-много {1} символа.", MinimumLength = 6)]
+            [DataType(DataType.Password)]
+            [Display(Name = "Нова парола")]
+            public string NewPassword { get; set; }
 
-            [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
-            [StringLength(50, ErrorMessage = UserErrorMessages.MaxStringLength)]
-            [Display(Name = "Фамилия")]
-            public string LastName { get; set; }
-        }
-
-        private async Task LoadAsync(ApplicationUser user)
-        {
-            var userInfo = await _userManager.GetUserAsync(User);
-
-            Input = new InputModel
-            {
-                FirstName = userInfo.FirstName,
-                LastName = userInfo.LastName,
-            };
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
+            [DataType(DataType.Password)]
+            [Display(Name = "Повтори нова парола")]
+            [Compare("NewPassword", ErrorMessage = "Новата паролата и повторно въведената парола не съвпадат.")]
+            public string ConfirmPassword { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -83,44 +74,42 @@ namespace QuizExam.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            await LoadAsync(user);
+            var hasPassword = await _userManager.HasPasswordAsync(user);
+
+            if (hasPassword)
+            {
+                return RedirectToPage("./ChangePassword");
+            }
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            if (!ModelState.IsValid)
+            var addPasswordResult = await _userManager.AddPasswordAsync(user, Input.NewPassword);
+            if (!addPasswordResult.Succeeded)
             {
-                await LoadAsync(user);
+                foreach (var error in addPasswordResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
                 return Page();
             }
 
-            bool isUserUpdated = false;
-            if (user.FirstName != Input.FirstName || user.LastName != Input.LastName)
-            {
-                user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
-                isUserUpdated = true;
-            }
-
-            if (isUserUpdated)
-            {
-                var result = await _userManager.UpdateAsync(user);
-                if (!result.Succeeded)
-                {
-                    TempData[ErrorMessageConstants.ErrorMessage] = "Възникна грешка при опит за редактиране на данните.";
-                    return RedirectToPage();
-                }
-            }
-
             await _signInManager.RefreshSignInAsync(user);
-            TempData[SuccessMessageConstants.SuccessMessage] = "Вашите данни бяха редактирани успешно.";
+            TempData[SuccessMessageConstants.SuccessMessage] = "Вашата нова парола беше записана успешно.";
+
             return RedirectToPage();
         }
     }

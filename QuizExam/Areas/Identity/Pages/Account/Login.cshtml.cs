@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using QuizExam.Infrastructure.Data.Identity;
+using QuizExam.Core.Constants;
 
 namespace QuizExam.Areas.Identity.Pages.Account
 {
@@ -70,8 +71,8 @@ namespace QuizExam.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+            [EmailAddress(ErrorMessage = UserErrorMessages.InvalidEmail)]
             [Display(Name = "Имейл")]
             public string Email { get; set; }
 
@@ -79,7 +80,7 @@ namespace QuizExam.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
             [DataType(DataType.Password)]
             [Display(Name = "Парола")]
             public string Password { get; set; }
@@ -126,8 +127,8 @@ namespace QuizExam.Areas.Identity.Pages.Account
 
                     var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
 
-                    if (await _signInManager.UserManager.IsInRoleAsync(user, "Administrator") ||
-                        await _signInManager.UserManager.IsInRoleAsync(user, "SuperAdmin"))
+                    if (await _signInManager.UserManager.IsInRoleAsync(user, UserRolesConstants.Administrator) ||
+                        await _signInManager.UserManager.IsInRoleAsync(user, UserRolesConstants.SuperAdmin))
                     {
                         return RedirectToAction("GetExamsList", "Exam", new { area = "Admin" });
                     }
@@ -145,7 +146,7 @@ namespace QuizExam.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Възникна грешка при опит за вход в системата.");
+                    ModelState.AddModelError(string.Empty, "Грешен потребител или парола.");
                     return Page();
                 }
             }

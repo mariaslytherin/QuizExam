@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using QuizExam.ErrorDescribers;
 using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Identity;
 
@@ -14,7 +15,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddErrorDescriber<ApplicationErrorDescriber>();
 
 builder.Services.AddAuthentication()
 .AddFacebook(facebookOptions =>

@@ -79,13 +79,13 @@ namespace QuizExam.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required(ErrorMessage = "Полето {0} е задължително.")]
-            [StringLength(50, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
+            [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+            [StringLength(50, ErrorMessage = UserErrorMessages.MaxStringLength)]
             [Display(Name = "Име")]
             public string FirstName { get; set; }
 
-            [Required(ErrorMessage = "Полето {0} е задължително.")]
-            [StringLength(80, ErrorMessage = "Полето {0} трябва да бъде максимум {1} знака.")]
+            [Required(ErrorMessage = GlobalErrorMessages.FieldRequired)]
+            [StringLength(80, ErrorMessage = UserErrorMessages.MaxStringLength)]
             [Display(Name = "Фамилия")]
             public string LastName { get; set; }
 
@@ -94,7 +94,7 @@ namespace QuizExam.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [EmailAddress]
+            [EmailAddress(ErrorMessage = UserErrorMessages.InvalidEmail)]
             [Display(Name = "Имейл")]
             public string Email { get; set; }
         }

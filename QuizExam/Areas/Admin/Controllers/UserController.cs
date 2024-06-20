@@ -98,10 +98,20 @@ namespace QuizExam.Areas.Admin.Controllers
 
             foreach (var role in this.roleManager.Roles)
             {
+                string displayName = role.Name;
+                switch (role.Name)
+                {
+                    case UserRolesConstants.SuperAdmin: displayName = "Главен администратор"; break;
+                    case UserRolesConstants.Administrator: displayName = "Администратор"; break;
+                    case UserRolesConstants.Student: displayName = "Ученик"; break;
+                    default:
+                        break;
+                }
                 var userRolesViewModel = new UserRolesVM
                 {
                     RoleId = role.Id,
                     RoleName = role.Name,
+                    DisplayName = displayName,
                 };
                 if (await this.userManager.IsInRoleAsync(user, role.Name))
                 {

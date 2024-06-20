@@ -1,4 +1,5 @@
-﻿@using QuizExam.Core.Models.Exam
+﻿@using QuizExam.Core.Constants
+@using QuizExam.Core.Models.Exam
 @model ExamListVM
 @{
     ViewData["Title"] = "Всички изпити";
@@ -21,7 +22,7 @@
                             <th style="text-align: center;">Предмет</th>
                             <th style="text-align: center;">Дата на създаване</th>
                             <th style="text-align: center;">Публикуван</th>
-                            @if (User.IsInRole("SuperAdmin"))
+                            @if (User.IsInRole(UserRolesConstants.SuperAdmin))
                             {
                                 <th style="text-align: center;">Потребител</th>
                             }
@@ -48,7 +49,7 @@
                                 <td style="text-align: center;">@exam.SubjectName</td>
                                 <td style="text-align: center;">@exam.CreateDate</td>
                                 <td style="text-align: center;">@exam.IsActive</td>
-                                @if (User.IsInRole("SuperAdmin"))
+                                @if (User.IsInRole(UserRolesConstants.SuperAdmin))
                                 {
                                     <td style="text-align: center;">@exam.CreatedBy</td>
                                 }
