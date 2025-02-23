@@ -6,8 +6,8 @@
     }
     public class UserErrorMessages
     {
-        public const string NameMaxMinLength = "Полето {0} трябва да бъде между {2} и {1} символа.";
-        public const string InvalidEmail = "Полето {0} не е валиден имейл адрес.";
+		public const string NameMaxMinLength = "Полето {0} трябва да съдържа между {2} и {1} символа.";
+		public const string InvalidEmail = "Полето {0} не е валиден имейл адрес.";
         public const string MaxStringLength = "Полето {0} може да съдържа максимум {1} знака.";
     }
     public class ExamErrorMessages
