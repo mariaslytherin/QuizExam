@@ -38,7 +38,7 @@
 
         public const string UnsuccessfulDeactivationMessage = "Неуспешно активиране!";
 
-        public const string ErrorMustCheckAnswerMessage = "Необходимо е да отбележите верен отговор на въпроса!";
+		public const string ErrorMustSelectRoleMessage = "Необходимо е да назначите поне една роля на потребителя!";
 
         public const string ErrorExamNotFoundMessage = "Не успяхме да намерим този изпит!";
 
