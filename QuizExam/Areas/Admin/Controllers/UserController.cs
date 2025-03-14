@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Models;
-using QuizExam.Core.Models.User;
 using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Areas.Admin.Controllers
@@ -134,7 +131,14 @@ namespace QuizExam.Areas.Admin.Controllers
 
             if (user == null)
             {
-                return View();
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorAppeardMessage;
+                return RedirectToAction("GetAllUsers", "User");
+            }
+
+            if (!model.Any(u => u.Selected))
+            {
+                TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustSelectRoleMessage;
+                return RedirectToAction("GetRoles", "User", new { id = id });
             }
 
             var roles = await this.userManager.GetRolesAsync(user);

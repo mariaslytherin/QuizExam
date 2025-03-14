@@ -109,7 +109,7 @@ namespace QuizExam.Core.Services
 
         public async Task<ExamListVM> GetAllExamsAsync(string userId, bool isSuperAdmin, int? page, int? size)
         {
-            List<Exam> allExams = await this.repository.All<Exam>().ToListAsync();
+            List<Exam> allExams = await this.repository.All<Exam>().OrderByDescending(e => e.CreateDate).ToListAsync();
 
             if (!isSuperAdmin)
             {
@@ -147,7 +147,6 @@ namespace QuizExam.Core.Services
             if (size.HasValue && page.HasValue)
             {
                 exams = exams
-                    .OrderBy(e => e.Title)
                     .Skip((int)(page * size - size))
                     .Take((int)size).ToList();
             }

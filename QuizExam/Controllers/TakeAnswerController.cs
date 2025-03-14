@@ -22,20 +22,17 @@ namespace QuizExam.Controllers
             {
                 if (model.CheckedOptionId == null)
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
                     return Ok(new { errorMessage = ErrorMessageConstants.ErrorMustCheckAnswerMessage });
                 }
 
                 if (await this.takeAnswerService.AddAnswer(model, model.ExamId))
                 {
-                    TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulRecordMessage;
+                    
                 }
                 else
                 {
                     return Ok(new { errorMessage = ErrorMessageConstants.ErrorAppeardMessage });
                 }
-
-                TempData["ExamId"] = model.ExamId;
 
                 if (model.IsLast)
                 {

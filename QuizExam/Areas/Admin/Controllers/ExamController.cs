@@ -5,6 +5,7 @@ using QuizExam.Core.Constants;
 using QuizExam.Core.Contracts;
 using QuizExam.Core.Extensions;
 using QuizExam.Core.Models.Exam;
+using QuizExam.Infrastructure.Data;
 using QuizExam.Infrastructure.Data.Identity;
 
 namespace QuizExam.Areas.Admin.Controllers
@@ -46,6 +47,12 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
+                var isExamDeactivated = await this.examService.IsExamDeactivatedAsync(id);
+                if (!isExamDeactivated)
+                {
+                    TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningExamIsActiveMessage;
+                }
+
                 var exam = await this.examService.GetExamForViewAsync(id);
 
                 return View("View", exam);
@@ -86,6 +93,16 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var subjects = await this.subjectService.GetActiveSubjectsAsync();
+
+                ViewBag.Subjects = subjects
+                    .Select(s => new SelectListItem()
+                    {
+                        Text = s.Name,
+                        Value = s.Id.ToString(),
+                    })
+                    .ToList();
+
                 return View();
             }
 

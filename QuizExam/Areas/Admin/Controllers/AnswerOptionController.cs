@@ -10,13 +10,16 @@ namespace QuizExam.Areas.Admin.Controllers
     {
         private readonly IAnswerOptionService answerService;
         private readonly IQuestionService questionService;
+        private readonly IExamService examService;
 
         public AnswerOptionController(
             IAnswerOptionService answerService,
-            IQuestionService questionService)
+            IQuestionService questionService,
+            IExamService examService)
         {
             this.answerService = answerService;
             this.questionService = questionService;
+            this.examService = examService;
         }
 
         [HttpPost]
@@ -27,6 +30,13 @@ namespace QuizExam.Areas.Admin.Controllers
                 if (!ModelState.IsValid)
                 {
                     TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfullAddMessage;
+                    return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = model.ExamId });
+                }
+
+                var isExamDeactivated = await this.examService.IsExamDeactivatedAsync(model.ExamId);
+                if (!isExamDeactivated)
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamMustBeDeactivatedToEdit;
                     return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = model.ExamId });
                 }
 
@@ -65,6 +75,13 @@ namespace QuizExam.Areas.Admin.Controllers
                     return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = model.ExamId });
                 }
 
+                var isExamDeactivated = await this.examService.IsExamDeactivatedAsync(model.ExamId);
+                if (!isExamDeactivated)
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamMustBeDeactivatedToEdit;
+                    return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = model.ExamId });
+                }
+
                 if (model.CorrectAnswerId == null)
                 {
                     TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
@@ -94,6 +111,13 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
+                var isExamDeactivated = await this.examService.IsExamDeactivatedAsync(examId);
+                if (!isExamDeactivated)
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamMustBeDeactivatedToEdit;
+                    return RedirectToAction("Edit", "Question", new { id = questionId, examId = examId });
+                }
+
                 if (await this.answerService.DeleteAsync(id))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeleteMessage;

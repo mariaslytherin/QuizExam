@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="col-12">
-        <a asp-action="New" class="btn btn-block btn-outline-success" style="width: 130px; margin-bottom: 10px;">Добави</a>
+        <a class="btn btn-block btn-outline-success" data-toggle="modal" data-target="#subjectModal" style="width: 130px; margin-bottom: 10px;">Добави</a>
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Предмети</h3>
@@ -47,5 +47,11 @@
                 </table>
             </div>
         </div>
+        <partial name="Modals/_AddSubjectModal" model='new NewSubjectVM()'></partial>
     </div>
 </div>
+
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+ *@

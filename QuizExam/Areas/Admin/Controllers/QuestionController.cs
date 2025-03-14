@@ -11,13 +11,16 @@ namespace QuizExam.Areas.Admin.Controllers
     {
         private readonly IQuestionService questionService;
         private readonly IAnswerOptionService answerOptionService;
+        private readonly IExamService examService;
 
         public QuestionController(
             IQuestionService questionService,
-            IAnswerOptionService answerOptionService)
+            IAnswerOptionService answerOptionService,
+            IExamService examService)
         {
             this.questionService = questionService;
             this.answerOptionService = answerOptionService;
+            this.examService = examService;
         }
 
         public IActionResult New(string id, string isActive)
@@ -68,6 +71,12 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
+                var isExamDeactivated = await this.examService.IsExamDeactivatedAsync(examId);
+                if (!isExamDeactivated)
+                {
+                    TempData[WarningMessageConstants.WarningMessage] = WarningMessageConstants.WarningExamIsActiveEditQuestionMessage;
+                }
+
                 var question = await this.questionService.GetQuestionForEditAsync(id);
                 var options = await this.answerOptionService.GetOptionsAsync(id);
 
@@ -102,6 +111,13 @@ namespace QuizExam.Areas.Admin.Controllers
                 if (!ModelState.IsValid)
                 {
                     TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.UnsuccessfulEditMessage;
+                    return RedirectToAction("Edit", new { examId, id = model.Id });
+                }
+
+                var isExamDeactivated = await this.examService.IsExamDeactivatedAsync(examId);
+                if (!isExamDeactivated)
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamMustBeDeactivatedToEdit;
                     return RedirectToAction("Edit", new { examId, id = model.Id });
                 }
 
@@ -140,6 +156,13 @@ namespace QuizExam.Areas.Admin.Controllers
         {
             try
             {
+                var isExamDeactivated = await this.examService.IsExamDeactivatedAsync(examId);
+                if (!isExamDeactivated)
+                {
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorExamMustBeDeactivatedToEdit;
+                    return RedirectToAction("ViewExam", "Exam", new { id = examId });
+                }
+
                 if (await this.questionService.DeleteAsync(id))
                 {
                     TempData[SuccessMessageConstants.SuccessMessage] = SuccessMessageConstants.SuccessfulDeleteMessage;

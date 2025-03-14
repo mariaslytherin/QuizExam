@@ -112,7 +112,6 @@ namespace QuizExam.Core.Services
             if (size.HasValue && page.HasValue)
             {
                 takes = takes
-                    .OrderBy(e => e.CreateDate)
                     .Skip((int)(page * size - size))
                     .Take((int)size)
                     .ToList();

@@ -16,12 +16,12 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Name" class="form-label"></label>
-                        <input asp-for="Name" type="text" class="form-control" placeholder="Enter subject name" aria-required="true">
+                        <input asp-for="Name" type="text" class="form-control" aria-required="true">
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-success">Добави</button>
+                    <button type="submit" class="btn btn-info">Добави</button>
                     <a asp-action="GetSubjectsList" class="btn btn-outline-secondary" style="width:auto">Назад</a>
                 </div>
             </form>
