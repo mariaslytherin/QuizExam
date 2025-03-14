@@ -22,7 +22,8 @@ namespace QuizExam.Controllers
             {
                 if (model.CheckedOptionId == null)
                 {
-                    return Ok(new { errorMessage = ErrorMessageConstants.ErrorMustCheckAnswerMessage });
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorNotSelectedCorrectAnswerMessage;
+                    return Ok(new { errorMessage = ErrorMessageConstants.ErrorNotSelectedCorrectAnswerMessage });
                 }
 
                 if (await this.takeAnswerService.AddAnswer(model, model.ExamId))

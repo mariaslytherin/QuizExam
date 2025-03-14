@@ -71,7 +71,7 @@ namespace QuizExam.Areas.Admin.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorNotSelectedCorrectAnswerMessage;
                     return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = model.ExamId });
                 }
 
@@ -84,7 +84,7 @@ namespace QuizExam.Areas.Admin.Controllers
 
                 if (model.CorrectAnswerId == null)
                 {
-                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorMustCheckAnswerMessage;
+                    TempData[ErrorMessageConstants.ErrorMessage] = ErrorMessageConstants.ErrorNotSelectedCorrectAnswerMessage;
                     return RedirectToAction("Edit", "Question", new { id = model.QuestionId, examId = model.ExamId });
                 }
 

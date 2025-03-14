@@ -12,7 +12,7 @@ namespace QuizExam.Core.Contracts
 
         Task<ExamListVM> GetAllExamsAsync(string userId, bool isSuperAdmin, int? page, int? size);
 
-        Task<List<ViewExamVM>> GetActiveExamsAsync(string? subjectId = null, string? examTitle = null);
+        Task<List<ViewExamVM>> GetActiveExamsAsync(string subjectId = null, string examTitle = null);
 
         Task<ExamVM> GetExamInfoAsync(string id);
 

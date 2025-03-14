@@ -167,7 +167,7 @@ namespace QuizExam.Core.Services
             return model;
         }
 
-        public async Task<TakeExamVM> GetTakeForView(string takeExamId, string? filter = null)
+        public async Task<TakeExamVM> GetTakeForView(string takeExamId, string filter = null)
         {
             var take = await this.repository.GetByIdAsync<TakeExam>(Guid.Parse(takeExamId));
             var exam = await this.repository.GetByIdAsync<Exam>(take.ExamId);

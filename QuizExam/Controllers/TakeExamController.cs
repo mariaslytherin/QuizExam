@@ -29,7 +29,7 @@ namespace QuizExam.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTakeResult(string takeId, string? filter = null)
+        public async Task<IActionResult> GetTakeResult(string takeId, string filter = null)
         {
             try
             {

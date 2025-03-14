@@ -17,7 +17,7 @@ namespace QuizExam.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTopHardestQuestions(string? subjectId = null, string? examId = null)
+        public async Task<IActionResult> GetTopHardestQuestions(string subjectId = null, string examId = null)
         {
             var subjects = await this.subjectService.GetAllSubjectsAsync();
             var exams = await this.examService.GetActiveExamsBySubjectAsync(subjectId);

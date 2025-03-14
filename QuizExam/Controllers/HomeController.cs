@@ -23,7 +23,7 @@ namespace QuizExam.Controllers
             this.subjectService = subjectService;
         }
 
-        public async Task<IActionResult> Index(string? subjectId = null, string? examTitle = null)
+        public async Task<IActionResult> Index(string subjectId = null, string examTitle = null)
         {
             var subjects = await this.subjectService.GetAllSubjectsAsync();
             var exams = await this.examService.GetActiveExamsAsync(subjectId, examTitle);

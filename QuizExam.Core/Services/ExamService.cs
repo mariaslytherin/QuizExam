@@ -156,7 +156,7 @@ namespace QuizExam.Core.Services
             return model;
         }
 
-        public async Task<List<ViewExamVM>> GetActiveExamsAsync(string? subjectId = null, string? examTitle = null)
+        public async Task<List<ViewExamVM>> GetActiveExamsAsync(string subjectId = null, string examTitle = null)
         {
             var exams = await this.repository.AllReadonly<Exam>()
                 .Where(e => !e.IsDeleted && e.IsActive)
